@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@worker-tools/router": "^0.3.0-pre.6",
+    "reflect-metadata": "^0.1.13",
     "urlpattern-polyfill": "^6.0.2"
   }
 }
