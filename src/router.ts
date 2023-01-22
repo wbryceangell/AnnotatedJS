@@ -1,6 +1,25 @@
-import { WorkerRouter } from "../node_modules/@worker-tools/router/types/index";
+import {
+  Method,
+  Handler,
+  RouteContext,
+  WorkerRouter,
+} from "@worker-tools/router";
+import { routes } from "./injected";
 
-const router = new WorkerRouter();
+export interface Route {
+  method: Method;
+  path: string;
+  handler: Handler<RouteContext>;
+}
+
+let router = new WorkerRouter();
+
+for (const route of routes) {
+  switch (route.method) {
+    case "GET":
+      router = router.get(route.path, route.handler);
+  }
+}
 
 // TODO: get injected paths and methods
 // TODO: add injected values to the router

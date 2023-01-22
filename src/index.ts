@@ -1,3 +1,4 @@
+import "urlpattern-polyfill";
 import router from "./router";
 
 const swAddEventListener =
