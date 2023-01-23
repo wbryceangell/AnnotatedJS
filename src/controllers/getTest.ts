@@ -2,9 +2,9 @@ import { Controller } from "../decorators/class/controller";
 import { Get } from "../decorators/method/get";
 
 @Controller("/test")
-class Test {
-  @Get()
-  getTest() {
+class GetTest {
+  @Get("/get")
+  test() {
     return new Response("Hey there");
   }
 }

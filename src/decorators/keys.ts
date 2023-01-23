@@ -1,6 +1,10 @@
 // class
-export const controllersKey = Symbol("controllers");
+export const controllersKey = "controllers";
 
 // method
-export const getKey = Symbol("get");
-export const methodKeys = [getKey];
+export const getKey = "get";
+export const postKey = "post";
+export const putKey = "put";
+export const patchKey = "patch";
+export const deleteKey = "delete";
+export const methodKeys = [getKey, postKey, putKey, patchKey, deleteKey];

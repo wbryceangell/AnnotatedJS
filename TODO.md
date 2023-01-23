@@ -1,3 +1,3 @@
-add decorators for controller and methods
-inject decorators
-use injected decorators in router
+figure out how to have types for decorated methods
+figure out how to inject services into controllers
+find a way to configure where to look for classes and add them without needing to import them explicitly
