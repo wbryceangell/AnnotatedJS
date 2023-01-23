@@ -1,5 +1,6 @@
 import "urlpattern-polyfill";
 import "reflect-metadata";
+import "./controllers/test";
 import router from "./router";
 
 const swAddEventListener =
