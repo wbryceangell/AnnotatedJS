@@ -1,6 +1,6 @@
 export default (
   key: any,
-  target: Object
+  target: any
 ): Array<{ path: string; property: string | symbol }> => {
   return Reflect.getOwnMetadata(key, target) || [];
 };

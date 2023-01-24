@@ -8,14 +8,13 @@ let router = new WorkerRouter();
 
 for (const controller of getControllers()) {
   for (const methodKey of methodKeys) {
-    for (const method of getMethods(
-      methodKey,
-      controller.constructor.prototype
-    )) {
+    for (const method of getMethods(methodKey, controller.prototype)) {
       //@ts-ignore
       router = router[methodKey](
         normalizePath([controller.path, method.path].join("/")),
-        controller.constructor.prototype[method.property]
+        (controller.prototype[method.property] as Function).bind(
+          controller.prototype
+        )
       );
     }
   }
