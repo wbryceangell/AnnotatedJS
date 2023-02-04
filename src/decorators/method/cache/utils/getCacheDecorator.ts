@@ -1,12 +1,12 @@
-import getMethods from "./utils/getMethods";
 import { Handler, RouteContext } from "@worker-tools/router";
-import { cacheKey } from "../keys";
-import { CacheMetadata } from "../types";
+import { cacheKey } from "../../../keys";
+import { CacheMetadata } from "../../../types";
+import getMethods from "../../utils/getMethods";
 
-export const Cache = (name: string) =>
+export default (purge: boolean) => (name: string) =>
   ((target, property) => {
     const methods = getMethods<CacheMetadata>(cacheKey, target);
-    methods.push({ name, property });
+    methods.push({ name, property, purge });
     Reflect.defineMetadata(cacheKey, methods, target);
   }) as (
     target: Object,

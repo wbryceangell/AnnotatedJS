@@ -11,7 +11,9 @@ export default (
     cacheMetadata?: CacheMetadata
   ) =>
   async (req: Request, ctx: RouteContext) => {
-    const cache = cacheMetadata ? await caches.open(cacheMetadata.name) : null;
+    let cache: Cache | null = null;
+    if (cacheMetadata && !cacheMetadata.purge)
+      cache = await caches.open(cacheMetadata.name);
 
     if (cache) {
       const res = await cache.match(req);
@@ -22,9 +24,14 @@ export default (
       controllerMetadata.prototype[httpMethodMetadata.property] as Function
     ).call(controllerMetadata.prototype, req, ctx);
 
-    if (cache) {
-      cache.put(req, res);
-    }
+    if (
+      cacheMetadata &&
+      cacheMetadata.purge &&
+      (await caches.has(cacheMetadata.name))
+    )
+      await caches.delete(cacheMetadata.name);
+
+    if (cache) await cache.put(req, (res as Response).clone());
 
     return res;
   };
