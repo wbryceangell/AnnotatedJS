@@ -1,6 +1,6 @@
 import { Awaitable, RouteContext } from "@worker-tools/router";
 import { Controller } from "../decorators/class/controller";
-import { Post } from "../decorators/method/post";
+import { Post } from "../decorators/method/http/methods/post";
 import { Inject } from "../decorators/property/inject";
 import { PostService } from "../services/postService";
 

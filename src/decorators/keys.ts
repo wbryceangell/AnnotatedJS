@@ -2,6 +2,7 @@
 export const controllersKey = "controllers";
 
 // method
+export const cacheKey = "cache";
 export const getKey = "get";
 export const postKey = "post";
 export const putKey = "put";

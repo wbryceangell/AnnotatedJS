@@ -1,20 +1,32 @@
 import { WorkerRouter } from "@worker-tools/router";
 import { getControllers } from "./decorators/class/controller";
-import { methodKeys } from "./decorators/keys";
+import { cacheKey, methodKeys } from "./decorators/keys";
 import getMethods from "./decorators/method/utils/getMethods";
 import normalizePath from "normalize-path";
+import { CacheMetadata, HttpMethodMetadata } from "./decorators/types";
+import getRoute from "./utils/getRoute";
 
 let router = new WorkerRouter();
 
-for (const controller of getControllers()) {
+for (const controllerMetadata of getControllers()) {
+  const cacheMetadataList = getMethods<CacheMetadata>(
+    cacheKey,
+    controllerMetadata.prototype
+  );
   for (const methodKey of methodKeys) {
-    for (const method of getMethods(methodKey, controller.prototype)) {
+    for (const httpMethodMetadata of getMethods<HttpMethodMetadata>(
+      methodKey,
+      controllerMetadata.prototype
+    )) {
+      const cacheMetadata = cacheMetadataList.find(
+        (metadata) => metadata.property === httpMethodMetadata.property
+      );
       //@ts-ignore
       router = router[methodKey](
-        normalizePath([controller.path, method.path].join("/")),
-        (controller.prototype[method.property] as Function).bind(
-          controller.prototype
-        )
+        normalizePath(
+          [controllerMetadata.path, httpMethodMetadata.path].join("/")
+        ),
+        getRoute(controllerMetadata, httpMethodMetadata, cacheMetadata)
       );
     }
   }
