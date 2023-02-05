@@ -1,10 +1,12 @@
-import "urlpattern-polyfill";
-import "reflect-metadata";
-import "./controllers/getTest";
-import "./controllers/postTest";
-import router from "./router";
-
-const swAddEventListener =
-  addEventListener as ServiceWorkerGlobalScope["addEventListener"];
-
-swAddEventListener("fetch", router);
+export { initialize } from "./initialize";
+export { Controller } from "./decorators/class/controller";
+export { Service } from "./decorators/class/service";
+export { Inject } from "./decorators/property/inject";
+export { Cache } from "./decorators/method/cache/cache";
+export { Purge } from "./decorators/method/cache/purge";
+export { Delete } from "./decorators/method/http/methods/delete";
+export { Get } from "./decorators/method/http/methods/get";
+export { Patch } from "./decorators/method/http/methods/patch";
+export { Post } from "./decorators/method/http/methods/post";
+export { Put } from "./decorators/method/http/methods/put";
+export { Awaitable, RouteContext } from "@worker-tools/router";
