@@ -1,4 +1,4 @@
-import getMethods from "./getMethods";
+import getMethods from "../../utils/getMethods";
 import { Handler, RouteContext } from "@worker-tools/router";
 
 export default (key: string) =>
