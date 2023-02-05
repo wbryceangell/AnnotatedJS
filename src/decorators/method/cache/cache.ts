@@ -1,3 +1,3 @@
-import getCacheDecorator from "./utils/getCacheDecorator.js";
+import getCacheDecorator from "./utils/getCacheDecorator";
 
 export const Cache = getCacheDecorator(false);

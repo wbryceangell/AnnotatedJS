@@ -1,4 +1,4 @@
-import getMethodDecorator from "../utils/getHttpMethod.js";
-import { patchKey } from "../../../keys.js";
+import { patchKey } from "../../../keys";
+import getMethodDecorator from "../utils/getHttpMethod";
 
 export const Patch = getMethodDecorator(patchKey);

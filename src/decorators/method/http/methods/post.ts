@@ -1,4 +1,4 @@
-import getMethodDecorator from "../utils/getHttpMethod.js";
-import { postKey } from "../../../keys.js";
+import { postKey } from "../../../keys";
+import getMethodDecorator from "../utils/getHttpMethod";
 
 export const Post = getMethodDecorator(postKey);

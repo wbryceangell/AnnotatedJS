@@ -1,3 +1,3 @@
-import injectable from "./utils/injectable.js";
+import injectable from "./utils/injectable";
 
 export const Service = injectable;

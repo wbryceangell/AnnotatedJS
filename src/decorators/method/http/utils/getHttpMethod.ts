@@ -1,6 +1,5 @@
+import getMethods from "../../utils/getMethods";
 import { Handler, RouteContext } from "@worker-tools/router";
-
-import getMethods from "../../utils/getMethods.js";
 
 export default (key: string) =>
   (path = "/") =>

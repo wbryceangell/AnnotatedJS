@@ -1,8 +1,7 @@
 import { Handler, RouteContext } from "@worker-tools/router";
-
-import { CacheMetadata } from "../../../types.js";
-import { cacheKey } from "../../../keys.js";
-import getMethods from "../../utils/getMethods.js";
+import { cacheKey } from "../../../keys";
+import { CacheMetadata } from "../../../types";
+import getMethods from "../../utils/getMethods";
 
 export default (purge: boolean) => (name: string) =>
   ((target, property) => {

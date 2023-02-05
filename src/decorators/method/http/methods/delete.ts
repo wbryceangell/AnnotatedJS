@@ -1,4 +1,4 @@
-import { deleteKey } from "../../../keys.js";
-import getMethodDecorator from "../utils/getHttpMethod.js";
+import { deleteKey } from "../../../keys";
+import getMethodDecorator from "../utils/getHttpMethod";
 
 export const Delete = getMethodDecorator(deleteKey);

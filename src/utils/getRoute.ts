@@ -1,16 +1,15 @@
+import { RouteContext } from "@worker-tools/router";
 import {
   CacheMetadata,
   ControllerMetadata,
   HttpMethodMetadata,
-} from "../decorators/types.js";
-
-import { RouteContext } from "@worker-tools/router";
+} from "../decorators/types";
 
 export default (
-  controllerMetadata: ControllerMetadata,
-  httpMethodMetadata: HttpMethodMetadata,
-  cacheMetadata?: CacheMetadata
-) =>
+    controllerMetadata: ControllerMetadata,
+    httpMethodMetadata: HttpMethodMetadata,
+    cacheMetadata?: CacheMetadata
+  ) =>
   async (req: Request, ctx: RouteContext) => {
     let cache: Cache | null = null;
     if (cacheMetadata && !cacheMetadata.purge)
