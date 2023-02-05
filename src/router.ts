@@ -1,10 +1,11 @@
+import { CacheMetadata, HttpMethodMetadata } from "./decorators/types.js";
+import { cacheKey, methodKeys } from "./decorators/keys.js";
+
 import { WorkerRouter } from "@worker-tools/router";
-import { getControllers } from "./decorators/class/controller";
-import { cacheKey, methodKeys } from "./decorators/keys";
-import getMethods from "./decorators/method/utils/getMethods";
+import { getControllers } from "./decorators/class/controller.js";
+import getMethods from "./decorators/method/utils/getMethods.js";
+import getRoute from "./utils/getRoute.js";
 import normalizePath from "normalize-path";
-import { CacheMetadata, HttpMethodMetadata } from "./decorators/types";
-import getRoute from "./utils/getRoute";
 
 export default () => {
   let router = new WorkerRouter();
