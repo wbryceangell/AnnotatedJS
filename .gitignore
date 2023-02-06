@@ -2,7 +2,4 @@ dist
 node_modules
 package-lock.json
 .vscode
-.yarn
-yarn.lock
-.pnp.***
 types
