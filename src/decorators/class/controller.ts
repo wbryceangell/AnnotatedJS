@@ -1,4 +1,4 @@
-import { controllersKey } from "../keys";
+import { controllersKey } from "../../keys";
 
 export const Controller: (path: string) => ClassDecorator =
   (path) => (constructor) => {

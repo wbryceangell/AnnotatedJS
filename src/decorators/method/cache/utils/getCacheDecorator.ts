@@ -1,5 +1,5 @@
 import { Handler, RouteContext } from "@worker-tools/router";
-import { cacheKey } from "../../../keys";
+import { cacheKey } from "../../../../keys";
 import { CacheMetadata } from "../../../types";
 import getMethods from "../../utils/getMethods";
 

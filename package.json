@@ -1,9 +1,13 @@
 {
-  "name": "texmex",
+  "name": "@fork-git-it/texmex",
   "version": "1.0.0",
   "description": "A minimalist TypeScript API framework",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "types/**/*"
+  ],
   "scripts": {
     "test": "jest",
     "format": "prettier . -w",
