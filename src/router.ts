@@ -1,6 +1,6 @@
 import { WorkerRouter } from "@worker-tools/router";
 import { getControllers } from "./decorators/class/controller";
-import { cacheKey, methodKeys } from "./decorators/keys";
+import { cacheKey, methodKeys } from "./keys";
 import getMethods from "./decorators/method/utils/getMethods";
 import normalizePath from "normalize-path";
 import { CacheMetadata, HttpMethodMetadata } from "./decorators/types";

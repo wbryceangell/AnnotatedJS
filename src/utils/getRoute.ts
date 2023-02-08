@@ -4,6 +4,7 @@ import {
   ControllerMetadata,
   HttpMethodMetadata,
 } from "../decorators/types";
+import getCaches from "../global/caches/getCaches";
 
 export default (
     controllerMetadata: ControllerMetadata,
@@ -11,6 +12,7 @@ export default (
     cacheMetadata?: CacheMetadata
   ) =>
   async (req: Request, ctx: RouteContext) => {
+    const caches = getCaches();
     let cache: Cache | null = null;
     if (cacheMetadata && !cacheMetadata.purge)
       cache = await caches.open(cacheMetadata.name);
