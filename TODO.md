@@ -1,0 +1,2 @@
+- probably want to have unit tests that make sure the router ends up configured with what we expect when we use the @Api or @Controller annotations
+- maybe we should export the default configuration objects for specific environments, ie node, worker, etc.
