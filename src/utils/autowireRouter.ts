@@ -1,14 +1,12 @@
-import { WorkerRouter } from "@worker-tools/router";
-import { getControllers } from "./decorators/class/controller";
-import { cacheKey, methodKeys } from "./keys";
-import getMethods from "./decorators/method/utils/getMethods";
 import normalizePath from "normalize-path";
-import { CacheMetadata, HttpMethodMetadata } from "./decorators/types";
-import getRoute from "./utils/getRoute";
+import { getControllers } from "../decorators/class/controller";
+import getMethods from "../decorators/method/utils/getMethods";
+import { CacheMetadata, HttpMethodMetadata } from "../decorators/types";
+import { Router } from "../interfaces/router";
+import { cacheKey, methodKeys } from "../keys";
+import getRoute from "./getRoute";
 
-export default () => {
-  let router = new WorkerRouter();
-
+export default (router: Router) => {
   for (const controllerMetadata of getControllers()) {
     const cacheMetadataList = getMethods<CacheMetadata>(
       cacheKey,
@@ -32,10 +30,4 @@ export default () => {
       }
     }
   }
-
-  router = router.recover("*", (req) => {
-    return fetch(req);
-  });
-
-  return router;
 };

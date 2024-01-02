@@ -1,5 +1,5 @@
+import { RequestHandler } from "../../../../interfaces/router";
 import getMethods from "../../utils/getMethods";
-import { Handler, RouteContext } from "@worker-tools/router";
 
 export default (key: string) =>
   (path = "/") =>
@@ -10,5 +10,5 @@ export default (key: string) =>
     }) as (
       target: Object,
       propertyKey: string | symbol,
-      descriptor: TypedPropertyDescriptor<Handler<RouteContext>>
-    ) => TypedPropertyDescriptor<Handler<RouteContext>> | void;
+      descriptor: TypedPropertyDescriptor<RequestHandler>
+    ) => TypedPropertyDescriptor<RequestHandler> | void;

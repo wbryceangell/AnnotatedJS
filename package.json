@@ -23,7 +23,6 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@worker-tools/router": "^0.3.0-pre.6",
     "normalize-path": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "urlpattern-polyfill": "^6.0.2"

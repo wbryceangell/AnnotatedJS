@@ -1,4 +1,4 @@
-import { Handler, RouteContext } from "@worker-tools/router";
+import { RequestHandler } from "../../../../interfaces/router";
 import { cacheKey } from "../../../../keys";
 import { CacheMetadata } from "../../../types";
 import getMethods from "../../utils/getMethods";
@@ -11,5 +11,5 @@ export default (purge: boolean) => (name: string) =>
   }) as (
     target: Object,
     propertyKey: string | symbol,
-    descriptor: TypedPropertyDescriptor<Handler<RouteContext>>
-  ) => TypedPropertyDescriptor<Handler<RouteContext>> | void;
+    descriptor: TypedPropertyDescriptor<RequestHandler>
+  ) => TypedPropertyDescriptor<RequestHandler> | void;

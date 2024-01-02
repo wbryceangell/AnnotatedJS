@@ -1,4 +1,3 @@
-import { RouteContext } from "@worker-tools/router";
 import {
   CacheMetadata,
   ControllerMetadata,
@@ -11,7 +10,7 @@ export default (
     httpMethodMetadata: HttpMethodMetadata,
     cacheMetadata?: CacheMetadata
   ) =>
-  async (req: Request, ctx: RouteContext) => {
+  async (req: Request) => {
     const caches = getCaches();
     let cache: Cache | null = null;
     if (cacheMetadata && !cacheMetadata.purge)
@@ -24,7 +23,7 @@ export default (
 
     const res = await (
       controllerMetadata.prototype[httpMethodMetadata.property] as Function
-    ).call(controllerMetadata.prototype, req, ctx);
+    ).call(controllerMetadata.prototype, req);
 
     if (
       cacheMetadata &&
