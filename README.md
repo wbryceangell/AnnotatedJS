@@ -8,6 +8,8 @@
 
 AnnotatedJS is a lightweight framework for building JavaScript backends. It is built with <a href="https://www.typescriptlang.org" target="_blank">TypeScript</a> and favors configuration over convention. This design allows it the flexibility to operate in different runtimes such as <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API" target="_blank">Web Workers</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API" target="_blank">Service Workers</a>, and <a href="https://nodejs.org" target="_blank">Node.js</a>.
 
+The framework is heavily inspired by <a href="https://spring.io/" target="_blank">Spring</a> and <a href="https://nestjs.com/" target="_blank">NestJS</a>.
+
 ## Attributions
 
 Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect"> Pixel perfect </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
