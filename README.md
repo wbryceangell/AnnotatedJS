@@ -2,7 +2,7 @@
   <img src="https://github.com/Fork-Git-It/AnnotatedJS/assets/11467984/c11a3cb2-4fe9-4656-9c1c-24626352b4f0" width="120" alt="AnnotatedJS Logo" />
 </p>
 <p align="center">A JavaScript framework for building backends with annotations.</p>
-<p align="center"><a href="https://paypal.me/wbryceangell?country.x=US&locale.x=en_US" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a></p>
+<p align="center"><a href="https://paypal.me/wbryceangell?country.x=US&locale.x=en_US" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-0079c1.svg"/></a></p>
 
 ## Description
 
@@ -16,6 +16,26 @@ This framework relies on the <a href="https://github.com/tc39/proposal-decorator
 
 - [JavaScript](https://babeljs.io/docs/babel-plugin-proposal-decorators)
 - [TypeScript](https://www.typescriptlang.org/docs/handbook/decorators.html)
+
+## Annotations
+
+### Class Annotations
+
+- @Controller
+- @Service
+
+### Property Annotations
+
+- @Inject
+
+### Method Annotations
+
+- @Cache
+- @Get
+- @Put
+- @Post
+- @Patch
+- @Delete
 
 ## Attributions
 
