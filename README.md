@@ -38,7 +38,34 @@ This framework relies on the <a href="https://github.com/tc39/proposal-decorator
 
 ## @Controller
 
+`Controller` is a class level annotation that represents a specific API entrypoint. It expects the API path as a parameter.
+
+```typescript
+import { Controller, Get } from "@fork-git-it/annotatedjs";
+
+@Controller("/api")
+export class ExampleController {
+  @Get("/get")
+  async test(req: Request): Promise<Response> {
+    return new Response("Hello World");
+  }
+}
+```
+
 ## @Service
+
+`Service` is a class level annotation that will typically encapsulate logic that can be used by a `Controller` or another `Service`.
+
+```typescript
+import { Service } from "@fork-git-it/annotatedjs";
+
+@Service
+export class EchoService {
+  echo(message: string) {
+    return message;
+  }
+}
+```
 
 ## @Inject
 
