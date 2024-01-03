@@ -1,7 +1,7 @@
 {
   "name": "@fork-git-it/annotatedjs",
   "version": "1.0.0-alpha",
-  "description": "A javascript framework for building backends with annotations",
+  "description": "A JavaScript framework for building backends with annotations",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
