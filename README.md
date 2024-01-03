@@ -21,21 +21,36 @@ This framework relies on the <a href="https://github.com/tc39/proposal-decorator
 
 ### Class Annotations
 
-- @Controller
-- @Service
+- [@Controller](#controller)
+- [@Service](#service)
 
 ### Property Annotations
 
-- @Inject
+- [@Inject](#inject)
 
 ### Method Annotations
 
-- @Cache
-- @Get
-- @Put
-- @Post
-- @Patch
-- @Delete
+- [@Get](#get)
+- [@Put](#put)
+- [@Post](#post)
+- [@Patch](#patch)
+- [@Delete](#delete)
+
+## @Controller
+
+## @Service
+
+## @Inject
+
+## @Get
+
+## @Put
+
+## @Post
+
+## @Patch
+
+## @Delete
 
 ## Attributions
 
