@@ -1,7 +1,7 @@
 {
-  "name": "@fork-git-it/texmex",
-  "version": "1.0.0",
-  "description": "A minimalist TypeScript API framework",
+  "name": "@fork-git-it/annotatedjs",
+  "version": "1.0.0-alpha",
+  "description": "A javascript framework for building backends with annotations",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
@@ -13,7 +13,13 @@
     "format": "prettier . -w",
     "build": "tsc"
   },
-  "author": "wbryceangell@gmail.com",
+  "contributors": [
+    {
+      "name": "William Bryce Angell",
+      "email": "wbryceangell@gmail.com",
+      "url": "https://github.com/wbryceangell"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^29.2.6",
