@@ -1,5 +1,5 @@
-import { RequestHandler } from "../../../../interfaces/router";
-import getMethods from "../../utils/getMethods";
+import { RequestHandler } from "../../../interfaces/router";
+import getMethods from "../getMethods";
 
 export default (key: string) =>
   (path = "/") =>

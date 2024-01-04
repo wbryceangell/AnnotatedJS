@@ -1,6 +1,6 @@
 import normalizePath from "normalize-path";
-import { getControllers } from "../decorators/class/controller";
-import getMethods from "../decorators/method/utils/getMethods";
+import { getControllers } from "../decorators/controller/controller";
+import getMethods from "../decorators/controller/getMethods";
 import { CacheMetadata, HttpMethodMetadata } from "../decorators/types";
 import { Router } from "../interfaces/router";
 import { cacheKey, methodKeys } from "../keys";
@@ -30,4 +30,7 @@ export default (router: Router) => {
       }
     }
   }
+  router.all("*", (req) => {
+    return fetch(req);
+  });
 };
