@@ -1,5 +1,5 @@
-import { container } from "../../global/container";
+import setGlobal from "../../global/utils/setGlobal";
 
 export default ((constructor) => {
-  Reflect.defineMetadata(constructor.name, constructor.prototype, container);
+  setGlobal(constructor.name, constructor.prototype);
 }) as ClassDecorator;

@@ -1,10 +1,13 @@
-import { Config } from "../../interfaces/config";
+import { propertiesKey } from "../../keys";
+import getProperties from "./getProperties";
 
-export const Property = (key: Symbol) =>
+export const Property = (property: symbol) =>
   ((config, methodName) => {
-    Reflect.defineMetadata(key, methodName, config);
+    const properties = getProperties(config);
+    properties.push({ property, methodName });
+    Reflect.defineMetadata(propertiesKey, properties, config);
   }) as (
-    target: Config,
+    target: Object,
     propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<() => any>
   ) => TypedPropertyDescriptor<() => any> | void;
