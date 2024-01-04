@@ -1,5 +1,6 @@
 // global
 export const cachesKey = "caches";
+export const routerKey = "router";
 
 // class
 export const controllersKey = "controllers";
