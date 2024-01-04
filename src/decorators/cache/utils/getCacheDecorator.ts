@@ -1,7 +1,7 @@
-import { RequestHandler } from "../../../../interfaces/router";
-import { cacheKey } from "../../../../keys";
-import { CacheMetadata } from "../../../types";
-import getMethods from "../../utils/getMethods";
+import { RequestHandler } from "../../../interfaces/router";
+import { cacheKey } from "../../../keys";
+import { CacheMetadata } from "../../types";
+import getMethods from "../../controller/getMethods";
 
 export default (purge: boolean) => (name: string) =>
   ((target, property) => {

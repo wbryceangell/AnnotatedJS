@@ -1,4 +1,4 @@
-import { container } from "../../../global/container";
+import { container } from "../../global/container";
 
 export default ((constructor) => {
   Reflect.defineMetadata(constructor.name, constructor.prototype, container);
