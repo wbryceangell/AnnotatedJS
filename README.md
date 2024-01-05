@@ -18,6 +18,39 @@ This framework relies on the <a href="https://github.com/tc39/proposal-decorator
   - Use "legacy" version of the decorator proposal
 - [TypeScript](https://www.typescriptlang.org/docs/handbook/decorators.html)
 
+## Initialization
+
+```typescript
+// service worker entrypoint
+
+import { initialize } from "@fork-git-it/annotatedjs";
+// import config and all controllers here
+
+const requestHandler = initialize();
+const eventHandler = (evt: Event) => {
+  evt.respondWith(requestHandler(evt.request));
+};
+addEventListener("fetch", eventHandler);
+```
+
+```typescript
+// node entrypoint
+
+import { initialize } from "@fork-git-it/annotatedjs";
+import { createServerAdapter } from "@whatwg-node/server";
+import { createServer } from "http";
+import "isomorphic-fetch";
+// import config and all controllers here
+
+const requestHandler = initialize();
+const ittyServer = createServerAdapter(requestHandler);
+const httpServer = createServer(ittyServer);
+httpServer.listen(3001);
+console.log("listening at https://localhost:3001");
+```
+
+AnnotatedJS starts with the `initialize()` method. This method will return back a request handler. The request handler can then be used in different runtimes such as a service worker, or node (see above).
+
 ## Annotations
 
 ### [@Config](#config-1)
