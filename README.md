@@ -20,11 +20,11 @@ This framework relies on the <a href="https://github.com/tc39/proposal-decorator
 
 ## Annotations
 
-### [@Config](#config)
+### [@Config](#config-1)
 
-### [@Controller](#controller)
+### [@Controller](#controller-1)
 
-### [@Service](#service)
+### [@Service](#service-1)
 
 ### [@Inject](#inject-1)
 
@@ -84,7 +84,7 @@ export class ExampleController {
 }
 ```
 
-The `Controller` annotation represents a specific API entrypoint. It expects the API path as a parameter.
+`@Controller` represents a specific API entrypoint. It expects the API path as a parameter.
 
 The HTTP method annotations `@Get`, `@Put`, `@Post`, `@Patch`, `@Delete` take the API endpoint path as an optional paramater.
 
