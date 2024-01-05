@@ -30,7 +30,4 @@ export default (router: Router) => {
       }
     }
   }
-  router.all("*", (req) => {
-    return fetch(req);
-  });
 };
