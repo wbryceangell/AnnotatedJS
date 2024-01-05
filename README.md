@@ -46,7 +46,7 @@ export class ExampleConfig {
 }
 ```
 
-`@Config` defines values that will be available for injection. It requires the `getRouter()` method at minimum.
+`@Config` defines values that will be available for injection. It requires the `getRouter()` method at minimum, see [Router](#router).
 
 `@Config` encapsulates `@Property` annotations. `@Property` takes a symbol as an argument and injects the returned value of the method using that symbol, see [@Inject](#inject-1).
 
@@ -189,6 +189,10 @@ export class StorageController {
 ```
 
 `@Inject` accepts two different types of arguments: a symbol or a class. The `StorageService` class above uses a Symbol to get the `Storage` instance. The `StorageController` class uses the `StorageService` class as the injection argument.
+
+## Router
+
+`Router` is an interface that is exposed by the framework. The `@Config` class expects the `getRouter()` method to return an implementation that conforms to the interface. The examples above uses [itty-router](https://github.com/kwhitley/itty-router).
 
 ## Attributions
 
