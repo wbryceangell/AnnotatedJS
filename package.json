@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "normalize-path": "^3.0.0",
-    "reflect-metadata": "^0.1.13",
-    "urlpattern-polyfill": "^6.0.2"
+    "reflect-metadata": "^0.1.13"
   }
 }
