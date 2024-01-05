@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import "urlpattern-polyfill";
 import getGlobal from "./global/utils/getGlobal";
 import { Router } from "./interfaces/router";
 import { routerKey } from "./keys";
