@@ -8,6 +8,10 @@
     "dist/**/*",
     "types/**/*"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": "https://github.com/Fork-Git-It/AnnotatedJS",
   "scripts": {
     "test": "jest",
     "format": "prettier . -w",
