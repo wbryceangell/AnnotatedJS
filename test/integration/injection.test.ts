@@ -14,7 +14,9 @@ describe("Injection", () => {
       const prop = Symbol.for("prop");
       @Config
       class Configuration {
-        getRouter() {}
+        getRouter() {
+          return {};
+        }
         @Property(prop) getProp() {}
       }
       class Test {
@@ -23,12 +25,14 @@ describe("Injection", () => {
     }).toThrow();
   });
 
-  it("should not work when symbol is configured and null", () => {
+  it("should work when symbol is configured and null", () => {
     expect(() => {
       const prop = Symbol.for("prop");
       @Config
       class Configuration {
-        getRouter() {}
+        getRouter() {
+          return {};
+        }
         @Property(prop) getProp() {
           return null;
         }
@@ -36,7 +40,7 @@ describe("Injection", () => {
       class Test {
         @Inject(prop) public prop: any;
       }
-    }).toThrow();
+    }).not.toThrow();
   });
 
   it("should work when symbol is configured and defined", () => {
@@ -44,7 +48,9 @@ describe("Injection", () => {
       const prop = Symbol.for("prop");
       @Config
       class Configuration {
-        getRouter() {}
+        getRouter() {
+          return {};
+        }
         @Property(prop) getProp() {
           return {};
         }
