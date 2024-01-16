@@ -1,4 +1,4 @@
-import { Config, Inject, Property, initialize } from "../../src/index";
+import { Config, Inject, Property } from "../../src/index";
 
 describe("Injection", () => {
   it("should not work when symbol is not configured", () => {
