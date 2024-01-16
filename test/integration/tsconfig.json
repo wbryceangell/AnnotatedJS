@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["ES6", "WebWorker", "DOM"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "ES6",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
+  },
+  "include": ["."]
+}
