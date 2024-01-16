@@ -72,4 +72,18 @@ describe("Config", () => {
       }
     }).not.toThrow();
   });
+
+  it("should not work when @Property is not used on a function", () => {
+    expect(() => {
+      @Config
+      class Configuration {
+        getRouter() {
+          return {};
+        }
+
+        // @ts-ignore
+        @Property(Symbol.for("prop")) private prop: any;
+      }
+    }).toThrow();
+  });
 });

@@ -9,6 +9,9 @@ export const Property = (property: symbol) =>
           property
         )}. It must be a symbol`
       );
+    // @ts-ignore
+    if (typeof config[methodName] !== "function")
+      throw new Error("Property must be used on a Config method");
     const properties = getProperties(config);
     properties.push({ property, methodName });
     Reflect.defineMetadata(propertiesKey, properties, config);
