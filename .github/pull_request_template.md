@@ -2,11 +2,7 @@ All Submissions:
 
 - [ ] Have you followed the guidelines in our Contributing document?
 - [ ] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/Fork-Git-It/AnnotatedJS/pulls) for the same update/change?
-
-### New Feature Submissions:
-
-1. [ ] Does your submission run in our functional test environments?
-2. [ ] Have you formatted the code?
+- [ ] Has the package version number been bumped?
 
 ### Changes to Core Features:
 

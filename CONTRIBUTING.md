@@ -4,7 +4,7 @@ Thank you for wanting to contribute to the AnnotatedJS project!
 
 ## Testing
 
-At the moment we only have functional testing for Node.js and Service Worker runtimes (see [README](https://github.com/Fork-Git-It/AnnotatedJS/blob/main/README.md)). Please try running these functional tests with the changeset in a well supported browser and the LTS version of Node.js.
+The full test suite can be ran via the `npm test` command. It also runs as part of the PR pipeline.
 
 ## Submitting changes
 
@@ -19,3 +19,5 @@ Always write a clear log message for your commits. One-line messages are fine fo
 ## Coding conventions
 
 AnnotatedJS uses the default [prettier](https://prettier.io/) formatter. The command `npm run format` will automatically format the codebase.
+
+Please bump the version number of the package based on the type of PR (Feature or Fix). Also be sure that the package-lock.json is updated as well!
