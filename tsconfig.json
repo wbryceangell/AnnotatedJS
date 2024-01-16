@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["ES6", "WebWorker"],
     "module": "CommonJS",
     "outDir": "dist",
     "rootDir": "src",
