@@ -2,7 +2,11 @@
   <img src="https://github.com/Fork-Git-It/AnnotatedJS/assets/11467984/c11a3cb2-4fe9-4656-9c1c-24626352b4f0" width="120" alt="AnnotatedJS Logo" />
 </p>
 <p align="center">A JavaScript framework for building backends with annotations.</p>
-<p align="center"><a href="https://paypal.me/wbryceangell?country.x=US&locale.x=en_US" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-0079c1.svg"/></a></p>
+<p align="center">
+<a href="https://github.com/Fork-Git-It/AnnotatedJS/pkgs/npm/annotatedjs" target="_blank"><img src="https://img.shields.io/github/package-json/v/Fork-Git-It/AnnotatedJS/main" alt="Package Version" /></a>
+<a href="https://github.com/Fork-Git-It/AnnotatedJS/actions/workflows/ci.yml" target="_blank"><img src="https://github.com/Fork-Git-It/AnnotatedJS/actions/workflows/ci.yml/badge.svg" alt="Continuous Integration" /></a>
+<a href="https://paypal.me/wbryceangell?country.x=US&locale.x=en_US" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-0079c1.svg"/></a>
+</p>
 
 ## Description
 
