@@ -5,7 +5,7 @@ describe("Service", () => {
     expect(() => {
       class TestService {}
       class Test {
-        @Inject(TestService) private service: any;
+        @Inject(TestService) private accessor service: any;
       }
     }).toThrow();
   });
@@ -15,7 +15,7 @@ describe("Service", () => {
       @Service
       class TestService {}
       class Test {
-        @Inject(TestService) private service: any;
+        @Inject(TestService) private accessor service: any;
       }
     }).not.toThrow();
   });

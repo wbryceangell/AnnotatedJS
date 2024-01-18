@@ -15,8 +15,8 @@
   "scripts": {
     "test": "npm run test:int",
     "test:int": "npm run test:int:sw & npm run test:int:node",
-    "test:int:sw": "jest -c ./test/integration/jest.sw.config.js integration",
-    "test:int:node": "jest -c ./test/integration/jest.node.config.js integration",
+    "test:int:sw": "jest integration --env=jsdom",
+    "test:int:node": "jest integration --env=node",
     "format": "prettier . -w",
     "build": "tsc"
   },
@@ -29,11 +29,15 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/plugin-proposal-decorators": "^7.23.7",
+    "@babel/preset-env": "^7.23.8",
+    "@babel/preset-typescript": "^7.23.3",
     "@types/jest": "^29.2.6",
     "@types/normalize-path": "^3.0.0",
+    "babel-jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^2.8.3",
-    "ts-jest": "^29.0.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {
