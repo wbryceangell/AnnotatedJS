@@ -4,7 +4,7 @@ describe("Injection", () => {
   it("should not work when symbol is not configured", () => {
     expect(() => {
       class Test {
-        @Inject(Symbol.for("injected")) public injected: any;
+        @Inject(Symbol.for("injected")) public accessor injected: any;
       }
     }).toThrow();
   });
@@ -20,7 +20,7 @@ describe("Injection", () => {
         @Property(prop) getProp() {}
       }
       class Test {
-        @Inject(prop) public prop: any;
+        @Inject(prop) public accessor prop: any;
       }
     }).toThrow();
   });
@@ -38,7 +38,7 @@ describe("Injection", () => {
         }
       }
       class Test {
-        @Inject(prop) public prop: any;
+        @Inject(prop) public accessor prop: any;
       }
     }).not.toThrow();
   });
@@ -56,7 +56,7 @@ describe("Injection", () => {
         }
       }
       class Test {
-        @Inject(prop) public prop: any;
+        @Inject(prop) public accessor prop: any;
       }
     }).not.toThrow();
   });
