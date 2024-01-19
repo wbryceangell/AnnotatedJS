@@ -1,17 +1,32 @@
-import { ConfigMetadataProperties } from "../types";
+import { type ConfigMetadataProperties } from "../types";
+import { getMetadata } from "../utils/getMetadata";
+import { getMetadataProperty } from "../utils/getMetadataProperty";
+import { validateKind } from "../utils/validateKind";
 
 export const Property =
-  (property: symbol) =>
-  (method: Function, { kind, metadata }: ClassMethodDecoratorContext) => {
-    if (kind !== "method")
-      throw new Error("Property can only be used on a method");
-    if (typeof property !== "symbol")
+  (property: string) =>
+  (method: () => unknown, context: ClassMethodDecoratorContext) => {
+    const annotationName = `@${Property.name}`;
+    validateKind(annotationName, context, "method");
+
+    if (typeof property !== "string") {
       throw new Error(
         `Invalid property argument ${JSON.stringify(
           property
-        )}. It must be a symbol`
+        )}. It must be a string`
       );
-    if (!metadata) throw new Error("Property could not use metadata");
-    if (!metadata.properties) metadata.properties = [];
-    (<ConfigMetadataProperties>metadata.properties).push([property, method]);
+    }
+
+    const metadata = getMetadata(annotationName, context);
+    const properties = <ConfigMetadataProperties>(
+      getMetadataProperty(metadata, "properties", [])
+    );
+
+    if (
+      properties.find(([existingProperty]) => existingProperty === property)
+    ) {
+      throw new Error(`Property ${property} is being set more than once`);
+    }
+
+    properties.push([property, method]);
   };

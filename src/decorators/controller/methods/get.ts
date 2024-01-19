@@ -1,4 +1,3 @@
-import { getKey } from "../../../keys";
-import getMethodDecorator from "./getHttpMethod";
+import { getHttpMethod } from "./getHttpMethod";
 
-export const Get = getMethodDecorator(getKey);
+export const Get = getHttpMethod("Get");
