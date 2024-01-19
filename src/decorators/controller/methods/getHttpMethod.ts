@@ -1,27 +1,47 @@
-import { RequestHandler } from "../../../interfaces/router";
-import getMethods from "../getMethods";
+import { type RequestHandler } from "../../../interfaces/router";
+import { type HttpMethodMetadata } from "../../types";
+import { validateKind } from "../../utils/validateKind";
 
-export default (key: string) =>
+export const getHttpMethod =
+  (httpMethod: string) =>
   (path = "/") =>
-    ((target, property) => {
-      if (typeof path !== "string")
-        throw new Error(
-          `Invalid Method path argument ${JSON.stringify(
-            path,
-          )}. Argument must be a string`,
-        );
-      if (path.length === 0)
-        throw new Error("Method path argument is an empty string");
-      // @ts-ignore
-      if (typeof target[property] !== "function")
-        throw new Error(
-          "Method annotation must be used on a Controller method",
-        );
-      const methods = getMethods(key, target);
-      methods.push({ path, property });
-      Reflect.defineMetadata(key, methods, target);
-    }) as (
-      target: Object,
-      propertyKey: string | symbol,
-      descriptor: TypedPropertyDescriptor<RequestHandler>,
-    ) => TypedPropertyDescriptor<RequestHandler> | void;
+  (handler: RequestHandler, context: ClassMethodDecoratorContext) => {
+    validateKind(`@${httpMethod}`, context, "method");
+
+    if (typeof path !== "string") {
+      throw new Error(
+        `Invalid HTTP Method path argument ${JSON.stringify(
+          path
+        )}. Argument must be a string`
+      );
+    }
+
+    if (path.length === 0) {
+      throw new Error("HTTP Method path argument is an empty string");
+    }
+
+    const { metadata } = context;
+    if (!metadata) {
+      throw new Error("HTTP Method could not use metadata");
+    }
+    if (!metadata.methods) {
+      metadata.methods = [];
+    }
+
+    if (
+      (metadata.methods as HttpMethodMetadata[]).find(
+        (metadata) =>
+          metadata.path === path && metadata.httpMethod === httpMethod
+      )
+    ) {
+      throw new Error(
+        `HTTP Method ${httpMethod} and path ${path} already configured`
+      );
+    }
+
+    (metadata.methods as HttpMethodMetadata[]).push({
+      httpMethod,
+      path,
+      handler,
+    });
+  };

@@ -1,24 +1,54 @@
-import { container } from "../../global/container";
+import { container as defaultContainer } from "../../global/container";
+import { getGlobal } from "../../global/utils/getGlobal";
+import { setGlobal } from "../../global/utils/setGlobal";
+import { validateContainer } from "../../global/utils/validateContainer";
 import { controllersKey } from "../../keys";
+import { type ControllerMetadata, type HttpMethodMetadata } from "../types";
+import { validateKind } from "../utils/validateKind";
 
-export const Controller: (path: string) => ClassDecorator =
-  (path) => (constructor) => {
-    if (typeof path !== "string")
+export const Controller =
+  (path: string, container = defaultContainer) =>
+  (constructor: FunctionConstructor, context: ClassDecoratorContext) => {
+    validateContainer(container);
+    validateKind("@Controller", context, "class");
+
+    if (typeof path !== "string") {
       throw new Error(
         `Invalid Controller path argument ${JSON.stringify(
           path,
         )}. Argument must be a string`,
       );
-    if (path.length === 0)
-      throw new Error("Controller path argument is an empty string");
-    const controllers = getControllers();
-    controllers.push({ path, prototype: constructor.prototype });
-    Reflect.defineMetadata(controllersKey, controllers, container);
-  };
+    }
 
-export function getControllers(): Array<{
-  path: string;
-  prototype: any;
-}> {
-  return Reflect.getOwnMetadata(controllersKey, container) || [];
-}
+    if (path.length === 0) {
+      throw new Error("Controller path argument is an empty string");
+    }
+
+    const { metadata } = context;
+    if (!metadata) {
+      throw new Error("Controller could not use metadata");
+    }
+
+    if (!metadata.methods) {
+      metadata.methods = [];
+    }
+
+    const controllerMethodMetadata = (
+      metadata.methods as HttpMethodMetadata[]
+    ).map((methodMetadata) => ({
+      ...methodMetadata,
+      handler: methodMetadata.handler.bind(constructor.prototype),
+    }));
+
+    let controllers = getGlobal<ControllerMetadata[]>(
+      container,
+      controllersKey
+    );
+
+    if (!controllers) {
+      controllers = [];
+    }
+
+    controllers.push({ path, methodMetadata: controllerMethodMetadata });
+    setGlobal(container, controllersKey, controllers);
+  };

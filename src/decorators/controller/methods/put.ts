@@ -1,4 +1,3 @@
-import { putKey } from "../../../keys";
-import getMethodDecorator from "./getHttpMethod";
+import { getHttpMethod } from "./getHttpMethod";
 
-export const Put = getMethodDecorator(putKey);
+export const Put = getHttpMethod("Put");
