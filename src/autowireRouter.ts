@@ -12,12 +12,10 @@ export const autowireRouter = (
     getGlobal(container, controllersKey)
   );
   for (const { path: controllerPath, methodMetadata } of controllers) {
-    for (const { path: methodPath, handler } of methodMetadata) {
-      // @ts-expect-error method key is too ambiguous for router interface
-      router = router[methodKey](
-        normalizePath([controllerPath, methodPath].join("/")),
-        handler
-      );
+    for (const { path: methodPath, handler, httpMethod } of methodMetadata) {
+      router = router[
+        <Exclude<keyof Router, "handle">>httpMethod.toLowerCase()
+      ](normalizePath([controllerPath, methodPath].join("/")), handler);
     }
   }
 };

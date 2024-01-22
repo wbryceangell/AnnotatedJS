@@ -16,7 +16,7 @@ export const Inject =
     const injectables = <Array<InjectableMetadata>>(
       getMetadataProperty(metadata, "injectables", [])
     );
-		
+
     injectables.push({
       target: context.name.toString(),
       key: key instanceof Function ? key.name : key,
