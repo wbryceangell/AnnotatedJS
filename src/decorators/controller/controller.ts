@@ -6,12 +6,13 @@ import { controllersKey } from "../../keys";
 import { type ControllerMetadata, type HttpMethodMetadata } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
-import { setInjectables } from "../utils/setInjectables";
+import { setInjectables } from "../inject/setInjectables";
 import { validateKind } from "../utils/validateKind";
+import { MetadataProperties } from "./metadataProperties";
 
 export const Controller =
   (path: string, container = defaultContainer) =>
-  (constructor: FunctionConstructor, context: ClassDecoratorContext) => {
+  (constructor: NewableFunction, context: ClassDecoratorContext) => {
     validateContainer(container);
 
     const annotationName = `@${Controller.name}`;
@@ -33,7 +34,7 @@ export const Controller =
     setInjectables(container, constructor, metadata);
 
     const methods = <Array<HttpMethodMetadata>>(
-      getMetadataProperty(metadata, "methods", [])
+      getMetadataProperty(metadata, MetadataProperties.methods, [])
     );
 
     const controllerMethodMetadata = methods.map((methodMetadata) => ({

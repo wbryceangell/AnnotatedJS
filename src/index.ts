@@ -6,7 +6,7 @@ export { Get } from "./decorators/controller/methods/get";
 export { Patch } from "./decorators/controller/methods/patch";
 export { Post } from "./decorators/controller/methods/post";
 export { Put } from "./decorators/controller/methods/put";
-export { Inject } from "./decorators/inject";
+export { Inject } from "./decorators/inject/inject";
 export { Service } from "./decorators/service";
 export { initialize } from "./initialize";
 export type { RequestHandler, RouteBuilder, Router } from "./interfaces/router";

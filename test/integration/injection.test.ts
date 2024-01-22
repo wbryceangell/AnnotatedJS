@@ -1,62 +1,71 @@
 import { Config, Inject, Property } from "../../src/index";
 
 describe("Injection", () => {
-  it("should not work when symbol is not configured", () => {
+  it("should not work when property is configured and undefined", () => {
     expect(() => {
-      class Test {
-        @Inject(Symbol.for("injected")) public accessor injected: any;
-      }
-    }).toThrow();
-  });
+      const prop = "prop";
 
-  it("should not work when symbol is configured and undefined", () => {
-    expect(() => {
-      const prop = Symbol.for("prop");
-      @Config
+      // @ts-ignore
+      @Config({})
       class Configuration {
         getRouter() {
           return {};
         }
-        @Property(prop) getProp() {}
+
+        @Property(prop)
+        getProp() {}
       }
+
       class Test {
-        @Inject(prop) public accessor prop: any;
+        @Inject(prop)
+        private accessor prop: unknown;
       }
     }).toThrow();
   });
 
-  it("should work when symbol is configured and null", () => {
+  it("should work when property is configured and null", () => {
     expect(() => {
-      const prop = Symbol.for("prop");
-      @Config
+      const prop = "prop";
+
+      // @ts-ignore
+      @Config({})
       class Configuration {
         getRouter() {
           return {};
         }
-        @Property(prop) getProp() {
+        @Property(prop)
+        getProp() {
           return null;
         }
       }
+
       class Test {
-        @Inject(prop) public accessor prop: any;
+        @Inject(prop)
+        private accessor prop: unknown;
       }
     }).not.toThrow();
   });
 
-  it("should work when symbol is configured and defined", () => {
+  it("should work when property is configured and defined", () => {
     expect(() => {
-      const prop = Symbol.for("prop");
-      @Config
+      const prop = "prop";
+
+      // @ts-ignore
+      @Config({})
       class Configuration {
         getRouter() {
           return {};
         }
-        @Property(prop) getProp() {
+
+        @Property(prop)
+        getProp() {
           return {};
         }
       }
+
       class Test {
-        @Inject(prop) public accessor prop: any;
+        @Inject(prop)
+        private accessor prop: unknown;
       }
     }).not.toThrow();
   });
