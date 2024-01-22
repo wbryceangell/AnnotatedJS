@@ -1,12 +1,15 @@
 import { type RequestHandler } from "../../../interfaces/router";
 import { type HttpMethodMetadata } from "../../types";
+import { getMetadata } from "../../utils/getMetadata";
+import { getMetadataProperty } from "../../utils/getMetadataProperty";
 import { validateKind } from "../../utils/validateKind";
 
 export const getHttpMethod =
   (httpMethod: string) =>
   (path = "/") =>
   (handler: RequestHandler, context: ClassMethodDecoratorContext) => {
-    validateKind(`@${httpMethod}`, context, "method");
+    const annotationName = `@${httpMethod}`;
+    validateKind(annotationName, context, "method");
 
     if (typeof path !== "string") {
       throw new Error(
@@ -20,16 +23,13 @@ export const getHttpMethod =
       throw new Error("HTTP Method path argument is an empty string");
     }
 
-    const { metadata } = context;
-    if (!metadata) {
-      throw new Error("HTTP Method could not use metadata");
-    }
-    if (!metadata.methods) {
-      metadata.methods = [];
-    }
+    const metadata = getMetadata(annotationName, context);
+    const methods = <Array<HttpMethodMetadata>>(
+      getMetadataProperty(metadata, "methods", [])
+    );
 
     if (
-      (metadata.methods as HttpMethodMetadata[]).find(
+      methods.find(
         (metadata) =>
           metadata.path === path && metadata.httpMethod === httpMethod
       )
@@ -39,7 +39,7 @@ export const getHttpMethod =
       );
     }
 
-    (metadata.methods as HttpMethodMetadata[]).push({
+    methods.push({
       httpMethod,
       path,
       handler,

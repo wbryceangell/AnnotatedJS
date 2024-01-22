@@ -4,13 +4,17 @@ import { setGlobal } from "../../global/utils/setGlobal";
 import { validateContainer } from "../../global/utils/validateContainer";
 import { controllersKey } from "../../keys";
 import { type ControllerMetadata, type HttpMethodMetadata } from "../types";
+import { getMetadata } from "../utils/getMetadata";
+import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 
 export const Controller =
   (path: string, container = defaultContainer) =>
   (constructor: FunctionConstructor, context: ClassDecoratorContext) => {
     validateContainer(container);
-    validateKind("@Controller", context, "class");
+
+    const annotationName = `@${Controller.name}`;
+    validateKind(annotationName, context, "class");
 
     if (typeof path !== "string") {
       throw new Error(
@@ -24,18 +28,12 @@ export const Controller =
       throw new Error("Controller path argument is an empty string");
     }
 
-    const { metadata } = context;
-    if (!metadata) {
-      throw new Error("Controller could not use metadata");
-    }
+    const metadata = getMetadata(annotationName, context);
+    const methods = <Array<HttpMethodMetadata>>(
+      getMetadataProperty(metadata, "methods", [])
+    );
 
-    if (!metadata.methods) {
-      metadata.methods = [];
-    }
-
-    const controllerMethodMetadata = (
-      metadata.methods as HttpMethodMetadata[]
-    ).map((methodMetadata) => ({
+    const controllerMethodMetadata = methods.map((methodMetadata) => ({
       ...methodMetadata,
       handler: methodMetadata.handler.bind(constructor.prototype),
     }));
