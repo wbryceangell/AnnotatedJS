@@ -2,16 +2,20 @@ import { Config, initialize } from "../../src/index";
 
 describe("Initialization", () => {
   it("fails when there isn't a config", () => {
-    expect(() => initialize()).toThrow();
+    expect(() => initialize({})).toThrow();
   });
 
-  it("should work when router is configured", () => {
-    @Config
+  it("works when router is configured", () => {
+    const container = {};
+
+    //@ts-ignore
+    @Config(container)
     class Configuration {
       getRouter() {
         return {};
       }
     }
-    expect(() => initialize()).not.toThrow();
+
+    expect(() => initialize(container)).not.toThrow();
   });
 });

@@ -1,7 +1,9 @@
 import { type ConfigMetadataProperties } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
+import { setMetadataProperty } from "../utils/setMetadataProperty";
 import { validateKind } from "../utils/validateKind";
+import { MetadataProperties } from "./metadataProperties";
 
 export const Property =
   (property: string) =>
@@ -19,7 +21,7 @@ export const Property =
 
     const metadata = getMetadata(annotationName, context);
     const properties = <ConfigMetadataProperties>(
-      getMetadataProperty(metadata, "properties", [])
+      getMetadataProperty(metadata, MetadataProperties.properties, [])
     );
 
     if (
@@ -29,4 +31,5 @@ export const Property =
     }
 
     properties.push([property, method]);
+    setMetadataProperty(metadata, MetadataProperties.properties, properties);
   };

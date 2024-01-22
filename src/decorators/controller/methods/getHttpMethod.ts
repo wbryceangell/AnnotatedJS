@@ -2,7 +2,9 @@ import { type RequestHandler } from "../../../interfaces/router";
 import { type HttpMethodMetadata } from "../../types";
 import { getMetadata } from "../../utils/getMetadata";
 import { getMetadataProperty } from "../../utils/getMetadataProperty";
+import { setMetadataProperty } from "../../utils/setMetadataProperty";
 import { validateKind } from "../../utils/validateKind";
+import { MetadataProperties } from "../metadataProperties";
 
 export const getHttpMethod =
   (httpMethod: string) =>
@@ -25,7 +27,7 @@ export const getHttpMethod =
 
     const metadata = getMetadata(annotationName, context);
     const methods = <Array<HttpMethodMetadata>>(
-      getMetadataProperty(metadata, "methods", [])
+      getMetadataProperty(metadata, MetadataProperties.methods, [])
     );
 
     if (
@@ -44,4 +46,5 @@ export const getHttpMethod =
       path,
       handler,
     });
+    setMetadataProperty(metadata, MetadataProperties.methods, methods);
   };

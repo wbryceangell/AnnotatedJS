@@ -8,9 +8,8 @@ export const autowireRouter = (
   container: Record<string, unknown>,
   router: Router
 ) => {
-  const controllers = <Array<ControllerMetadata>>(
-    getGlobal(container, controllersKey)
-  );
+  const controllers =
+    <Array<ControllerMetadata>>getGlobal(container, controllersKey) || [];
   for (const { path: controllerPath, methodMetadata } of controllers) {
     for (const { path: methodPath, handler, httpMethod } of methodMetadata) {
       router = router[
