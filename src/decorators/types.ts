@@ -14,7 +14,6 @@ export type ConfigConstructor = {
   prototype: { getRouter: () => Router };
 };
 export type InjectableMetadata = {
-  target: string;
   key: string;
   set(constructor: FunctionConstructor, value: unknown): void;
 };
