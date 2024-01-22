@@ -1,4 +1,3 @@
-export { Purge } from "./decorators/controller/cache/purge";
 export { Config } from "./decorators/config/config";
 export { Property } from "./decorators/config/property";
 export { Controller } from "./decorators/controller/controller";
@@ -10,4 +9,4 @@ export { Put } from "./decorators/controller/methods/put";
 export { Inject } from "./decorators/inject/inject";
 export { Service } from "./decorators/service";
 export { initialize } from "./initialize";
-export { RequestHandler, RouteBuilder, Router } from "./interfaces/router";
+export type { RequestHandler, RouteBuilder, Router } from "./interfaces/router";

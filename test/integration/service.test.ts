@@ -4,18 +4,26 @@ describe("Service", () => {
   it("should not work when it does not have @Service annotation", () => {
     expect(() => {
       class TestService {}
-      class Test {
-        @Inject(TestService) private service: any;
+
+      @Service({})
+      class OtherService {
+        @Inject(TestService)
+        private accessor service: TestService;
       }
     }).toThrow();
   });
 
   it("should work when service has @Service annotation", () => {
     expect(() => {
-      @Service
+      const container = {};
+
+      @Service(container)
       class TestService {}
-      class Test {
-        @Inject(TestService) private service: any;
+
+      @Service(container)
+      class OtherService {
+        @Inject(TestService)
+        private accessor service: TestService;
       }
     }).not.toThrow();
   });

@@ -1,13 +1,14 @@
-import "reflect-metadata";
-import getGlobal from "./global/utils/getGlobal";
-import { Router } from "./interfaces/router";
+import { container as defaultContainer } from "./global/container";
+import { getGlobal } from "./global/utils/getGlobal";
+import { type Router } from "./interfaces/router";
 import { routerKey } from "./keys";
-import autowireRouter from "./utils/autowireRouter";
+import { autowireRouter } from "./autowireRouter";
 
-export const initialize = () => {
-  const router: Router = getGlobal(routerKey);
-  if (!router)
+export const initialize = (container = defaultContainer) => {
+  const router: Router = getGlobal(container, routerKey);
+  if (!router) {
     throw new Error("Failed to initialize. router implementation is undefined");
-  autowireRouter(router);
+  }
+  autowireRouter(container, router);
   return router.handle;
 };

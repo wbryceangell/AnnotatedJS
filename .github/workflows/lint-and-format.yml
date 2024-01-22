@@ -1,4 +1,4 @@
-name: Format
+name: Lint and Format
 
 on:
   pull_request:
@@ -15,6 +15,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
+      - run: npm run lint:fix
       - run: npm run format
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4

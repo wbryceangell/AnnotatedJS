@@ -4,14 +4,15 @@ describe("Config", () => {
   it("should not work when getRouter is missing", () => {
     expect(() => {
       // @ts-ignore
-      @Config
+      @Config({})
       class Configuration {}
     }).toThrow();
   });
 
   it("should not work when router is not an object", () => {
     expect(() => {
-      @Config
+      // @ts-ignore
+      @Config({})
       class Configuration {
         getRouter() {
           return null;
@@ -22,7 +23,8 @@ describe("Config", () => {
 
   it("should work when router is an object", () => {
     expect(() => {
-      @Config
+      // @ts-ignore
+      @Config({})
       class Configuration {
         getRouter() {
           return {};
@@ -31,42 +33,48 @@ describe("Config", () => {
     }).not.toThrow();
   });
 
-  it("should not work when @Property arg is not a symbol", () => {
+  it("should not work when @Property arg is not a string", () => {
     expect(() => {
-      @Config
+      // @ts-ignore
+      @Config({})
       class Configuration {
         getRouter() {
           return {};
         }
 
         //@ts-ignore
-        @Property("") getProp() {}
+        @Property(0)
+        getProp() {}
       }
     }).toThrow();
   });
 
   it("should not work when property is undefined", () => {
     expect(() => {
-      @Config
+      // @ts-ignore
+      @Config({})
       class Configuration {
         getRouter() {
           return {};
         }
 
-        @Property(Symbol.for("prop")) getProp() {}
+        @Property("prop")
+        getProp() {}
       }
     }).toThrow();
   });
 
   it("should work when property is null", () => {
     expect(() => {
-      @Config
+      // @ts-ignore
+      @Config({})
       class Configuration {
         getRouter() {
           return {};
         }
 
-        @Property(Symbol.for("prop")) getProp() {
+        @Property("prop")
+        getProp() {
           return null;
         }
       }
@@ -75,14 +83,16 @@ describe("Config", () => {
 
   it("should not work when @Property is not used on a function", () => {
     expect(() => {
-      @Config
+      // @ts-ignore
+      @Config({})
       class Configuration {
         getRouter() {
           return {};
         }
 
         // @ts-ignore
-        @Property(Symbol.for("prop")) private prop: any;
+        @Property("prop")
+        private prop: unknown;
       }
     }).toThrow();
   });

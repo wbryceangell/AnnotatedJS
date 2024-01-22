@@ -1,14 +1,19 @@
-export type ControllerMetadata = { path: string; prototype: any };
-export type HttpMethodMetadata = { path: string; property: string | symbol };
-export type PropertyMetadata = {
-  property: symbol;
-  methodName: string | symbol;
+import { type RequestHandler, type Router } from "../interfaces/router";
+
+export type ControllerMetadata = {
+  path: string;
+  methodMetadata: HttpMethodMetadata[];
 };
-export type CacheMetadata = {
-  name: string;
-  property: string | symbol;
-  purge: boolean;
+export type HttpMethodMetadata = {
+  path: string;
+  httpMethod: string;
+  handler: RequestHandler;
 };
+export type ConfigMetadataProperties = Array<[string, () => unknown]>;
 export type ConfigConstructor = {
-  prototype: { getRouter: Function };
+  prototype: { getRouter: () => Router };
+};
+export type InjectableMetadata = {
+  key: string;
+  set(object: unknown, value: unknown): void;
 };
