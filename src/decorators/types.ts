@@ -15,5 +15,5 @@ export type ConfigConstructor = {
 };
 export type InjectableMetadata = {
   key: string;
-  set(constructor: FunctionConstructor, value: unknown): void;
+  set(object: unknown, value: unknown): void;
 };

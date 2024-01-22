@@ -6,6 +6,7 @@ import { controllersKey } from "../../keys";
 import { type ControllerMetadata, type HttpMethodMetadata } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
+import { setInjectables } from "../utils/setInjectables";
 import { validateKind } from "../utils/validateKind";
 
 export const Controller =
@@ -29,6 +30,8 @@ export const Controller =
     }
 
     const metadata = getMetadata(annotationName, context);
+    setInjectables(container, constructor, metadata);
+
     const methods = <Array<HttpMethodMetadata>>(
       getMetadataProperty(metadata, "methods", [])
     );
