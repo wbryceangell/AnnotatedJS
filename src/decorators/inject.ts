@@ -18,7 +18,6 @@ export const Inject =
     );
 
     injectables.push({
-      target: context.name.toString(),
       key: key instanceof Function ? key.name : key,
       set: context.access.set,
     });
