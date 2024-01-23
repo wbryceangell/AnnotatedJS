@@ -1,38 +1,6 @@
 import { Config, Property } from "../../src";
 
 describe("Config", () => {
-  it("should not work when getRouter is missing", () => {
-    expect(() => {
-      // @ts-ignore
-      @Config({})
-      class Configuration {}
-    }).toThrow();
-  });
-
-  it("should not work when router is not an object", () => {
-    expect(() => {
-      // @ts-ignore
-      @Config({})
-      class Configuration {
-        getRouter() {
-          return null;
-        }
-      }
-    }).toThrow();
-  });
-
-  it("should work when router is an object", () => {
-    expect(() => {
-      // @ts-ignore
-      @Config({})
-      class Configuration {
-        getRouter() {
-          return {};
-        }
-      }
-    }).not.toThrow();
-  });
-
   it("should not work when @Property arg is not a string", () => {
     expect(() => {
       // @ts-ignore

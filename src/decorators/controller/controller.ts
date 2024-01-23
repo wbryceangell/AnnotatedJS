@@ -1,32 +1,31 @@
+import normalizePath from "normalize-path";
 import { container as defaultContainer } from "../../global/container";
-import { getGlobal } from "../../global/utils/getGlobal";
-import { setGlobal } from "../../global/utils/setGlobal";
+import { getRouter } from "../../global/utils/getRouter";
 import { validateContainer } from "../../global/utils/validateContainer";
-import { controllersKey } from "../../keys";
-import { type ControllerMetadata, type HttpMethodMetadata } from "../types";
+import { setInjectables } from "../inject/setInjectables";
+import type { HttpMethodMetadata, Router } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
-import { setInjectables } from "../inject/setInjectables";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
 export const Controller =
-  (path: string, container = defaultContainer) =>
+  (controllerPath: string, container = defaultContainer) =>
   (constructor: NewableFunction, context: ClassDecoratorContext) => {
     validateContainer(container);
 
     const annotationName = `@${Controller.name}`;
     validateKind(annotationName, context, "class");
 
-    if (typeof path !== "string") {
+    if (typeof controllerPath !== "string") {
       throw new Error(
         `Invalid Controller path argument ${JSON.stringify(
-          path,
-        )}. Argument must be a string`,
+          controllerPath
+        )}. Argument must be a string`
       );
     }
 
-    if (path.length === 0) {
+    if (controllerPath.length === 0) {
       throw new Error("Controller path argument is an empty string");
     }
 
@@ -42,15 +41,25 @@ export const Controller =
       handler: methodMetadata.handler.bind(constructor.prototype),
     }));
 
-    let controllers = getGlobal<ControllerMetadata[]>(
-      container,
-      controllersKey
-    );
+    let router = getRouter(container);
+    for (const {
+      path: methodPath,
+      handler,
+      httpMethod,
+    } of controllerMethodMetadata) {
+      const routerMethod = <Exclude<keyof Router, "handle">>(
+        httpMethod.toLowerCase()
+      );
 
-    if (!controllers) {
-      controllers = [];
+      if (typeof router[routerMethod] !== "function") {
+        throw new Error(
+          `Router is improperly configured. It should include ${routerMethod} method`
+        );
+      }
+
+      router = router[routerMethod](
+        normalizePath([controllerPath, methodPath].join("/")),
+        handler
+      );
     }
-
-    controllers.push({ path, methodMetadata: controllerMethodMetadata });
-    setGlobal(container, controllersKey, controllers);
   };

@@ -1,20 +1,16 @@
 import { container as defaultContainer } from "../global/container";
-import { setGlobal } from "../global/utils/setGlobal";
+import { setRouter } from "../global/utils/setRouter";
 import { validateContainer } from "../global/utils/validateContainer";
-import { routerKey } from "../keys";
-import type { Router as RouterType } from "./types";
+import type { RouterConstructor } from "./types";
 import { validateKind } from "./utils/validateKind";
 
 export const Router =
   (container = defaultContainer) =>
-  (
-    constructor: NewableFunction & RouterType,
-    context: ClassDecoratorContext
-  ) => {
+  (constructor: RouterConstructor, context: ClassDecoratorContext) => {
     validateContainer(container);
 
     const annotationName = `@${Router.name}`;
     validateKind(annotationName, context, "class");
 
-    setGlobal(container, routerKey, constructor.prototype);
+    setRouter(container, constructor.prototype);
   };
