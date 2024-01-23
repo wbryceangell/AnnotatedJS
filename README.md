@@ -126,7 +126,7 @@ The HTTP method annotations `@Get`, `@Put`, `@Post`, `@Patch`, `@Delete` take th
 ```typescript
 import { Service } from "@fork-git-it/annotatedjs";
 
-@Service
+@Service()
 export class ExampleService {
   doSomething() {}
 }
