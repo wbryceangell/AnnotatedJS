@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "normalize-path": "^3.0.0",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.2.1"
   }
 }
