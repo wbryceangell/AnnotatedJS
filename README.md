@@ -16,11 +16,7 @@ The framework is heavily inspired by <a href="https://spring.io/" target="_blank
 
 ## Decorators
 
-This framework relies on the <a href="https://github.com/tc39/proposal-decorators" target="_blank">decorators</a> experimental JavaScript feature. Here are a some guides to start using it in:
-
-- [JavaScript](https://babeljs.io/docs/babel-plugin-proposal-decorators)
-  - Use "legacy" version of the decorator proposal
-- [TypeScript](https://www.typescriptlang.org/docs/handbook/decorators.html)
+This framework relies on the <a href="https://github.com/tc39/proposal-decorators" target="_blank">decorators</a> experimental JavaScript feature. It is recommended to use [Babel](https://babeljs.io/docs/babel-plugin-proposal-decorators) to compile codebases that include AnnotatedJS.
 
 ## Initialization
 
@@ -70,14 +66,14 @@ AnnotatedJS starts with the `initialize()` method. This method will return back 
 ```typescript
 import { Config, Router } from "@fork-git-it/annotatedjs";
 
-@Config
+@Config()
 export class ExampleConfig {
   getRouter(): Router {
     // return Router implementation
   }
 
-  @Property(Symbol.for("Injected"))
-  getInjected(): any {
+  @Property("Injected")
+  getInjected(): unknown {
     // return some value to be injected
   }
 }
@@ -85,7 +81,7 @@ export class ExampleConfig {
 
 `@Config` defines values that will be available for injection. It requires the `getRouter()` method at minimum, see [Router](#router).
 
-`@Config` encapsulates `@Property` annotations. `@Property` takes a symbol as an argument and injects the returned value of the method using that symbol, see [@Inject](#inject-1).
+`@Config` encapsulates `@Property` annotations. `@Property` takes a string as an argument and injects the returned value of the method using that string, see [@Inject](#inject-1).
 
 ## @Controller
 
@@ -130,7 +126,7 @@ The HTTP method annotations `@Get`, `@Put`, `@Post`, `@Patch`, `@Delete` take th
 ```typescript
 import { Service } from "@fork-git-it/annotatedjs";
 
-@Service
+@Service()
 export class ExampleService {
   doSomething() {}
 }
@@ -152,7 +148,7 @@ export class ExampleConfig {
     return IttyRouter();
   }
 
-  @Property(Symbol.for("Storage"))
+  @Property("Storage")
   getStorage(): Map<string, string> {
     return new Map();
   }
@@ -165,8 +161,8 @@ import { Inject, Service } from "@fork-git-it/annotatedjs";
 
 @Service
 export class StorageService {
-  @Inject(Symbol.for("Storage"))
-  private storage!: Map<string, string>;
+  @Inject("Storage")
+  private accessor storage: Map<string, string>;
 
   create(key: string, value: any) {
     this.storage.set(key, JSON.stringify(value));
@@ -195,7 +191,7 @@ import { StorageService } from "./storageService";
 @Controller("/storage")
 export class StorageController {
   @Inject(StorageService)
-  private storageService!: StorageService;
+  private accessor storageService: StorageService;
 
   @Get("/:key")
   async get(req: Request): Promise<Response> {
@@ -225,11 +221,15 @@ export class StorageController {
 }
 ```
 
-`@Inject` accepts two different types of arguments: a symbol or a class. The `StorageService` class above uses a Symbol to get the `Storage` instance. The `StorageController` class uses the `StorageService` class as the injection argument.
+`@Inject` accepts two different types of arguments: a string or a class. The `StorageService` class above uses a string to get the `Storage` instance. The `StorageController` class uses the `StorageService` class as the injection argument.
 
 ## Router
 
 `Router` is an interface that is exposed by the framework. The `@Config` class expects the `getRouter()` method to return an implementation that conforms to the interface. The examples above uses [itty-router](https://github.com/kwhitley/itty-router).
+
+## Containers
+
+AnnotatedJS utilizes a container object to store globally configured values. The framework sets up a container by default but the `initialize` function and class-level annotations also accept a container object as an argument. This means that multiple containers can be configured if necessary. The container TypeScript type is `Record<string, unknown>`.
 
 ## Attributions
 
