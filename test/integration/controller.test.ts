@@ -18,10 +18,10 @@ describe("Controller", () => {
 
   it("should not work when method argument is not a string", () => {
     expect(() => {
-      @Controller("test")
+      @Controller("test", {})
       class TestController {
         // @ts-ignore
-        @Get({}, {})
+        @Get({})
         get() {}
       }
     }).toThrow();
@@ -29,10 +29,10 @@ describe("Controller", () => {
 
   it("should not work when method argument is an empty string", () => {
     expect(() => {
-      @Controller("test")
+      @Controller("test", {})
       class TestController {
         // @ts-ignore
-        @Get("", {})
+        @Get("")
         get() {}
       }
     }).toThrow();
@@ -47,5 +47,27 @@ describe("Controller", () => {
         private notMethod: unknown;
       }
     }).toThrow();
+  });
+
+  it("should work when annotated method is a function", () => {
+    expect(() => {
+      @Controller("test", {})
+      class TestController {
+        // @ts-ignore
+        @Get()
+        get() {}
+      }
+    }).not.toThrow();
+  });
+
+  it("should work when annotated method is a function and method path is included", () => {
+    expect(() => {
+      @Controller("test", {})
+      class TestController {
+        // @ts-ignore
+        @Get("path")
+        get() {}
+      }
+    }).not.toThrow();
   });
 });
