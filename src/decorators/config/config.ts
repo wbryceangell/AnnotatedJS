@@ -9,6 +9,7 @@ import {
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
+import { MetadataProperties } from "./metadataProperties";
 
 export const Config =
   (container = defaultContainer) =>
@@ -33,7 +34,7 @@ export const Config =
 
     const metadata = getMetadata(annotationName, context);
     const properties = <ConfigMetadataProperties>(
-      getMetadataProperty(metadata, "properties", [])
+      getMetadataProperty(metadata, MetadataProperties.properties, [])
     );
 
     for (const [property, method] of properties) {
