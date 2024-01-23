@@ -66,14 +66,14 @@ AnnotatedJS starts with the `initialize()` method. This method will return back 
 ```typescript
 import { Config, Router } from "@fork-git-it/annotatedjs";
 
-@Config
+@Config()
 export class ExampleConfig {
   getRouter(): Router {
     // return Router implementation
   }
 
-  @Property(Symbol.for("Injected"))
-  getInjected(): any {
+  @Property("Injected")
+  getInjected(): unknown {
     // return some value to be injected
   }
 }
@@ -81,7 +81,7 @@ export class ExampleConfig {
 
 `@Config` defines values that will be available for injection. It requires the `getRouter()` method at minimum, see [Router](#router).
 
-`@Config` encapsulates `@Property` annotations. `@Property` takes a symbol as an argument and injects the returned value of the method using that symbol, see [@Inject](#inject-1).
+`@Config` encapsulates `@Property` annotations. `@Property` takes a string as an argument and injects the returned value of the method using that string, see [@Inject](#inject-1).
 
 ## @Controller
 
