@@ -227,6 +227,10 @@ export class StorageController {
 
 `Router` is an interface that is exposed by the framework. The `@Config` class expects the `getRouter()` method to return an implementation that conforms to the interface. The examples above uses [itty-router](https://github.com/kwhitley/itty-router).
 
+## Containers
+
+AnnotatedJS utilizes a container object to store globally configured values. The framework sets up a container by default but the `initialize` function and class-level annotations also accept a container object as an argument. This means that multiple containers can be configured if necessary. The container TypeScript type is `Record<string, unknown>`.
+
 ## Attributions
 
 Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect"> Pixel perfect </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
