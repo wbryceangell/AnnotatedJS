@@ -1,5 +1,14 @@
-import { type RequestHandler, type Router } from "../interfaces/router";
-
+export type Router = {
+  get: RouteBuilder;
+  put: RouteBuilder;
+  post: RouteBuilder;
+  patch: RouteBuilder;
+  delete: RouteBuilder;
+  all: RouteBuilder;
+  handle: RequestHandler;
+};
+export type RequestHandler = (req: Request) => Promise<Response>;
+export type RouteBuilder = (uri: string, handler: RequestHandler) => Router;
 export type ControllerMetadata = {
   path: string;
   methodMetadata: HttpMethodMetadata[];
