@@ -16,11 +16,7 @@ The framework is heavily inspired by <a href="https://spring.io/" target="_blank
 
 ## Decorators
 
-This framework relies on the <a href="https://github.com/tc39/proposal-decorators" target="_blank">decorators</a> experimental JavaScript feature. Here are a some guides to start using it in:
-
-- [JavaScript](https://babeljs.io/docs/babel-plugin-proposal-decorators)
-  - Use "legacy" version of the decorator proposal
-- [TypeScript](https://www.typescriptlang.org/docs/handbook/decorators.html)
+This framework relies on the <a href="https://github.com/tc39/proposal-decorators" target="_blank">decorators</a> experimental JavaScript feature. It is recommended to use [Babel](https://babeljs.io/docs/babel-plugin-proposal-decorators) to compile codebases that include AnnotatedJS.
 
 ## Initialization
 
