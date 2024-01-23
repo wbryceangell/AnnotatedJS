@@ -1,24 +1,44 @@
-import { Controller, Get } from "../../src/index";
+import { Controller, Get, Router } from "../../src/index";
 
 describe("Controller", () => {
   it("should not work when path argument is not a string", () => {
     expect(() => {
+      const container = {};
+
       // @ts-ignore
-      @Controller({}, {})
+      @Router(container)
+      class TestRouter {}
+
+      // @ts-ignore
+      @Controller({}, container)
       class TestController {}
     }).toThrow();
   });
 
   it("should not work when path argument is an empty string", () => {
     expect(() => {
-      @Controller("", {})
+      const container = {};
+
+      // @ts-ignore
+      @Router(container)
+      class TestRouter {}
+
+      @Controller("", container)
       class TestController {}
     }).toThrow();
   });
 
   it("should not work when method argument is not a string", () => {
     expect(() => {
-      @Controller("test", {})
+      const container = {};
+
+      // @ts-ignore
+      @Router(container)
+      class TestRouter {
+        get() {}
+      }
+
+      @Controller("test", container)
       class TestController {
         // @ts-ignore
         @Get({})
@@ -29,7 +49,15 @@ describe("Controller", () => {
 
   it("should not work when method argument is an empty string", () => {
     expect(() => {
-      @Controller("test", {})
+      const container = {};
+
+      // @ts-ignore
+      @Router(container)
+      class TestRouter {
+        get() {}
+      }
+
+      @Controller("test", container)
       class TestController {
         // @ts-ignore
         @Get("")
@@ -40,7 +68,15 @@ describe("Controller", () => {
 
   it("should not work when annotated method is not a function", () => {
     expect(() => {
-      @Controller("test", {})
+      const container = {};
+
+      // @ts-ignore
+      @Router(container)
+      class TestRouter {
+        get() {}
+      }
+
+      @Controller("test", container)
       class TestController {
         // @ts-ignore
         @Get()
@@ -51,7 +87,15 @@ describe("Controller", () => {
 
   it("should work when annotated method is a function", () => {
     expect(() => {
-      @Controller("test", {})
+      const container = {};
+
+      // @ts-ignore
+      @Router(container)
+      class TestRouter {
+        get() {}
+      }
+
+      @Controller("test", container)
       class TestController {
         // @ts-ignore
         @Get()
@@ -62,7 +106,15 @@ describe("Controller", () => {
 
   it("should work when annotated method is a function and method path is included", () => {
     expect(() => {
-      @Controller("test", {})
+      const container = {};
+
+      // @ts-ignore
+      @Router(container)
+      class TestRouter {
+        get() {}
+      }
+
+      @Controller("test", container)
       class TestController {
         // @ts-ignore
         @Get("path")
