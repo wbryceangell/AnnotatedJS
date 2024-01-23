@@ -148,7 +148,7 @@ export class ExampleConfig {
     return IttyRouter();
   }
 
-  @Property(Symbol.for("Storage"))
+  @Property("Storage")
   getStorage(): Map<string, string> {
     return new Map();
   }
@@ -161,8 +161,8 @@ import { Inject, Service } from "@fork-git-it/annotatedjs";
 
 @Service
 export class StorageService {
-  @Inject(Symbol.for("Storage"))
-  private storage!: Map<string, string>;
+  @Inject("Storage")
+  private accessor storage: Map<string, string>;
 
   create(key: string, value: any) {
     this.storage.set(key, JSON.stringify(value));
@@ -191,7 +191,7 @@ import { StorageService } from "./storageService";
 @Controller("/storage")
 export class StorageController {
   @Inject(StorageService)
-  private storageService!: StorageService;
+  private accessor storageService: StorageService;
 
   @Get("/:key")
   async get(req: Request): Promise<Response> {
@@ -221,7 +221,7 @@ export class StorageController {
 }
 ```
 
-`@Inject` accepts two different types of arguments: a symbol or a class. The `StorageService` class above uses a Symbol to get the `Storage` instance. The `StorageController` class uses the `StorageService` class as the injection argument.
+`@Inject` accepts two different types of arguments: a string or a class. The `StorageService` class above uses a string to get the `Storage` instance. The `StorageController` class uses the `StorageService` class as the injection argument.
 
 ## Router
 
