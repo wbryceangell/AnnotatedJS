@@ -1,8 +1,8 @@
-import { container as defaultContainer } from "../global/container";
-import { setGlobal } from "../global/utils/setGlobal";
-import { validateContainer } from "../global/utils/validateContainer";
-import { getMetadata } from "./utils/getMetadata";
+import { container as defaultContainer } from "../container/container";
+import { setGlobal } from "../container/utils/setGlobal";
+import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
+import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 
 export const Service =

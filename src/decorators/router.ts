@@ -1,6 +1,6 @@
-import { container as defaultContainer } from "../global/container";
-import { setRouter } from "../global/utils/setRouter";
-import { validateContainer } from "../global/utils/validateContainer";
+import { container as defaultContainer } from "../container/container";
+import { setRouter } from "../container/utils/setRouter";
+import { validateContainer } from "../container/utils/validateContainer";
 import type { RouterConstructor } from "./types";
 import { validateKind } from "./utils/validateKind";
 
