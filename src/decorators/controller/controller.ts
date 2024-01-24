@@ -1,7 +1,7 @@
 import normalizePath from "normalize-path";
-import { container as defaultContainer } from "../../global/container";
-import { getRouter } from "../../global/utils/getRouter";
-import { validateContainer } from "../../global/utils/validateContainer";
+import { container as defaultContainer } from "../../container/container";
+import { getRouter } from "../../container/utils/getRouter";
+import { validateContainer } from "../../container/utils/validateContainer";
 import { setInjectables } from "../inject/setInjectables";
 import type { HttpMethodMetadata, Router } from "../types";
 import { getMetadata } from "../utils/getMetadata";

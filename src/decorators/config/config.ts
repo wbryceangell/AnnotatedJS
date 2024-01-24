@@ -1,6 +1,6 @@
-import { container as defaultContainer } from "../../global/container";
-import { setGlobal } from "../../global/utils/setGlobal";
-import { validateContainer } from "../../global/utils/validateContainer";
+import { container as defaultContainer } from "../../container/container";
+import { setGlobal } from "../../container/utils/setGlobal";
+import { validateContainer } from "../../container/utils/validateContainer";
 import type { ConfigMetadataProperties } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";

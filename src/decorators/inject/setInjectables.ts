@@ -1,4 +1,4 @@
-import { getGlobal } from "../../global/utils/getGlobal";
+import { getGlobal } from "../../container/utils/getGlobal";
 import { InjectableMetadata } from "../types";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { MetadataProperties } from "./metadataProperties";
