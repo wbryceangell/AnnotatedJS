@@ -1,14 +1,17 @@
-export type Router = {
-  get: RouteBuilder;
-  put: RouteBuilder;
-  post: RouteBuilder;
-  patch: RouteBuilder;
-  delete: RouteBuilder;
-  all: RouteBuilder;
-  handle: RequestHandler;
-};
+export interface AnnotatedRouter {
+  get(uri: string, handler: RequestHandler): AnnotatedRouter;
+  put(uri: string, handler: RequestHandler): AnnotatedRouter;
+  post(uri: string, handler: RequestHandler): AnnotatedRouter;
+  patch(uri: string, handler: RequestHandler): AnnotatedRouter;
+  delete(uri: string, handler: RequestHandler): AnnotatedRouter;
+  all(uri: string, handler: RequestHandler): AnnotatedRouter;
+  handle(req: Request): Promise<Response>;
+}
 export type RequestHandler = (req: Request) => Promise<Response>;
-export type RouteBuilder = (uri: string, handler: RequestHandler) => Router;
+export type RouteBuilder = (
+  uri: string,
+  handler: RequestHandler
+) => AnnotatedRouter;
 export type HttpMethodMetadata = {
   path: string;
   httpMethod: string;
@@ -16,7 +19,7 @@ export type HttpMethodMetadata = {
 };
 export type ConfigMetadataProperties = Array<[string, () => unknown]>;
 export type RouterConstructor = {
-  prototype: Router;
+  prototype: AnnotatedRouter;
 };
 export type InjectableMetadata = {
   key: string;

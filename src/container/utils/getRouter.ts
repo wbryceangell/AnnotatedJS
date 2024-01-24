@@ -1,7 +1,7 @@
-import { Router } from "../../decorators/types";
+import { AnnotatedRouter } from "../../decorators/types";
 import { getGlobal } from "./getGlobal";
 
-export const getRouter = (container: Record<string, Router>) => {
+export const getRouter = (container: Record<string, AnnotatedRouter>) => {
   const router = getGlobal(container, "Router");
 
   if (!router) {
