@@ -3,7 +3,7 @@ import { container as defaultContainer } from "../../container/container";
 import { getRouter } from "../../container/utils/getRouter";
 import { validateContainer } from "../../container/utils/validateContainer";
 import { setInjectables } from "../inject/setInjectables";
-import type { HttpMethodMetadata, Router } from "../types";
+import type { HttpMethodMetadata, AnnotatedRouter } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
@@ -47,7 +47,7 @@ export const Controller =
       handler,
       httpMethod,
     } of controllerMethodMetadata) {
-      const routerMethod = <Exclude<keyof Router, "handle">>(
+      const routerMethod = <Exclude<keyof AnnotatedRouter, "handle">>(
         httpMethod.toLowerCase()
       );
 
