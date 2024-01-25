@@ -70,7 +70,9 @@ export const Controller =
       );
     }
 
-    context.addInitializer(function () {});
+    context.addInitializer(function () {
+      new this();
+    });
 
     new constructor();
   };
