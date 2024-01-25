@@ -70,5 +70,7 @@ export const Controller =
       );
     }
 
+    context.addInitializer(function () {});
+
     new constructor();
   };
