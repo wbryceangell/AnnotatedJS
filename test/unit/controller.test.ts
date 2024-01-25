@@ -1,3 +1,4 @@
+import { MetadataProperties } from "../../src/decorators/inject/metadataProperties";
 import { Controller } from "../../src/index";
 
 describe("Controller", () => {
@@ -53,5 +54,24 @@ describe("Controller", () => {
     });
 
     expect(spy).toHaveBeenCalledTimes(2);
+  });
+
+  it("sets injectables on class instance", () => {
+    const key = "key";
+    const value = null;
+    const set = jest.fn();
+    class ControllerClass {}
+
+    Controller("path", { Router: {}, [key]: value })(class {}, {
+      kind: "class",
+      name: "Controller",
+      addInitializer: (initializer: Function) =>
+        initializer.call(ControllerClass),
+      metadata: {
+        [MetadataProperties.injectables]: [{ key, set }],
+      },
+    });
+
+    expect(set).toHaveBeenCalledWith(expect.any(ControllerClass), value);
   });
 });
