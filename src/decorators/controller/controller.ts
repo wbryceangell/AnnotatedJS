@@ -11,9 +11,9 @@ import { MetadataProperties } from "./metadataProperties";
 
 export const Controller =
   <
-    Class extends new (...args: unknown[]) => unknown = new (
+    Class extends new (...args: unknown[]) => object = new (
       ...args: unknown[]
-    ) => unknown
+    ) => object
   >(
     controllerPath: string,
     container = defaultContainer
@@ -37,7 +37,6 @@ export const Controller =
     }
 
     const metadata = getMetadata(annotationName, context);
-    setInjectables(container, constructor, metadata);
 
     const methods = <Array<HttpMethodMetadata>>(
       getMetadataProperty(metadata, MetadataProperties.methods, [])
@@ -71,7 +70,8 @@ export const Controller =
     }
 
     context.addInitializer(function () {
-      new this();
+      const controller = new this();
+      setInjectables(container, controller, metadata);
     });
 
     new constructor();
