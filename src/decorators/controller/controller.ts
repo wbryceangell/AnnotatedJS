@@ -10,8 +10,15 @@ import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
 export const Controller =
-  (controllerPath: string, container = defaultContainer) =>
-  (constructor: NewableFunction, context: ClassDecoratorContext) => {
+  <
+    Class extends new (...args: unknown[]) => unknown = new (
+      ...args: unknown[]
+    ) => unknown
+  >(
+    controllerPath: string,
+    container = defaultContainer
+  ) =>
+  (constructor: Class, context: ClassDecoratorContext<Class>) => {
     validateContainer(container);
 
     const annotationName = `@${Controller.name}`;
@@ -62,4 +69,6 @@ export const Controller =
         handler
       );
     }
+
+    new constructor();
   };
