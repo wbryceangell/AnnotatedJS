@@ -24,7 +24,9 @@ export const Service =
 
     setGlobal(container, constructor.name, constructor.prototype);
 
-    context.addInitializer(function () {});
+    context.addInitializer(function () {
+			new this();
+		});
 
     new constructor();
   };
