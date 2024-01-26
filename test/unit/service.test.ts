@@ -20,4 +20,17 @@ describe("Service", () => {
 
     expect(spy).toHaveBeenCalled();
   });
+
+  it("has an initialization hook", () => {
+    const spy = jest.fn();
+
+    Service({ Router: {} })(class {}, {
+      kind: "class",
+      name: "Service",
+      addInitializer: spy,
+      metadata: {},
+    });
+
+    expect(spy).toHaveBeenCalledWith(expect.any(Function));
+  });
 });
