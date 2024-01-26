@@ -7,9 +7,9 @@ import { validateKind } from "./utils/validateKind";
 
 export const Service =
   <
-    Class extends new (...args: unknown[]) => unknown = new (
+    Class extends new (...args: unknown[]) => object = new (
       ...args: unknown[]
-    ) => unknown
+    ) => object
   >(
     container = defaultContainer
   ) =>
@@ -19,14 +19,14 @@ export const Service =
     const annotationName = `@${Service.name}`;
     validateKind(annotationName, context, "class");
 
-    const metadata = getMetadata(annotationName, context);
-    setInjectables(container, constructor, metadata);
-
     setGlobal(container, constructor.name, constructor.prototype);
 
     context.addInitializer(function () {
-			new this();
-		});
+      const service = new this();
+
+      const metadata = getMetadata(annotationName, context);
+      setInjectables(container, service, metadata);
+    });
 
     new constructor();
   };
