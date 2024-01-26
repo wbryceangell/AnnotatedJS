@@ -33,4 +33,25 @@ describe("Service", () => {
 
     expect(spy).toHaveBeenCalledWith(expect.any(Function));
   });
+
+  it("initialization hook creates an instance of the class", () => {
+    const spy = jest.fn();
+
+    Service({ Router: {} })(class {}, {
+      kind: "class",
+      name: "Service",
+      addInitializer: jest.fn((initializer: Function) => {
+        initializer.call(
+          class {
+            constructor() {
+              spy();
+            }
+          }
+        );
+      }),
+      metadata: {},
+    });
+
+    expect(spy).toHaveBeenCalled();
+  });
 });
