@@ -1,4 +1,5 @@
-import { MetadataProperties } from "../../src/decorators/inject/metadataProperties";
+import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
+import { MetadataProperties as injectMetadataProperties } from "../../src/decorators/inject/metadataProperties";
 import { Controller } from "../../src/index";
 
 describe("Controller", () => {
@@ -68,10 +69,39 @@ describe("Controller", () => {
       addInitializer: (initializer: Function) =>
         initializer.call(ControllerClass),
       metadata: {
-        [MetadataProperties.injectables]: [{ key, set }],
+        [injectMetadataProperties.injectables]: [{ key, set }],
       },
     });
 
     expect(set).toHaveBeenCalledWith(expect.any(ControllerClass), value);
+  });
+
+  it("configures router with annotated methods", () => {
+    const get = jest.fn();
+    const controllerPath = "controller";
+    const methodPath = "method";
+    const handler = () => {};
+    const boundFunction = jest.fn();
+    const bind = jest.fn(() => boundFunction);
+    handler.bind = bind;
+    class ControllerClass {}
+
+    Controller(controllerPath, { Router: { get } })(class {}, {
+      kind: "class",
+      name: "Controller",
+      addInitializer: (initializer: Function) =>
+        initializer.call(ControllerClass),
+      metadata: {
+        [MetadataProperties.methods]: [
+          { path: methodPath, httpMethod: "Get", handler },
+        ],
+      },
+    });
+
+    expect(get).toHaveBeenCalledWith(
+      `/${controllerPath}/${methodPath}`,
+      boundFunction
+    );
+    expect(bind).toHaveBeenCalledWith(expect.any(ControllerClass));
   });
 });

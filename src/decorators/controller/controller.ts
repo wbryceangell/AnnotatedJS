@@ -36,42 +36,42 @@ export const Controller =
       throw new Error("Controller path argument is an empty string");
     }
 
-    const metadata = getMetadata(annotationName, context);
-
-    const methods = <Array<HttpMethodMetadata>>(
-      getMetadataProperty(metadata, MetadataProperties.methods, [])
-    );
-
-    const controllerMethodMetadata = methods.map((methodMetadata) => ({
-      ...methodMetadata,
-      handler: methodMetadata.handler.bind(constructor.prototype),
-    }));
-
-    let router = getRouter(container);
-    for (const {
-      path: methodPath,
-      handler,
-      httpMethod,
-    } of controllerMethodMetadata) {
-      const routerMethod = <Exclude<keyof AnnotatedRouter, "handle">>(
-        httpMethod.toLowerCase()
-      );
-
-      if (typeof router[routerMethod] !== "function") {
-        throw new Error(
-          `Router is improperly configured. It should include ${routerMethod} method`
-        );
-      }
-
-      router = router[routerMethod](
-        normalizePath([controllerPath, methodPath].join("/")),
-        handler
-      );
-    }
-
     context.addInitializer(function () {
       const controller = new this();
+
+      const metadata = getMetadata(annotationName, context);
       setInjectables(container, controller, metadata);
+
+      const methods = <Array<HttpMethodMetadata>>(
+        getMetadataProperty(metadata, MetadataProperties.methods, [])
+      );
+
+      const controllerMethodMetadata = methods.map((methodMetadata) => ({
+        ...methodMetadata,
+        handler: methodMetadata.handler.bind(controller),
+      }));
+
+      let router = getRouter(container);
+      for (const {
+        path: methodPath,
+        handler,
+        httpMethod,
+      } of controllerMethodMetadata) {
+        const routerMethod = <Exclude<keyof AnnotatedRouter, "handle">>(
+          httpMethod.toLowerCase()
+        );
+
+        if (typeof router[routerMethod] !== "function") {
+          throw new Error(
+            `Router is improperly configured. It should include ${routerMethod} method`
+          );
+        }
+
+        router = router[routerMethod](
+          normalizePath("/" + [controllerPath, methodPath].join("/"), true),
+          handler
+        );
+      }
     });
 
     new constructor();
