@@ -5,7 +5,7 @@ describe("Service", () => {
   it("creates an instance of the service class", () => {
     const spy = jest.fn();
 
-    Service({ Router: {} })(
+    Service({})(
       class {
         constructor() {
           spy();
@@ -25,7 +25,7 @@ describe("Service", () => {
   it("has an initialization hook", () => {
     const spy = jest.fn();
 
-    Service({ Router: {} })(class {}, {
+    Service({})(class {}, {
       kind: "class",
       name: "Service",
       addInitializer: spy,
@@ -38,7 +38,7 @@ describe("Service", () => {
   it("initialization hook creates an instance of the class", () => {
     const spy = jest.fn();
 
-    Service({ Router: {} })(class {}, {
+    Service({})(class {}, {
       kind: "class",
       name: "Service",
       addInitializer: jest.fn((initializer: Function) => {
@@ -62,9 +62,9 @@ describe("Service", () => {
     const set = jest.fn();
     class ServiceClass {}
 
-    Service({ Router: {}, [key]: value })(class {}, {
+    Service({ [key]: value })(class {}, {
       kind: "class",
-      name: "Controller",
+      name: "Service",
       addInitializer: (initializer: Function) => initializer.call(ServiceClass),
       metadata: {
         [MetadataProperties.injectables]: [{ key, set }],
@@ -73,4 +73,22 @@ describe("Service", () => {
 
     expect(set).toHaveBeenCalledWith(expect.any(ServiceClass), value);
   });
+
+  it("sets global value to class instance", () => {
+    const container = {};
+    const name = "ServiceClass";
+    class ServiceClass {}
+
+    Service(container)(class {}, {
+      kind: "class",
+      name,
+      addInitializer: (initializer: Function) => initializer.call(ServiceClass),
+      metadata: {},
+    });
+
+    expect(container[name]).toStrictEqual(expect.any(ServiceClass));
+  });
+
+  // TODO: Ensure that class has a name.
+  // We need to use context name as global key value
 });

@@ -19,13 +19,14 @@ export const Service =
     const annotationName = `@${Service.name}`;
     validateKind(annotationName, context, "class");
 
-    setGlobal(container, constructor.name, constructor.prototype);
-
     context.addInitializer(function () {
       const service = new this();
 
       const metadata = getMetadata(annotationName, context);
       setInjectables(container, service, metadata);
+
+      // @ts-expect-error we need to use object type but it is actually a class
+      setGlobal(container, context.name, service);
     });
 
     new constructor();
