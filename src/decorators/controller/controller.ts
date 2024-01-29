@@ -3,22 +3,18 @@ import { container as defaultContainer } from "../../container/container";
 import { getRouter } from "../../container/utils/getRouter";
 import { validateContainer } from "../../container/utils/validateContainer";
 import { setInjectables } from "../inject/setInjectables";
-import type { HttpMethodMetadata, AnnotatedRouter } from "../types";
+import type { HttpMethodMetadata, AnnotatedRouter, Class } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
 export const Controller =
-  <
-    Class extends new (...args: unknown[]) => object = new (
-      ...args: unknown[]
-    ) => object
-  >(
+  <T extends Class<object>>(
     controllerPath: string,
     container = defaultContainer
   ) =>
-  (constructor: Class, context: ClassDecoratorContext<Class>) => {
+  (constructor: T, context: ClassDecoratorContext<T>) => {
     validateContainer(container);
 
     const annotationName = `@${Controller.name}`;
