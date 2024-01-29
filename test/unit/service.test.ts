@@ -2,6 +2,13 @@ import { MetadataProperties } from "../../src/decorators/inject/metadataProperti
 import { Service } from "../../src/index";
 
 describe("Service", () => {
+  const kind = "class";
+  const name = "Service";
+  const initializerFor =
+    <T>(className: T) =>
+    (initializer: Function) =>
+      initializer.call(className);
+
   it("creates an instance of the service class", () => {
     const spy = jest.fn();
 
@@ -12,8 +19,8 @@ describe("Service", () => {
         }
       },
       {
-        kind: "class",
-        name: "Service",
+        kind,
+        name,
         addInitializer: () => {},
         metadata: {},
       }
@@ -26,8 +33,8 @@ describe("Service", () => {
     const spy = jest.fn();
 
     Service({})(class {}, {
-      kind: "class",
-      name: "Service",
+      kind,
+      name,
       addInitializer: spy,
       metadata: {},
     });
@@ -39,17 +46,17 @@ describe("Service", () => {
     const spy = jest.fn();
 
     Service({})(class {}, {
-      kind: "class",
-      name: "Service",
-      addInitializer: jest.fn((initializer: Function) => {
-        initializer.call(
+      kind,
+      name,
+      addInitializer: jest.fn(
+        initializerFor(
           class {
             constructor() {
               spy();
             }
           }
-        );
-      }),
+        )
+      ),
       metadata: {},
     });
 
@@ -63,9 +70,9 @@ describe("Service", () => {
     class ServiceClass {}
 
     Service({ [key]: value })(class {}, {
-      kind: "class",
-      name: "Service",
-      addInitializer: (initializer: Function) => initializer.call(ServiceClass),
+      kind,
+      name,
+      addInitializer: initializerFor(ServiceClass),
       metadata: {
         [MetadataProperties.injectables]: [{ key, set }],
       },
@@ -80,9 +87,9 @@ describe("Service", () => {
     class ServiceClass {}
 
     Service(container)(class {}, {
-      kind: "class",
+      kind,
       name,
-      addInitializer: (initializer: Function) => initializer.call(ServiceClass),
+      addInitializer: initializerFor(ServiceClass),
       metadata: {},
     });
 
@@ -92,7 +99,7 @@ describe("Service", () => {
   it("errors if context name is undefined", () => {
     expect(() =>
       Service({})(class {}, {
-        kind: "class",
+        kind,
         name: undefined,
         addInitializer: () => {},
         metadata: {},
