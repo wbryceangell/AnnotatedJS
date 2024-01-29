@@ -2,13 +2,14 @@ import { container as defaultContainer } from "../container/container";
 import { setRouter } from "../container/utils/setRouter";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
-import { AnnotatedRouter, Class } from "./types";
+import { AnnotatedRouter, Class, ClassDecorator } from "./types";
 import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 
-export const Router =
-  <T extends Class<AnnotatedRouter>>(container = defaultContainer) =>
-  (constructor: T, context: ClassDecoratorContext<T>) => {
+export const Router = <T extends Class<AnnotatedRouter>>(
+  container = defaultContainer
+) =>
+  ((constructor, context) => {
     validateContainer(container);
 
     const annotationName = `@${Router.name}`;
@@ -22,4 +23,4 @@ export const Router =
     });
 
     new constructor();
-  };
+  }) as ClassDecorator<T>;

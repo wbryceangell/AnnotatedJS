@@ -26,3 +26,7 @@ export type InjectableMetadata = {
   set(object: unknown, value: unknown): void;
 };
 export type Class<T> = new (...args: unknown[]) => T;
+export type ClassDecorator<T extends Class<unknown>> = (
+  constructor: T,
+  context: ClassDecoratorContext<T>
+) => void;

@@ -1,7 +1,7 @@
 import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
 import { MetadataProperties as injectMetadataProperties } from "../../src/decorators/inject/metadataProperties";
 import { Controller } from "../../src/index";
-import { itCreatesInstanceOfClass } from "./utils";
+import { itCreatesInstanceOfClass, itHasInitializationHook } from "./utils";
 
 describe("Controller", () => {
   const kind = "class";
@@ -12,19 +12,7 @@ describe("Controller", () => {
       initializer.call(className);
 
   itCreatesInstanceOfClass(name, Controller("path", { Router: {} }));
-
-  it("has an initialization hook", () => {
-    const spy = jest.fn();
-
-    Controller("path", { Router: {} })(class {}, {
-      kind,
-      name,
-      addInitializer: spy,
-      metadata: {},
-    });
-
-    expect(spy).toHaveBeenCalledWith(expect.any(Function));
-  });
+  itHasInitializationHook(name, Controller("path", { Router: {} }));
 
   it("initialization hook to create instance of class", () => {
     const spy = jest.fn();

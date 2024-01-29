@@ -3,18 +3,22 @@ import { container as defaultContainer } from "../../container/container";
 import { getRouter } from "../../container/utils/getRouter";
 import { validateContainer } from "../../container/utils/validateContainer";
 import { setInjectables } from "../inject/setInjectables";
-import type { HttpMethodMetadata, AnnotatedRouter, Class } from "../types";
+import type {
+  HttpMethodMetadata,
+  AnnotatedRouter,
+  Class,
+  ClassDecorator,
+} from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
-export const Controller =
-  <T extends Class<object>>(
-    controllerPath: string,
-    container = defaultContainer
-  ) =>
-  (constructor: T, context: ClassDecoratorContext<T>) => {
+export const Controller = <T extends Class<object>>(
+  controllerPath: string,
+  container = defaultContainer
+) =>
+  ((constructor, context) => {
     validateContainer(container);
 
     const annotationName = `@${Controller.name}`;
@@ -71,4 +75,4 @@ export const Controller =
     });
 
     new constructor();
-  };
+  }) as ClassDecorator<T>;
