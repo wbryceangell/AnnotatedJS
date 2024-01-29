@@ -89,6 +89,14 @@ describe("Service", () => {
     expect(container[name]).toStrictEqual(expect.any(ServiceClass));
   });
 
-  // TODO: Ensure that class has a name.
-  // We need to use context name as global key value
+  it("errors if context name is undefined", () => {
+    expect(() =>
+      Service({})(class {}, {
+        kind: "class",
+        name: undefined,
+        addInitializer: () => {},
+        metadata: {},
+      })
+    ).toThrow();
+  });
 });
