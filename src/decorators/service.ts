@@ -19,6 +19,10 @@ export const Service =
     const annotationName = `@${Service.name}`;
     validateKind(annotationName, context, "class");
 
+    if (typeof context.name !== "string") {
+      throw new Error(`${annotationName} must be used on a named class`);
+    }
+
     context.addInitializer(function () {
       const service = new this();
 
