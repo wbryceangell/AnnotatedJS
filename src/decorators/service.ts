@@ -2,18 +2,13 @@ import { container as defaultContainer } from "../container/container";
 import { setGlobal } from "../container/utils/setGlobal";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
+import { Class } from "./types";
 import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 
 export const Service =
-  <
-    Class extends new (...args: unknown[]) => object = new (
-      ...args: unknown[]
-    ) => object
-  >(
-    container = defaultContainer
-  ) =>
-  (constructor: Class, context: ClassDecoratorContext<Class>) => {
+  <T extends Class<object>>(container = defaultContainer) =>
+  (constructor: T, context: ClassDecoratorContext<T>) => {
     validateContainer(container);
 
     const annotationName = `@${Service.name}`;

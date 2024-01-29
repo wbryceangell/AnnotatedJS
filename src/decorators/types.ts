@@ -25,3 +25,4 @@ export type InjectableMetadata = {
   key: string;
   set(object: unknown, value: unknown): void;
 };
+export type Class<T> = new (...args: unknown[]) => T;
