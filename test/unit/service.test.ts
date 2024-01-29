@@ -1,17 +1,19 @@
 import { MetadataProperties } from "../../src/decorators/inject/metadataProperties";
 import { Service } from "../../src/index";
-import { itCreatesInstanceOfClass, itHasInitializationHook } from "./utils";
+import {
+  initializerFor,
+  itCreatesClassInstanceInInitHook,
+  itCreatesInstanceOfClass,
+  itHasInitializationHook,
+} from "./utils";
 
 describe("Service", () => {
   const kind = "class";
   const name = "Service";
-  const initializerFor =
-    <T>(className: T) =>
-    (initializer: Function) =>
-      initializer.call(className);
 
   itCreatesInstanceOfClass(name, Service({}));
   itHasInitializationHook(name, Service({}));
+  itCreatesClassInstanceInInitHook(name, Service({}));
 
   it("initialization hook creates an instance of the class", () => {
     const spy = jest.fn();

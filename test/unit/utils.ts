@@ -1,5 +1,9 @@
 import { Class, ClassDecorator } from "../../src/decorators/types";
 
+export const initializerFor =
+  (classDef: Class<unknown>) => (initializer: Function) =>
+    initializer.call(classDef);
+
 export const itCreatesInstanceOfClass = <T extends Class<object>>(
   name: string,
   classDecorator: ClassDecorator<T>
@@ -44,4 +48,33 @@ export const itHasInitializationHook = <T extends Class<object>>(
     );
 
     expect(spy).toHaveBeenCalledWith(expect.any(Function));
+  });
+
+export const itCreatesClassInstanceInInitHook = <T extends Class<object>>(
+  name: string,
+  classDecorator: ClassDecorator<T>
+) =>
+  it("initialization hook to create instance of class", () => {
+    const spy = jest.fn();
+
+    classDecorator(
+      // @ts-expect-error Class type is too broad for anonymous class
+      class {},
+      {
+        kind: "class",
+        name,
+        addInitializer: jest.fn(
+          initializerFor(
+            class {
+              constructor() {
+                spy();
+              }
+            }
+          )
+        ),
+        metadata: {},
+      }
+    );
+
+    expect(spy).toHaveBeenCalled();
   });
