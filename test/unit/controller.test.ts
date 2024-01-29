@@ -3,6 +3,13 @@ import { MetadataProperties as injectMetadataProperties } from "../../src/decora
 import { Controller } from "../../src/index";
 
 describe("Controller", () => {
+  const kind = "class";
+  const name = "Controller";
+  const initializerFor =
+    <T>(className: T) =>
+    (initializer: Function) =>
+      initializer.call(className);
+
   it("creates an instance of the controller class", () => {
     const spy = jest.fn();
 
@@ -13,8 +20,8 @@ describe("Controller", () => {
         }
       },
       {
-        kind: "class",
-        name: "Controller",
+        kind,
+        name,
         addInitializer: () => {},
         metadata: {},
       }
@@ -27,8 +34,8 @@ describe("Controller", () => {
     const spy = jest.fn();
 
     Controller("path", { Router: {} })(class {}, {
-      kind: "class",
-      name: "Controller",
+      kind,
+      name,
       addInitializer: spy,
       metadata: {},
     });
@@ -46,11 +53,9 @@ describe("Controller", () => {
     }
 
     Controller("path", { Router: {} })(ControllerClass, {
-      kind: "class",
-      name: "Controller",
-      addInitializer: jest.fn((initializer: Function) => {
-        initializer.call(ControllerClass);
-      }),
+      kind,
+      name,
+      addInitializer: initializerFor(ControllerClass),
       metadata: {},
     });
 
@@ -64,10 +69,9 @@ describe("Controller", () => {
     class ControllerClass {}
 
     Controller("path", { Router: {}, [key]: value })(class {}, {
-      kind: "class",
-      name: "Controller",
-      addInitializer: (initializer: Function) =>
-        initializer.call(ControllerClass),
+      kind,
+      name,
+      addInitializer: initializerFor(ControllerClass),
       metadata: {
         [injectMetadataProperties.injectables]: [{ key, set }],
       },
@@ -87,10 +91,9 @@ describe("Controller", () => {
     class ControllerClass {}
 
     Controller(controllerPath, { Router: { get } })(class {}, {
-      kind: "class",
-      name: "Controller",
-      addInitializer: (initializer: Function) =>
-        initializer.call(ControllerClass),
+      kind,
+      name,
+      addInitializer: initializerFor(ControllerClass),
       metadata: {
         [MetadataProperties.methods]: [
           { path: methodPath, httpMethod: "Get", handler },
