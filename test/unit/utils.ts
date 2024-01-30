@@ -1,3 +1,4 @@
+import { MetadataProperties } from "../../src/decorators/inject/metadataProperties";
 import { Class, ClassDecorator } from "../../src/decorators/types";
 
 export const initializerFor =
@@ -77,4 +78,34 @@ export const itCreatesClassInstanceInInitHook = <T extends Class<object>>(
     );
 
     expect(spy).toHaveBeenCalled();
+  });
+
+export const itSetsInjectablesOnInstance = <T extends Class<object>>(
+  name: string,
+  classDecorator: ClassDecorator<T>,
+  container: object
+) =>
+  it("sets injectables on class instance", () => {
+    const key = "key";
+    const value = null;
+
+    container[key] = value;
+
+    const set = jest.fn();
+    class ServiceClass {}
+
+    classDecorator(
+      // @ts-expect-error Class type is too broad for anonymous class
+      class {},
+      {
+        kind: "class",
+        name,
+        addInitializer: initializerFor(ServiceClass),
+        metadata: {
+          [MetadataProperties.injectables]: [{ key, set }],
+        },
+      }
+    );
+
+    expect(set).toHaveBeenCalledWith(expect.any(ServiceClass), value);
   });
