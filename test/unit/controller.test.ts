@@ -8,8 +8,7 @@ import {
   itSetsInjectablesOnInstance,
 } from "./utils";
 
-describe("Controller", () => {
-  const kind = "class";
+describe("@Controller", () => {
   const name = "Controller";
   const path = "path";
 
@@ -31,7 +30,7 @@ describe("Controller", () => {
     class ControllerClass {}
 
     Controller(controllerPath, { Router: { get } })(class {}, {
-      kind,
+      kind: "class",
       name,
       addInitializer: initializerFor(ControllerClass),
       metadata: {

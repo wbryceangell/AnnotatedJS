@@ -5,6 +5,8 @@ export const initializerFor =
   (classDef: Class<unknown>) => (initializer: Function) =>
     initializer.call(classDef);
 
+const kind = "class";
+
 export const itCreatesInstanceOfClass = <T extends Class<object>>(
   name: string,
   classDecorator: ClassDecorator<T>
@@ -20,7 +22,7 @@ export const itCreatesInstanceOfClass = <T extends Class<object>>(
         }
       },
       {
-        kind: "class",
+        kind,
         name,
         addInitializer: () => {},
         metadata: {},
@@ -41,7 +43,7 @@ export const itHasInitializationHook = <T extends Class<object>>(
       // @ts-expect-error Class type is too broad for anonymous class
       class {},
       {
-        kind: "class",
+        kind,
         name,
         addInitializer: spy,
         metadata: {},
@@ -62,7 +64,7 @@ export const itCreatesClassInstanceInInitHook = <T extends Class<object>>(
       // @ts-expect-error Class type is too broad for anonymous class
       class {},
       {
-        kind: "class",
+        kind,
         name,
         addInitializer: jest.fn(
           initializerFor(
@@ -98,7 +100,7 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
       // @ts-expect-error Class type is too broad for anonymous class
       class {},
       {
-        kind: "class",
+        kind,
         name,
         addInitializer: initializerFor(ServiceClass),
         metadata: {
