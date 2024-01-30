@@ -1,57 +1,24 @@
 import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
-import { MetadataProperties as injectMetadataProperties } from "../../src/decorators/inject/metadataProperties";
 import { Controller } from "../../src/index";
 import {
   initializerFor,
   itCreatesClassInstanceInInitHook,
   itCreatesInstanceOfClass,
   itHasInitializationHook,
+  itSetsInjectablesOnInstance,
 } from "./utils";
 
 describe("Controller", () => {
   const kind = "class";
   const name = "Controller";
+  const path = "path";
 
-  itCreatesInstanceOfClass(name, Controller("path", {}));
-  itHasInitializationHook(name, Controller("path", {}));
-  itCreatesClassInstanceInInitHook(name, Controller("path", { Router: {} }));
+  itCreatesInstanceOfClass(name, Controller(path, {}));
+  itHasInitializationHook(name, Controller(path, {}));
+  itCreatesClassInstanceInInitHook(name, Controller(path, { Router: {} }));
 
-  it("initialization hook to create instance of class", () => {
-    const spy = jest.fn();
-
-    class ControllerClass {
-      constructor() {
-        spy();
-      }
-    }
-
-    Controller("path", { Router: {} })(ControllerClass, {
-      kind,
-      name,
-      addInitializer: initializerFor(ControllerClass),
-      metadata: {},
-    });
-
-    expect(spy).toHaveBeenCalledTimes(2);
-  });
-
-  it("sets injectables on class instance", () => {
-    const key = "key";
-    const value = null;
-    const set = jest.fn();
-    class ControllerClass {}
-
-    Controller("path", { Router: {}, [key]: value })(class {}, {
-      kind,
-      name,
-      addInitializer: initializerFor(ControllerClass),
-      metadata: {
-        [injectMetadataProperties.injectables]: [{ key, set }],
-      },
-    });
-
-    expect(set).toHaveBeenCalledWith(expect.any(ControllerClass), value);
-  });
+  let container = { Router: {} };
+  itSetsInjectablesOnInstance(name, Controller(path, container), container);
 
   it("configures router with annotated methods", () => {
     const get = jest.fn();

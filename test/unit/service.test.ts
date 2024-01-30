@@ -1,10 +1,10 @@
-import { MetadataProperties } from "../../src/decorators/inject/metadataProperties";
 import { Service } from "../../src/index";
 import {
   initializerFor,
   itCreatesClassInstanceInInitHook,
   itCreatesInstanceOfClass,
   itHasInitializationHook,
+  itSetsInjectablesOnInstance,
 } from "./utils";
 
 describe("Service", () => {
@@ -15,44 +15,8 @@ describe("Service", () => {
   itHasInitializationHook(name, Service({}));
   itCreatesClassInstanceInInitHook(name, Service({}));
 
-  it("initialization hook creates an instance of the class", () => {
-    const spy = jest.fn();
-
-    Service({})(class {}, {
-      kind,
-      name,
-      addInitializer: jest.fn(
-        initializerFor(
-          class {
-            constructor() {
-              spy();
-            }
-          }
-        )
-      ),
-      metadata: {},
-    });
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("sets injectables on class instance", () => {
-    const key = "key";
-    const value = null;
-    const set = jest.fn();
-    class ServiceClass {}
-
-    Service({ [key]: value })(class {}, {
-      kind,
-      name,
-      addInitializer: initializerFor(ServiceClass),
-      metadata: {
-        [MetadataProperties.injectables]: [{ key, set }],
-      },
-    });
-
-    expect(set).toHaveBeenCalledWith(expect.any(ServiceClass), value);
-  });
+  let container = {};
+  itSetsInjectablesOnInstance(name, Service(container), container);
 
   it("sets global value to class instance", () => {
     const container = {};
