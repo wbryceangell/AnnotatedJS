@@ -28,5 +28,7 @@ export const Config = <T extends Class<object>>(container = defaultContainer) =>
       setGlobal(container as Record<string, typeof value>, property, value);
     }
 
+    context.addInitializer(function () {});
+
     new constructor();
   }) as ClassDecorator<T>;
