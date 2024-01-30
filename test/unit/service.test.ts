@@ -7,7 +7,7 @@ import {
   itSetsInjectablesOnInstance,
 } from "./utils";
 
-describe("Service", () => {
+describe("@Service", () => {
   const kind = "class";
   const name = "Service";
 

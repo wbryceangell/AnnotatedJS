@@ -1,15 +1,14 @@
 import { container as defaultContainer } from "../../container/container";
 import { setGlobal } from "../../container/utils/setGlobal";
 import { validateContainer } from "../../container/utils/validateContainer";
-import type { ConfigMetadataProperties } from "../types";
+import type { Class, ClassDecorator, ConfigMetadataProperties } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
-export const Config =
-  (container = defaultContainer) =>
-  (constructor: NewableFunction, context: ClassDecoratorContext) => {
+export const Config = <T extends Class<object>>(container = defaultContainer) =>
+  ((constructor, context) => {
     validateContainer(container);
 
     const annotationName = `@${Config.name}`;
@@ -28,4 +27,6 @@ export const Config =
       }
       setGlobal(container as Record<string, typeof value>, property, value);
     }
-  };
+
+    new constructor();
+  }) as ClassDecorator<T>;
