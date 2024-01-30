@@ -35,4 +35,17 @@ describe("@Config", () => {
     expect(callGetter).toHaveBeenCalledWith(expect.any(ConfigClass));
     expect(container[key]).toBe(value);
   });
+
+  it("errors if property is undefined", () => {
+    expect(() =>
+      Config({})(class {}, {
+        kind: "class",
+        name,
+        addInitializer: initializerFor(class {}),
+        metadata: {
+          [MetadataProperties.properties]: [["key", () => undefined]],
+        },
+      })
+    ).toThrow();
+  });
 });
