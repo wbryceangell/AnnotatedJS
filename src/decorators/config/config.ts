@@ -14,22 +14,23 @@ export const Config = <T extends Class<object>>(container = defaultContainer) =>
     const annotationName = `@${Config.name}`;
     validateKind(annotationName, context, "class");
 
-    const metadata = getMetadata(annotationName, context);
-    const properties = <ConfigMetadataProperties>(
-      getMetadataProperty(metadata, MetadataProperties.properties, [])
-    );
-
-    const { prototype } = constructor;
-    for (const [property, method] of properties) {
-      const value = method.call(prototype);
-      if (value === undefined) {
-        throw new Error(`Config property ${property.toString()} is undefined`);
-      }
-      setGlobal(container as Record<string, typeof value>, property, value);
-    }
-
     context.addInitializer(function () {
-      new this();
+      const config = new this();
+
+      const metadata = getMetadata(annotationName, context);
+      const properties = <ConfigMetadataProperties>(
+        getMetadataProperty(metadata, MetadataProperties.properties, [])
+      );
+
+      for (const [property, method] of properties) {
+        const value = method.call(config);
+        if (value === undefined) {
+          throw new Error(
+            `${annotationName} property ${property.toString()} is undefined`
+          );
+        }
+        setGlobal(container as Record<string, typeof value>, property, value);
+      }
     });
 
     new constructor();
