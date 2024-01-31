@@ -93,22 +93,38 @@ describe("Initialization", () => {
       }
     }
 
-    const responseBody = "Hello World";
+    const expectedGetBody = "get";
+    const expectedGetAllBody = "getAll";
 
     @Controller("/controller", container)
     class TestController {
+      @Get()
+      async getAll(req: Request) {
+        return new Response(expectedGetAllBody);
+      }
+
       @Get("get")
       async get(req: Request) {
-        return new Response(responseBody);
+        return new Response(expectedGetBody);
       }
     }
 
-    const response = await initialize(container)(
+    const handle = initialize(container);
+
+    const getAllResponse = await handle(
+      new Request("https://test.com/controller")
+    );
+    expect(getAllResponse).toBeDefined();
+
+    const getAllBody = await getAllResponse.text();
+    expect(getAllBody).toBe(expectedGetAllBody);
+
+    const getResponse = await handle(
       new Request("https://test.com/controller/get")
     );
-    expect(response).toBeDefined();
+    expect(getResponse).toBeDefined();
 
-    const body = await response.text();
-    expect(body).toBe(responseBody);
+    const getBody = await getResponse.text();
+    expect(getBody).toBe(expectedGetBody);
   });
 });
