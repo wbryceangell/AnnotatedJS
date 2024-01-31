@@ -1,32 +1,25 @@
 import { container as defaultContainer } from "../container/container";
-import { setGlobal } from "../container/utils/setGlobal";
+import { setRouter } from "../container/utils/setRouter";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
-import { Class, ClassDecorator } from "./types";
+import { AnnotatedRouter, Class, ClassDecorator } from "./types";
 import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 
-export const Service = <T extends Class<object>>(
+export const Router = <T extends Class<AnnotatedRouter>>(
   container = defaultContainer
 ) =>
   ((constructor, context) => {
     validateContainer(container);
 
-    const annotationName = `@${Service.name}`;
+    const annotationName = `@${Router.name}`;
     validateKind(annotationName, context, "class");
 
-    if (typeof context.name !== "string") {
-      throw new Error(`${annotationName} must be used on a named class`);
-    }
-
     context.addInitializer(function () {
-      const service = new this();
-
+      const router = new this();
       const metadata = getMetadata(annotationName, context);
-      setInjectables(container, service, metadata);
-
-      // @ts-expect-error we need to use object type but it is actually a class
-      setGlobal(container, context.name, service);
+      setInjectables(container, router, metadata);
+      setRouter(container, router);
     });
 
     new constructor();

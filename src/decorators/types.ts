@@ -1,19 +1,32 @@
-import { type RequestHandler, type Router } from "../interfaces/router";
-
-export type ControllerMetadata = {
-  path: string;
-  methodMetadata: HttpMethodMetadata[];
-};
+export interface AnnotatedRouter {
+  get(uri: string, handler: RequestHandler): AnnotatedRouter;
+  put(uri: string, handler: RequestHandler): AnnotatedRouter;
+  post(uri: string, handler: RequestHandler): AnnotatedRouter;
+  patch(uri: string, handler: RequestHandler): AnnotatedRouter;
+  delete(uri: string, handler: RequestHandler): AnnotatedRouter;
+  all(uri: string, handler: RequestHandler): AnnotatedRouter;
+  handle(req: Request): Promise<Response>;
+}
+export type RequestHandler = (req: Request) => Promise<Response>;
+export type RouteBuilder = (
+  uri: string,
+  handler: RequestHandler
+) => AnnotatedRouter;
 export type HttpMethodMetadata = {
   path: string;
   httpMethod: string;
   handler: RequestHandler;
 };
 export type ConfigMetadataProperties = Array<[string, () => unknown]>;
-export type ConfigConstructor = {
-  prototype: { getRouter: () => Router };
+export type RouterConstructor = {
+  prototype: AnnotatedRouter;
 };
 export type InjectableMetadata = {
   key: string;
   set(object: unknown, value: unknown): void;
 };
+export type Class<T> = new (...args: unknown[]) => T;
+export type ClassDecorator<T extends Class<unknown>> = (
+  constructor: T,
+  context: ClassDecoratorContext<T>
+) => void;

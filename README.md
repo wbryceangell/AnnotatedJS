@@ -24,11 +24,14 @@ This framework relies on the <a href="https://github.com/tc39/proposal-decorator
 // service worker entrypoint
 
 import { initialize } from "@fork-git-it/annotatedjs";
-// import config and all controllers here
+// import config
+// import services
+// import router
+// import controllers
 
-const requestHandler = initialize();
+const handleRequest = initialize();
 const eventHandler = (evt: Event) => {
-  evt.respondWith(requestHandler(evt.request));
+  evt.respondWith(handleRequest(evt.request));
 };
 addEventListener("fetch", eventHandler);
 ```
@@ -40,10 +43,13 @@ import { initialize } from "@fork-git-it/annotatedjs";
 import { createServerAdapter } from "@whatwg-node/server";
 import { createServer } from "http";
 import "isomorphic-fetch";
-// import config and all controllers here
+// import config
+// import services
+// import router
+// import controllers
 
-const requestHandler = initialize();
-const ittyServer = createServerAdapter(requestHandler);
+const handleRequest = initialize();
+const ittyServer = createServerAdapter(handleRequest);
 const httpServer = createServer(ittyServer);
 httpServer.listen(3001);
 console.log("listening at https://localhost:3001");
@@ -55,6 +61,8 @@ AnnotatedJS starts with the `initialize()` method. This method will return back 
 
 ### [@Config](#config-1)
 
+### [@Router](#router-1)
+
 ### [@Controller](#controller-1)
 
 ### [@Service](#service-1)
@@ -64,14 +72,10 @@ AnnotatedJS starts with the `initialize()` method. This method will return back 
 ## @Config
 
 ```typescript
-import { Config, Router } from "@fork-git-it/annotatedjs";
+import { Config } from "@fork-git-it/annotatedjs";
 
 @Config()
 export class ExampleConfig {
-  getRouter(): Router {
-    // return Router implementation
-  }
-
   @Property("Injected")
   getInjected(): unknown {
     // return some value to be injected
@@ -79,9 +83,54 @@ export class ExampleConfig {
 }
 ```
 
-`@Config` defines values that will be available for injection. It requires the `getRouter()` method at minimum, see [Router](#router).
+`@Config` defines values that will be available for injection.
 
 `@Config` encapsulates `@Property` annotations. `@Property` takes a string as an argument and injects the returned value of the method using that string, see [@Inject](#inject-1).
+
+## @Router
+
+```typescript
+import { AnnotatedRouter, Router } from "@fork-git-it/annotatedjs";
+
+@Router()
+export class ExampleRouter implements AnnotatedRouter {
+  get(uri: string, handler: RequestHandler): AnnotatedRouter {
+    // configure router to handle GET request
+    return this;
+  }
+
+  put(uri: string, handler: RequestHandler): AnnotatedRouter {
+    // configure router to handle PUT request
+    return this;
+  }
+
+  post(uri: string, handler: RequestHandler): AnnotatedRouter {
+    // configure router to handle POST request
+    return this;
+  }
+
+  patch(uri: string, handler: RequestHandler): AnnotatedRouter {
+    // configure router to handle PATCH request
+    return this;
+  }
+
+  delete(uri: string, handler: RequestHandler): AnnotatedRouter {
+    // configure router to handle DELETE request
+    return this;
+  }
+
+  all(uri: string, handler: RequestHandler): AnnotatedRouter {
+    // configure router to handle all requests
+    return this;
+  }
+
+  handle(req: Request): Promise<Response> {
+    // handle incoming request using the router
+  }
+}
+```
+
+`@Router` annotates the class that will handle incoming requests. The class should implement the `AnnotatedRouter` interface. It is a [Fluent interface](https://en.wikipedia.org/wiki/Fluent_interface).
 
 ## @Controller
 
@@ -139,12 +188,14 @@ export class ExampleService {
 `@Inject` is the annotation that allows for injection across classes. Here is a full example:
 
 ```typescript
+// exampleConfig.ts
 import { Config, Router } from "@fork-git-it/annotatedjs";
 import { Router as IttyRouter } from "itty-router";
 
-@Config
+@Config()
 export class ExampleConfig {
-  getRouter(): Router {
+  @Property("IttyRouter")
+  getIttyRouter() {
     return IttyRouter();
   }
 
@@ -156,10 +207,56 @@ export class ExampleConfig {
 ```
 
 ```typescript
+// exampleRouter.ts
+import { AnnotatedRouter, Router } from "@fork-git-it/annotatedjs";
+import { type RouterType } from "itty-router";
+
+@Router()
+class ExampleRouter implements AnnotatedRouter {
+  @Inject("IttyRouter")
+  private accessor ittyRouter: RouterType;
+
+  get(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.get(uri, handler);
+    return this;
+  }
+
+  handle(request: Request) {
+    return this.ittyRouter.handle(request);
+  }
+
+  put(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.put(uri, handler);
+    return this;
+  }
+
+  post(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.post(uri, handler);
+    return this;
+  }
+
+  patch(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.patch(uri, handler);
+    return this;
+  }
+
+  delete(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.delete(uri, handler);
+    return this;
+  }
+
+  all(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.all(uri, handler);
+    return this;
+  }
+}
+```
+
+```typescript
 // storageService.ts
 import { Inject, Service } from "@fork-git-it/annotatedjs";
 
-@Service
+@Service()
 export class StorageService {
   @Inject("Storage")
   private accessor storage: Map<string, string>;
@@ -222,10 +319,6 @@ export class StorageController {
 ```
 
 `@Inject` accepts two different types of arguments: a string or a class. The `StorageService` class above uses a string to get the `Storage` instance. The `StorageController` class uses the `StorageService` class as the injection argument.
-
-## Router
-
-`Router` is an interface that is exposed by the framework. The `@Config` class expects the `getRouter()` method to return an implementation that conforms to the interface. The examples above uses [itty-router](https://github.com/kwhitley/itty-router).
 
 ## Containers
 

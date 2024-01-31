@@ -1,56 +1,78 @@
-import { container as defaultContainer } from "../../global/container";
-import { getGlobal } from "../../global/utils/getGlobal";
-import { setGlobal } from "../../global/utils/setGlobal";
-import { validateContainer } from "../../global/utils/validateContainer";
-import { controllersKey } from "../../keys";
-import { type ControllerMetadata, type HttpMethodMetadata } from "../types";
+import normalizePath from "normalize-path";
+import { container as defaultContainer } from "../../container/container";
+import { getRouter } from "../../container/utils/getRouter";
+import { validateContainer } from "../../container/utils/validateContainer";
+import { setInjectables } from "../inject/setInjectables";
+import type {
+  HttpMethodMetadata,
+  AnnotatedRouter,
+  Class,
+  ClassDecorator,
+} from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
-import { setInjectables } from "../inject/setInjectables";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
-export const Controller =
-  (path: string, container = defaultContainer) =>
-  (constructor: NewableFunction, context: ClassDecoratorContext) => {
+export const Controller = <T extends Class<object>>(
+  controllerPath: string,
+  container = defaultContainer
+) =>
+  ((constructor, context) => {
     validateContainer(container);
 
     const annotationName = `@${Controller.name}`;
     validateKind(annotationName, context, "class");
 
-    if (typeof path !== "string") {
+    if (typeof controllerPath !== "string") {
       throw new Error(
         `Invalid Controller path argument ${JSON.stringify(
-          path
+          controllerPath
         )}. Argument must be a string`
       );
     }
 
-    if (path.length === 0) {
+    if (controllerPath.length === 0) {
       throw new Error("Controller path argument is an empty string");
     }
 
-    const metadata = getMetadata(annotationName, context);
-    setInjectables(container, constructor, metadata);
+    context.addInitializer(function () {
+      const controller = new this();
 
-    const methods = <Array<HttpMethodMetadata>>(
-      getMetadataProperty(metadata, MetadataProperties.methods, [])
-    );
+      const metadata = getMetadata(annotationName, context);
+      setInjectables(container, controller, metadata);
 
-    const controllerMethodMetadata = methods.map((methodMetadata) => ({
-      ...methodMetadata,
-      handler: methodMetadata.handler.bind(constructor.prototype),
-    }));
+      const methods = <Array<HttpMethodMetadata>>(
+        getMetadataProperty(metadata, MetadataProperties.methods, [])
+      );
 
-    let controllers = getGlobal<ControllerMetadata[]>(
-      container,
-      controllersKey
-    );
+      const controllerMethodMetadata = methods.map((methodMetadata) => ({
+        ...methodMetadata,
+        handler: methodMetadata.handler.bind(controller),
+      }));
 
-    if (!controllers) {
-      controllers = [];
-    }
+      let router = getRouter(container);
+      for (const {
+        path: methodPath,
+        handler,
+        httpMethod,
+      } of controllerMethodMetadata) {
+        const routerMethod = <Exclude<keyof AnnotatedRouter, "handle">>(
+          httpMethod.toLowerCase()
+        );
 
-    controllers.push({ path, methodMetadata: controllerMethodMetadata });
-    setGlobal(container, controllersKey, controllers);
-  };
+        if (typeof router[routerMethod] !== "function") {
+          throw new Error(
+            `Router is improperly configured. It should include ${routerMethod} method`
+          );
+        }
+
+        router = router[routerMethod](
+          normalizePath("/" + [controllerPath, methodPath].join("/"), true),
+          handler
+        );
+      }
+    });
+
+    new constructor();
+  }) as ClassDecorator<T>;

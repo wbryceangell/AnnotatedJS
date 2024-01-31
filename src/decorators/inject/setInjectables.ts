@@ -1,11 +1,11 @@
-import { getGlobal } from "../../global/utils/getGlobal";
+import { getGlobal } from "../../container/utils/getGlobal";
 import { InjectableMetadata } from "../types";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { MetadataProperties } from "./metadataProperties";
 
 export const setInjectables = (
   container: Record<string, unknown>,
-  constructor: NewableFunction,
+  instance: object,
   metadata: DecoratorMetadataObject
 ) => {
   const injectables = <Array<InjectableMetadata>>(
@@ -19,6 +19,6 @@ export const setInjectables = (
       throw new Error(`Injectable ${key} is undefined`);
     }
 
-    set(constructor, value);
+    set(instance, value);
   }
 };
