@@ -22,13 +22,26 @@ export const Config = <T extends Class<object>>(container = defaultContainer) =>
         getMetadataProperty(metadata, MetadataProperties.properties, [])
       );
 
+      const prototype = Object.getPrototypeOf(config);
+      for (const prop of properties) {
+        Object.defineProperty(prototype, prop[1].name, {
+          value: undefined,
+          writable: true,
+        });
+      }
+
       for (const [property, method] of properties) {
         const value = method.call(config);
+
         if (value === undefined) {
           throw new Error(
             `${annotationName} property ${property.toString()} is undefined`
           );
         }
+
+        Object.defineProperty(prototype, method.name, {
+          value: () => value,
+        });
         setGlobal(container as Record<string, typeof value>, property, value);
       }
     });

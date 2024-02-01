@@ -48,4 +48,73 @@ describe("@Config", () => {
       })
     ).toThrow();
   });
+
+  it("can use properties in other properties", () => {
+    const firstKey = "firstKey";
+    const firstGetter = () => {};
+    const value = null;
+    const callFirstGetter = jest.fn(() => value);
+    firstGetter.call = callFirstGetter;
+
+    const secondKey = "secondKey";
+    const secondGetter = () => {};
+    const callSecondGetter = jest.fn((that) => {
+      return that.firstGetter();
+    });
+    secondGetter.call = callSecondGetter;
+
+    const container = {};
+    class ConfigClass {}
+
+    Config(container)(class {}, {
+      kind: "class",
+      name,
+      addInitializer: initializerFor(ConfigClass),
+      metadata: {
+        [MetadataProperties.properties]: [
+          [firstKey, firstGetter],
+          [secondKey, secondGetter],
+        ],
+      },
+    });
+
+    expect(callFirstGetter).toHaveBeenCalledTimes(1);
+    expect(callFirstGetter).toHaveBeenCalledWith(expect.any(ConfigClass));
+    expect(callSecondGetter).toHaveBeenCalledWith(expect.any(ConfigClass));
+
+    expect(container[firstKey]).toBe(value);
+    expect(container[secondKey]).toBe(value);
+  });
+
+  it("can use properties in other properties when declared in order", () => {
+    const firstGetter = () => {};
+    const callFirstGetter = jest.fn(() => null);
+    firstGetter.call = callFirstGetter;
+
+    const secondGetter = () => {};
+    const callSecondGetter = jest.fn((that) => {
+      return that.firstGetter();
+    });
+    secondGetter.call = callSecondGetter;
+
+    const container = {};
+    class ConfigClass {}
+
+    expect(() =>
+      Config(container)(class {}, {
+        kind: "class",
+        name,
+        addInitializer: initializerFor(ConfigClass),
+        metadata: {
+          [MetadataProperties.properties]: [
+            ["secondKey", secondGetter],
+            ["firstKey", firstGetter],
+          ],
+        },
+      })
+    ).toThrow();
+
+    expect(callFirstGetter).not.toHaveBeenCalled();
+    expect(callSecondGetter).toHaveBeenCalledWith(expect.any(ConfigClass));
+  });
 });

@@ -3,13 +3,8 @@ import { Config, Property } from "../../src";
 describe("Config", () => {
   it("should not work when @Property arg is not a string", () => {
     expect(() => {
-      // @ts-ignore
       @Config({})
       class Configuration {
-        getRouter() {
-          return {};
-        }
-
         //@ts-ignore
         @Property(0)
         getProp() {}
@@ -19,13 +14,8 @@ describe("Config", () => {
 
   it("should not work when property is undefined", () => {
     expect(() => {
-      // @ts-ignore
       @Config({})
       class Configuration {
-        getRouter() {
-          return {};
-        }
-
         @Property("prop")
         getProp() {}
       }
@@ -34,13 +24,8 @@ describe("Config", () => {
 
   it("should work when property is null", () => {
     expect(() => {
-      // @ts-ignore
       @Config({})
       class Configuration {
-        getRouter() {
-          return {};
-        }
-
         @Property("prop")
         getProp() {
           return null;
@@ -51,16 +36,45 @@ describe("Config", () => {
 
   it("should not work when @Property is not used on a function", () => {
     expect(() => {
-      // @ts-ignore
       @Config({})
       class Configuration {
-        getRouter() {
-          return {};
-        }
-
         // @ts-ignore
         @Property("prop")
         private prop: unknown;
+      }
+    }).toThrow();
+  });
+
+  it("should work when a property is used in another property", () => {
+    expect(() => {
+      @Config({})
+      class Configuration {
+        @Property("propOne")
+        getPropOne() {
+          return null;
+        }
+
+        @Property("propTwo")
+        getPropTwo() {
+          return this.getPropOne();
+        }
+      }
+    }).not.toThrow();
+  });
+
+  it("should not work when property tries to access another property before it is declared", () => {
+    expect(() => {
+      @Config({})
+      class Configuration {
+        @Property("propOne")
+        getPropOne() {
+          return this.getPropTwo();
+        }
+
+        @Property("propTwo")
+        getPropTwo() {
+          return null;
+        }
       }
     }).toThrow();
   });
