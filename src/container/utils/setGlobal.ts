@@ -3,7 +3,7 @@ export const setGlobal = <T>(
   key: string,
   value: T
 ) => {
-  if (container[key]) {
+  if (typeof container[key] !== "undefined") {
     throw new Error(`Global key ${key.toString()} has already been set`);
   }
   container[key] = value;
