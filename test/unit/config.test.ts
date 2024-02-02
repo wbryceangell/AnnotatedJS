@@ -9,6 +9,7 @@ import {
 
 describe("@Config", () => {
   const name = "Config";
+  const kind = "class";
 
   itCreatesInstanceOfClass(name, Config({}));
   itHasInitializationHook(name, Config({}));
@@ -24,7 +25,7 @@ describe("@Config", () => {
     class ConfigClass {}
 
     Config(container)(class {}, {
-      kind: "class",
+      kind,
       name,
       addInitializer: initializerFor(ConfigClass),
       metadata: {
@@ -39,7 +40,7 @@ describe("@Config", () => {
   it("errors if property is undefined", () => {
     expect(() =>
       Config({})(class {}, {
-        kind: "class",
+        kind,
         name,
         addInitializer: initializerFor(class {}),
         metadata: {
@@ -67,7 +68,7 @@ describe("@Config", () => {
     class ConfigClass {}
 
     Config(container)(class {}, {
-      kind: "class",
+      kind,
       name,
       addInitializer: initializerFor(ConfigClass),
       metadata: {
@@ -102,7 +103,7 @@ describe("@Config", () => {
 
     expect(() =>
       Config(container)(class {}, {
-        kind: "class",
+        kind,
         name,
         addInitializer: initializerFor(ConfigClass),
         metadata: {
@@ -116,5 +117,20 @@ describe("@Config", () => {
 
     expect(callFirstGetter).not.toHaveBeenCalled();
     expect(callSecondGetter).toHaveBeenCalledWith(expect.any(ConfigClass));
+  });
+
+  it("cannot set the same property twice", () => {
+    const property = ["key", () => null];
+
+    expect(() =>
+      Config({})(class {}, {
+        kind,
+        name,
+        addInitializer: initializerFor(class {}),
+        metadata: {
+          [MetadataProperties.properties]: [property, property],
+        },
+      })
+    ).toThrow();
   });
 });
