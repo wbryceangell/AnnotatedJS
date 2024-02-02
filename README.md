@@ -80,12 +80,20 @@ export class ExampleConfig {
   getInjected(): unknown {
     // return some value to be injected
   }
+
+  @Property("AnotherInjected")
+  getAnotherInjected(): unknown {
+    this.getInjected(); // will return singleton
+    // return value to be injected
+  }
 }
 ```
 
 `@Config` defines values that will be available for injection.
 
 `@Config` encapsulates `@Property` annotations. `@Property` takes a string as an argument and injects the returned value of the method using that string, see [@Inject](#inject-1).
+
+Properties may also use other properties in the config as long as they are declared in order.
 
 ## @Router
 
