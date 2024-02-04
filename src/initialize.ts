@@ -5,10 +5,15 @@ import { getRouter } from "./container/utils/getRouter";
 import { Class } from "./decorators/types";
 
 export const initialize = (container = defaultContainer) => {
-  for (const config of <Array<Class<unknown>>>(
+  for (const configClass of <Array<Class<unknown>>>(
     getGlobal(container, keys.configClasses)
   )) {
-    new config();
+    new configClass();
+  }
+
+  const routerClass = getGlobal(container, keys.routerClass);
+  if (typeof routerClass !== "function") {
+    throw new Error("Router class is not in the container");
   }
 
   const router = getRouter(container);
