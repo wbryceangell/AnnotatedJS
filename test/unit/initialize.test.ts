@@ -2,13 +2,16 @@ import { keys } from "../../src/container/keys";
 import { initialize } from "../../src/index";
 
 describe("initialize", () => {
-  const router = { handle: () => {} };
+  class Router {
+    handle() {}
+  }
+  const router = new Router();
 
-  it("errors if a config is not in container", () => {
+  it("errors if a config class is not in container", () => {
     expect(() => initialize({ [keys.router]: router })).toThrow();
   });
 
-  it("instantiates a config", () => {
+  it("instantiates a config class", () => {
     const spy = jest.fn();
     class Config {
       constructor() {
@@ -16,12 +19,16 @@ describe("initialize", () => {
       }
     }
 
-    initialize({ [keys.configClasses]: [Config], [keys.router]: router });
+    initialize({
+      [keys.configClasses]: [Config],
+      [keys.routerClass]: Router,
+      [keys.router]: router,
+    });
 
     expect(spy).toHaveBeenCalled();
   });
 
-  it("instantiates multiple configs", () => {
+  it("instantiates multiple config classes", () => {
     const spy = jest.fn();
     class ConfigOne {
       constructor() {
@@ -36,6 +43,7 @@ describe("initialize", () => {
 
     initialize({
       [keys.configClasses]: [ConfigOne, ConfigTwo],
+      [keys.routerClass]: Router,
       [keys.router]: router,
     });
 
@@ -43,7 +51,9 @@ describe("initialize", () => {
     expect(spy).toHaveBeenNthCalledWith(2, expect.any(ConfigTwo));
   });
 
-  it("errors if a router is not in the container", () => {
-    expect(() => initialize({ [keys.configClasses]: [class {}] })).toThrow();
+  it("errors if a router class is not in the container", () => {
+    expect(() =>
+      initialize({ [keys.configClasses]: [class {}], [keys.router]: router })
+    ).toThrow();
   });
 });
