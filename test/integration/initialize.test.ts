@@ -18,7 +18,7 @@ describe("Initialization", () => {
   });
 
   it("works when router is configured", () => {
-    const container = { [keys.configs]: [class {}] };
+    const container = { [keys.configClasses]: [class {}] };
 
     @Router(container)
     class TestRouter implements AnnotatedRouter {
@@ -49,7 +49,7 @@ describe("Initialization", () => {
   });
 
   it("returns a functioning request handler", async () => {
-    const container = { [keys.configs]: [class {}] };
+    const container = { [keys.configClasses]: [class {}] };
 
     @Config(container)
     class TestConfig {

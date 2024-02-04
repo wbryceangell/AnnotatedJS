@@ -6,7 +6,7 @@ import { Class } from "./decorators/types";
 
 export const initialize = (container = defaultContainer) => {
   for (const config of <Array<Class<unknown>>>(
-    getGlobal(container, keys.configs)
+    getGlobal(container, keys.configClasses)
   )) {
     new config();
   }

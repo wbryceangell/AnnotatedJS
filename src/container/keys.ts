@@ -1,4 +1,4 @@
 export const keys = {
-  configs: "_configs",
+  configClasses: "_configsClasses",
   router: "_router",
 };

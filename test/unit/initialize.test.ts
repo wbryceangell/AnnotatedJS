@@ -16,7 +16,7 @@ describe("initialize", () => {
       }
     }
 
-    initialize({ [keys.configs]: [Config], [keys.router]: router });
+    initialize({ [keys.configClasses]: [Config], [keys.router]: router });
 
     expect(spy).toHaveBeenCalled();
   });
@@ -35,7 +35,7 @@ describe("initialize", () => {
     }
 
     initialize({
-      [keys.configs]: [ConfigOne, ConfigTwo],
+      [keys.configClasses]: [ConfigOne, ConfigTwo],
       [keys.router]: router,
     });
 
@@ -44,6 +44,6 @@ describe("initialize", () => {
   });
 
   it("errors if a router is not in the container", () => {
-    expect(() => initialize({ [keys.configs]: [class {}] })).toThrow();
+    expect(() => initialize({ [keys.configClasses]: [class {}] })).toThrow();
   });
 });
