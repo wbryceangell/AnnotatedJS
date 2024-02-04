@@ -42,4 +42,8 @@ describe("initialize", () => {
     expect(spy).toHaveBeenNthCalledWith(1, expect.any(ConfigOne));
     expect(spy).toHaveBeenNthCalledWith(2, expect.any(ConfigTwo));
   });
+
+  it("errors if a router is not in the container", () => {
+    expect(() => initialize({ [keys.configs]: [class {}] })).toThrow();
+  });
 });
