@@ -15,8 +15,31 @@ describe("initialize", () => {
         spy();
       }
     }
-    const container = { [keys.configs]: [Config], [keys.router]: router };
-    initialize(container);
+
+    initialize({ [keys.configs]: [Config], [keys.router]: router });
+
     expect(spy).toHaveBeenCalled();
+  });
+
+  it("instantiates multiple configs", () => {
+    const spy = jest.fn();
+    class ConfigOne {
+      constructor() {
+        spy(this);
+      }
+    }
+    class ConfigTwo {
+      constructor() {
+        spy(this);
+      }
+    }
+
+    initialize({
+      [keys.configs]: [ConfigOne, ConfigTwo],
+      [keys.router]: router,
+    });
+
+    expect(spy).toHaveBeenNthCalledWith(1, expect.any(ConfigOne));
+    expect(spy).toHaveBeenNthCalledWith(2, expect.any(ConfigTwo));
   });
 });
