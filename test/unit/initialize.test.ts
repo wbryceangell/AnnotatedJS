@@ -7,8 +7,10 @@ describe("initialize", () => {
   }
   const router = new Router();
 
-  it("errors if a config class is not in container", () => {
-    expect(() => initialize({ [keys.router]: router })).toThrow();
+  it("does not error if there are no config classes", () => {
+    expect(() =>
+      initialize({ [keys.router]: router, [keys.routerClass]: Router })
+    ).not.toThrow();
   });
 
   it("instantiates a config class", () => {
