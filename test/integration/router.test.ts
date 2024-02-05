@@ -1,4 +1,5 @@
 import { AnnotatedRouter, Router } from "../../src";
+import { keys } from "../../src/container/keys";
 import { RequestHandler } from "../../src/decorators/types";
 
 describe("Router", () => {
@@ -39,7 +40,7 @@ describe("Router", () => {
       }
     }
 
-    const response = (await container.Router?.handle(
+    const response = (await container[keys.router].handle(
       new Request("http://localhost")
     )) as Response;
 

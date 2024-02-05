@@ -5,13 +5,8 @@ describe("Injection", () => {
     expect(() => {
       const prop = "prop";
 
-      // @ts-ignore
       @Config({})
       class Configuration {
-        getRouter() {
-          return {};
-        }
-
         @Property(prop)
         getProp() {}
       }
@@ -27,12 +22,8 @@ describe("Injection", () => {
     expect(() => {
       const prop = "prop";
 
-      // @ts-ignore
       @Config({})
       class Configuration {
-        getRouter() {
-          return {};
-        }
         @Property(prop)
         getProp() {
           return null;
@@ -50,13 +41,8 @@ describe("Injection", () => {
     expect(() => {
       const prop = "prop";
 
-      // @ts-ignore
       @Config({})
       class Configuration {
-        getRouter() {
-          return {};
-        }
-
         @Property(prop)
         getProp() {
           return {};

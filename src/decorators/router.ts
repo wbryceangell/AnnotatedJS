@@ -1,5 +1,6 @@
 import { container as defaultContainer } from "../container/container";
-import { setRouter } from "../container/utils/setRouter";
+import { keys } from "../container/keys";
+import { setGlobal } from "../container/utils/setGlobal";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
 import { AnnotatedRouter, Class, ClassDecorator } from "./types";
@@ -19,8 +20,8 @@ export const Router = <T extends Class<AnnotatedRouter>>(
       const router = new this();
       const metadata = getMetadata(annotationName, context);
       setInjectables(container, router, metadata);
-      setRouter(container, router);
+      setGlobal(container, keys.router, router);
     });
 
-    new constructor();
+    setGlobal(container, keys.routerClass, constructor);
   }) as ClassDecorator<T>;

@@ -1,7 +1,10 @@
+import R from "ramda";
+import { keys } from "../../src/container/keys";
 import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
 import { Controller } from "../../src/index";
 import {
   initializerFor,
+  itAddsClassToContainer,
   itCreatesClassInstanceInInitHook,
   itCreatesInstanceOfClass,
   itHasInitializationHook,
@@ -12,11 +15,18 @@ describe("@Controller", () => {
   const name = "Controller";
   const path = "path";
 
-  itCreatesInstanceOfClass(name, Controller(path, {}));
+  itAddsClassToContainer(
+    name,
+    R.curryN(2, Controller)(path),
+    keys.controllerClasses
+  );
   itHasInitializationHook(name, Controller(path, {}));
-  itCreatesClassInstanceInInitHook(name, Controller(path, { Router: {} }));
+  itCreatesClassInstanceInInitHook(
+    name,
+    Controller(path, { [keys.router]: {} })
+  );
 
-  let container = { Router: {} };
+  let container = { [keys.router]: {} };
   itSetsInjectablesOnInstance(name, Controller(path, container), container);
 
   it("configures router with annotated methods", () => {
@@ -29,7 +39,7 @@ describe("@Controller", () => {
     handler.bind = bind;
     class ControllerClass {}
 
-    Controller(controllerPath, { Router: { get } })(class {}, {
+    Controller(controllerPath, { [keys.router]: { get } })(class {}, {
       kind: "class",
       name,
       addInitializer: initializerFor(ControllerClass),
