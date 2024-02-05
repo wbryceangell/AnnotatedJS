@@ -1,7 +1,6 @@
 import { container as defaultContainer } from "./container/container";
 import { keys } from "./container/keys";
 import { getGlobal } from "./container/utils/getGlobal";
-import { getRouter } from "./container/utils/getRouter";
 import { AnnotatedRouter, Class } from "./decorators/types";
 
 export const initialize = (container = defaultContainer) => {
@@ -21,7 +20,7 @@ export const initialize = (container = defaultContainer) => {
 
   instantiateClasses(container, keys.controllerClasses);
 
-  const router = getRouter(container);
+  const router: AnnotatedRouter = getGlobal(container, keys.router);
   return router.handle.bind(router);
 };
 
