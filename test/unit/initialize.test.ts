@@ -53,6 +53,29 @@ describe("initialize", () => {
     expect(spy).toHaveBeenNthCalledWith(2, expect.any(ConfigTwo));
   });
 
+  it("instantiates multiple service classes", () => {
+    const spy = jest.fn();
+    class ServiceOne {
+      constructor() {
+        spy(this);
+      }
+    }
+    class ServiceTwo {
+      constructor() {
+        spy(this);
+      }
+    }
+
+    initialize({
+      [keys.serviceClasses]: [ServiceOne, ServiceTwo],
+      [keys.routerClass]: Router,
+      [keys.router]: router,
+    });
+
+    expect(spy).toHaveBeenNthCalledWith(1, expect.any(ServiceOne));
+    expect(spy).toHaveBeenNthCalledWith(2, expect.any(ServiceTwo));
+  });
+
   it("errors if a router class is not in the container", () => {
     expect(() =>
       initialize({ [keys.configClasses]: [class {}], [keys.router]: router })
