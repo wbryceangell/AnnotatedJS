@@ -5,16 +5,8 @@ import { getRouter } from "./container/utils/getRouter";
 import { Class } from "./decorators/types";
 
 export const initialize = (container = defaultContainer) => {
-  const configClasses: Array<Class<unknown>> = getGlobal(
-    container,
-    keys.configClasses
-  );
-
-  if (Array.isArray(configClasses)) {
-    for (const configClass of configClasses) {
-      new configClass();
-    }
-  }
+  instantiateClasses(container, keys.configClasses);
+  instantiateClasses(container, keys.serviceClasses);
 
   const routerClass = getGlobal(container, keys.routerClass);
   if (typeof routerClass !== "function") {
@@ -23,4 +15,17 @@ export const initialize = (container = defaultContainer) => {
 
   const router = getRouter(container);
   return router.handle.bind(router);
+};
+
+const instantiateClasses = (
+  container: Record<string, Array<Class<unknown>>>,
+  key: string
+) => {
+  const containerClasses = getGlobal(container, key);
+
+  if (Array.isArray(containerClasses)) {
+    for (const containerClass of containerClasses) {
+      new containerClass();
+    }
+  }
 };
