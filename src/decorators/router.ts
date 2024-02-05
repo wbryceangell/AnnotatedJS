@@ -1,4 +1,6 @@
 import { container as defaultContainer } from "../container/container";
+import { keys } from "../container/keys";
+import { setGlobal } from "../container/utils/setGlobal";
 import { setRouter } from "../container/utils/setRouter";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
@@ -22,5 +24,5 @@ export const Router = <T extends Class<AnnotatedRouter>>(
       setRouter(container, router);
     });
 
-    new constructor();
+    setGlobal(container, keys.routerClass, constructor);
   }) as ClassDecorator<T>;

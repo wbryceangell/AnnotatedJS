@@ -10,7 +10,6 @@ import {
   Router,
   initialize,
 } from "../../src/index";
-import { keys } from "../../src/container/keys";
 
 describe("Initialization", () => {
   it("fails when router is not configured", () => {
@@ -18,10 +17,7 @@ describe("Initialization", () => {
   });
 
   it("works when router is configured", () => {
-    const container = {
-      [keys.configClasses]: [class {}],
-      [keys.routerClass]: class {},
-    };
+    const container = {};
 
     @Router(container)
     class TestRouter implements AnnotatedRouter {
@@ -52,10 +48,7 @@ describe("Initialization", () => {
   });
 
   it("returns a functioning request handler", async () => {
-    const container = {
-      [keys.configClasses]: [class {}],
-      [keys.routerClass]: class {},
-    };
+    const container = {};
 
     @Config(container)
     class TestConfig {
