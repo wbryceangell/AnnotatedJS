@@ -1,3 +1,4 @@
+import { keys } from "../../container/keys";
 import { type ConfigMetadataProperties } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
@@ -17,6 +18,10 @@ export const Property =
           property
         )}. It must be a string`
       );
+    }
+
+    if (Object.values(keys).includes(property)) {
+      throw new Error(`Property ${property} is a reserved key`);
     }
 
     const metadata = getMetadata(annotationName, context);
