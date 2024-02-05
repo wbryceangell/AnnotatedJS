@@ -13,6 +13,8 @@ import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
+import { addClassToContainer } from "../utils/addClassToContainer";
+import { keys } from "../../container/keys";
 
 export const Controller = <T extends Class<object>>(
   controllerPath: string,
@@ -74,5 +76,5 @@ export const Controller = <T extends Class<object>>(
       }
     });
 
-    new constructor();
+    addClassToContainer(container, keys.controllerClasses, constructor);
   }) as ClassDecorator<T>;
