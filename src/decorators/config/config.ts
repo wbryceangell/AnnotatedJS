@@ -1,9 +1,9 @@
 import { container as defaultContainer } from "../../container/container";
 import { keys } from "../../container/keys";
-import { getGlobal } from "../../container/utils/getGlobal";
 import { setGlobal } from "../../container/utils/setGlobal";
 import { validateContainer } from "../../container/utils/validateContainer";
 import type { Class, ClassDecorator, ConfigMetadataProperties } from "../types";
+import { addClassToContainer } from "../utils/addClassToContainer";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
@@ -48,15 +48,5 @@ export const Config = <T extends Class<object>>(container = defaultContainer) =>
       }
     });
 
-    let configClasses: Array<Class<object>> = getGlobal(
-      container,
-      keys.configClasses
-    );
-
-    if (!Array.isArray(configClasses)) {
-      configClasses = [];
-      setGlobal(container, keys.configClasses, configClasses);
-    }
-
-    configClasses.push(constructor);
+    addClassToContainer(container, keys.configClasses, constructor);
   }) as ClassDecorator<T>;

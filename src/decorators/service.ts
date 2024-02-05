@@ -1,8 +1,10 @@
 import { container as defaultContainer } from "../container/container";
+import { keys } from "../container/keys";
 import { setGlobal } from "../container/utils/setGlobal";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
 import { Class, ClassDecorator } from "./types";
+import { addClassToContainer } from "./utils/addClassToContainer";
 import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 
@@ -29,5 +31,5 @@ export const Service = <T extends Class<object>>(
       setGlobal(container, context.name, service);
     });
 
-    new constructor();
+    addClassToContainer(container, keys.serviceClasses, constructor);
   }) as ClassDecorator<T>;
