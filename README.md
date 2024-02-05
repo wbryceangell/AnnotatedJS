@@ -24,10 +24,7 @@ This framework relies on the <a href="https://github.com/tc39/proposal-decorator
 // service worker entrypoint
 
 import { initialize } from "@fork-git-it/annotatedjs";
-// import config
-// import services
-// import router
-// import controllers
+// import annotated classes
 
 const handleRequest = initialize();
 const eventHandler = (evt: Event) => {
@@ -43,10 +40,7 @@ import { initialize } from "@fork-git-it/annotatedjs";
 import { createServerAdapter } from "@whatwg-node/server";
 import { createServer } from "http";
 import "isomorphic-fetch";
-// import config
-// import services
-// import router
-// import controllers
+// import annotated classes
 
 const handleRequest = initialize();
 const ittyServer = createServerAdapter(handleRequest);
