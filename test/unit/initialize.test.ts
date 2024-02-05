@@ -121,4 +121,27 @@ describe("initialize", () => {
 
     expect(spy).toHaveBeenCalled();
   });
+
+  it("instantiates multiple controller classes", () => {
+    const spy = jest.fn();
+    class ControllerOne {
+      constructor() {
+        spy(this);
+      }
+    }
+    class ControllerTwo {
+      constructor() {
+        spy(this);
+      }
+    }
+
+    initialize({
+      [keys.controllerClasses]: [ControllerOne, ControllerTwo],
+      [keys.routerClass]: Router,
+      [keys.router]: router,
+    });
+
+    expect(spy).toHaveBeenNthCalledWith(1, expect.any(ControllerOne));
+    expect(spy).toHaveBeenNthCalledWith(2, expect.any(ControllerTwo));
+  });
 });

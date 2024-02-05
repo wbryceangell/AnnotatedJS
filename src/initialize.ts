@@ -19,6 +19,8 @@ export const initialize = (container = defaultContainer) => {
 
   new routerClass();
 
+  instantiateClasses(container, keys.controllerClasses);
+
   const router = getRouter(container);
   return router.handle.bind(router);
 };
