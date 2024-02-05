@@ -105,4 +105,20 @@ describe("initialize", () => {
       initialize({ [keys.configClasses]: [class {}], [keys.router]: router })
     ).toThrow();
   });
+
+  it("instantiates router class", () => {
+    const spy = jest.fn();
+    class Router {
+      constructor() {
+        spy();
+      }
+    }
+
+    initialize({
+      [keys.routerClass]: Router,
+      [keys.router]: router,
+    });
+
+    expect(spy).toHaveBeenCalled();
+  });
 });
