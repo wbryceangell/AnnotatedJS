@@ -1,20 +1,20 @@
 import normalizePath from "normalize-path";
 import { container as defaultContainer } from "../../container/container";
-import { getRouter } from "../../container/utils/getRouter";
+import { keys } from "../../container/keys";
+import { getGlobal } from "../../container/utils/getGlobal";
 import { validateContainer } from "../../container/utils/validateContainer";
 import { setInjectables } from "../inject/setInjectables";
 import type {
-  HttpMethodMetadata,
   AnnotatedRouter,
   Class,
   ClassDecorator,
+  HttpMethodMetadata,
 } from "../types";
+import { addClassToContainer } from "../utils/addClassToContainer";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
-import { addClassToContainer } from "../utils/addClassToContainer";
-import { keys } from "../../container/keys";
 
 export const Controller = <T extends Class<object>>(
   controllerPath: string,
@@ -53,7 +53,7 @@ export const Controller = <T extends Class<object>>(
         handler: methodMetadata.handler.bind(controller),
       }));
 
-      let router = getRouter(container);
+      let router: AnnotatedRouter = getGlobal(container, keys.router);
       for (const {
         path: methodPath,
         handler,
