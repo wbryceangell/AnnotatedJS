@@ -4,6 +4,7 @@ import { Class } from "../../src/decorators/types";
 import { Config } from "../../src/index";
 import {
   initializerFor,
+  itAddsClassToContainer,
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
 } from "./utils";
@@ -12,22 +13,7 @@ describe("@Config", () => {
   const name = "Config";
   const kind = "class";
 
-  it("adds class to container", () => {
-    const container = {};
-    class ConfigClass {}
-
-    Config(container)(ConfigClass, {
-      kind,
-      name,
-      addInitializer: () => {},
-      metadata: {},
-    });
-
-    expect(container[keys.configClasses]).toStrictEqual(
-      expect.arrayContaining([expect.anything()])
-    );
-  });
-
+  itAddsClassToContainer(name, Config, keys.configClasses);
   itHasInitializationHook(name, Config({}));
   itCreatesClassInstanceInInitHook(name, Config({}));
 
