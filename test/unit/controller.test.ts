@@ -1,8 +1,10 @@
+import R from "ramda";
 import { keys } from "../../src/container/keys";
 import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
 import { Controller } from "../../src/index";
 import {
   initializerFor,
+  itAddsClassToContainer,
   itCreatesClassInstanceInInitHook,
   itCreatesInstanceOfClass,
   itHasInitializationHook,
@@ -13,7 +15,11 @@ describe("@Controller", () => {
   const name = "Controller";
   const path = "path";
 
-  itCreatesInstanceOfClass(name, Controller(path, {}));
+  itAddsClassToContainer(
+    name,
+    R.curryN(2, Controller)(path),
+    keys.controllerClasses
+  );
   itHasInitializationHook(name, Controller(path, {}));
   itCreatesClassInstanceInInitHook(
     name,
