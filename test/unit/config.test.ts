@@ -1,6 +1,5 @@
 import { keys } from "../../src/container/keys";
 import { MetadataProperties } from "../../src/decorators/config/metadataProperties";
-import { Class } from "../../src/decorators/types";
 import { Config } from "../../src/index";
 import {
   initializerFor,
