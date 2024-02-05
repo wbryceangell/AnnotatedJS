@@ -111,3 +111,29 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
 
     expect(set).toHaveBeenCalledWith(expect.any(ServiceClass), value);
   });
+
+export const itAddsClassToContainer = <T extends Class<object>>(
+  name: string,
+  getClassDecorator: (
+    container: Record<string, Array<Class<unknown>>>
+  ) => ClassDecorator<T>,
+  key: string
+) =>
+  it("adds class to container", () => {
+    const container = {};
+
+    getClassDecorator(container)(
+      // @ts-expect-error Class type is too broad for anonymous class
+      class {},
+      {
+        kind,
+        name,
+        addInitializer: () => {},
+        metadata: {},
+      }
+    );
+
+    expect(container[key]).toStrictEqual(
+      expect.arrayContaining([expect.anything()])
+    );
+  });
