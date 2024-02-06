@@ -6,8 +6,8 @@ export const Controller: (path: string) => ClassDecorator =
     if (typeof path !== "string")
       throw new Error(
         `Invalid Controller path argument ${JSON.stringify(
-          path
-        )}. Argument must be a string`
+          path,
+        )}. Argument must be a string`,
       );
     if (path.length === 0)
       throw new Error("Controller path argument is an empty string");
