@@ -4,7 +4,7 @@
   "description": "A JavaScript framework for building backends with annotations",
   "main": "dist/index.js",
   "engines" : { 
-    "node" : ">=18.0.0 <21.0.0"
+    "node" : ">=20.0.0 <21.0.0"
   },
   "types": "types/index.d.ts",
   "files": [
