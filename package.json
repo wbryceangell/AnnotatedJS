@@ -1,6 +1,6 @@
 {
   "name": "@fork-git-it/annotatedjs",
-  "version": "1.0.4-alpha",
+  "version": "1.0.5-alpha",
   "description": "A JavaScript framework for building backends with annotations",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
@@ -29,7 +29,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.12",
     "@types/normalize-path": "^3.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.2.5",
