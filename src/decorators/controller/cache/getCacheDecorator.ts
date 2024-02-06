@@ -11,5 +11,5 @@ export default (purge: boolean) => (name: string) =>
   }) as (
     target: Object,
     propertyKey: string | symbol,
-    descriptor: TypedPropertyDescriptor<RequestHandler>
+    descriptor: TypedPropertyDescriptor<RequestHandler>,
   ) => TypedPropertyDescriptor<RequestHandler> | void;

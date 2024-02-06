@@ -8,7 +8,7 @@ import getCaches from "../global/caches/getCaches";
 export default (
     controllerMetadata: ControllerMetadata,
     httpMethodMetadata: HttpMethodMetadata,
-    cacheMetadata?: CacheMetadata
+    cacheMetadata?: CacheMetadata,
   ) =>
   async (req: Request) => {
     const caches = getCaches();

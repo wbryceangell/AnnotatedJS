@@ -6,8 +6,8 @@ export const Property = (property: symbol) =>
     if (typeof property !== "symbol")
       throw new Error(
         `Invalid property argument ${JSON.stringify(
-          property
-        )}. It must be a symbol`
+          property,
+        )}. It must be a symbol`,
       );
     // @ts-ignore
     if (typeof config[methodName] !== "function")
@@ -18,5 +18,5 @@ export const Property = (property: symbol) =>
   }) as (
     target: Object,
     propertyKey: string | symbol,
-    descriptor: TypedPropertyDescriptor<() => any>
+    descriptor: TypedPropertyDescriptor<() => any>,
   ) => TypedPropertyDescriptor<() => any> | void;
