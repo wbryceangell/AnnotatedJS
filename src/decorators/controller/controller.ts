@@ -18,7 +18,7 @@ import { MetadataProperties } from "./metadataProperties";
 
 export const Controller = <T extends Class<object>>(
   controllerPath: string,
-  container = defaultContainer
+  container = defaultContainer,
 ) =>
   ((constructor, context) => {
     validateContainer(container);
@@ -29,8 +29,8 @@ export const Controller = <T extends Class<object>>(
     if (typeof controllerPath !== "string") {
       throw new Error(
         `Invalid Controller path argument ${JSON.stringify(
-          controllerPath
-        )}. Argument must be a string`
+          controllerPath,
+        )}. Argument must be a string`,
       );
     }
 
@@ -65,13 +65,13 @@ export const Controller = <T extends Class<object>>(
 
         if (typeof router[routerMethod] !== "function") {
           throw new Error(
-            `Router is improperly configured. It should include ${routerMethod} method`
+            `Router is improperly configured. It should include ${routerMethod} method`,
           );
         }
 
         router = router[routerMethod](
           normalizePath("/" + [controllerPath, methodPath].join("/"), true),
-          handler
+          handler,
         );
       }
     });

@@ -9,7 +9,7 @@ import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 
 export const Service = <T extends Class<object>>(
-  container = defaultContainer
+  container = defaultContainer,
 ) =>
   ((constructor, context) => {
     validateContainer(container);

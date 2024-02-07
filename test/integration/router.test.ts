@@ -41,7 +41,7 @@ describe("Router", () => {
     }
 
     const response = (await container[keys.router].handle(
-      new Request("http://localhost")
+      new Request("http://localhost"),
     )) as Response;
 
     expect(response).toBeDefined();

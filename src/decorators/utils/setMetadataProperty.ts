@@ -1,7 +1,7 @@
 export const setMetadataProperty = (
   metadata: DecoratorMetadataObject,
   key: string,
-  value: unknown
+  value: unknown,
 ) => {
   metadata[key] = value;
 };

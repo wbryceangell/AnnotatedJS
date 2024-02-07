@@ -9,7 +9,7 @@ export const initialize = (container = defaultContainer) => {
 
   const routerClass: Class<AnnotatedRouter> = getGlobal(
     container,
-    keys.routerClass
+    keys.routerClass,
   );
 
   if (typeof routerClass !== "function") {
@@ -26,7 +26,7 @@ export const initialize = (container = defaultContainer) => {
 
 const instantiateClasses = (
   container: Record<string, Array<Class<unknown>>>,
-  key: string
+  key: string,
 ) => {
   const containerClasses = getGlobal(container, key);
 

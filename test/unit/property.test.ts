@@ -13,7 +13,7 @@ describe("@Property", () => {
           private: false,
           access: { has: () => false, get: () => () => {} },
           addInitializer: () => {},
-        })
+        }),
       ).toThrow();
     }
   });

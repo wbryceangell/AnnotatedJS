@@ -15,8 +15,8 @@ export const Property =
     if (typeof property !== "string") {
       throw new Error(
         `Invalid property argument ${JSON.stringify(
-          property
-        )}. It must be a string`
+          property,
+        )}. It must be a string`,
       );
     }
 

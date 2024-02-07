@@ -5,7 +5,7 @@ import { Class } from "../types";
 export const addClassToContainer = (
   container: Record<string, Array<Class<unknown>>>,
   key: string,
-  constructor: Class<unknown>
+  constructor: Class<unknown>,
 ) => {
   let containerClasses = getGlobal(container, key);
 

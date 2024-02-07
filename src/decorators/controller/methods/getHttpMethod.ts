@@ -15,8 +15,8 @@ export const getHttpMethod =
     if (typeof path !== "string") {
       throw new Error(
         `Invalid HTTP Method path argument ${JSON.stringify(
-          path
-        )}. Argument must be a string`
+          path,
+        )}. Argument must be a string`,
       );
     }
 
@@ -32,11 +32,11 @@ export const getHttpMethod =
     if (
       methods.find(
         (metadata) =>
-          metadata.path === path && metadata.httpMethod === httpMethod
+          metadata.path === path && metadata.httpMethod === httpMethod,
       )
     ) {
       throw new Error(
-        `HTTP Method ${httpMethod} and path ${path} already configured`
+        `HTTP Method ${httpMethod} and path ${path} already configured`,
       );
     }
 

@@ -112,7 +112,7 @@ describe("Initialization", () => {
     const handle = initialize(container);
 
     const getAllResponse = await handle(
-      new Request("https://test.com/controller")
+      new Request("https://test.com/controller"),
     );
     expect(getAllResponse).toBeDefined();
 
@@ -120,7 +120,7 @@ describe("Initialization", () => {
     expect(getAllBody).toBe(expectedGetAllBody);
 
     const getResponse = await handle(
-      new Request("https://test.com/controller/get")
+      new Request("https://test.com/controller/get"),
     );
     expect(getResponse).toBeDefined();
 

@@ -10,7 +10,7 @@ export interface AnnotatedRouter {
 export type RequestHandler = (req: Request) => Promise<Response>;
 export type RouteBuilder = (
   uri: string,
-  handler: RequestHandler
+  handler: RequestHandler,
 ) => AnnotatedRouter;
 export type HttpMethodMetadata = {
   path: string;
@@ -28,5 +28,5 @@ export type InjectableMetadata = {
 export type Class<T> = new (...args: unknown[]) => T;
 export type ClassDecorator<T extends Class<unknown>> = (
   constructor: T,
-  context: ClassDecoratorContext<T>
+  context: ClassDecoratorContext<T>,
 ) => void;

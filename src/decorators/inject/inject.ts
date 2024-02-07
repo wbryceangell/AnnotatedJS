@@ -9,7 +9,7 @@ export const Inject =
   <T, K>(key: NewableFunction | string) =>
   (
     target: ClassAccessorDecoratorTarget<T, K>,
-    context: ClassAccessorDecoratorContext
+    context: ClassAccessorDecoratorContext,
   ) => {
     const annotationName = `@${Inject.name}`;
     validateKind(annotationName, context, "accessor");

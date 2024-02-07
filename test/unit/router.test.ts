@@ -16,7 +16,7 @@ describe("@Router", () => {
         name,
         addInitializer: () => {},
         metadata: {},
-      }
+      },
     );
 
     expect(container[keys.routerClass]).toBeDefined();
@@ -38,15 +38,15 @@ describe("@Router", () => {
         name,
         addInitializer,
         metadata,
-      }
+      },
     );
 
     expect(() =>
       Router(container)(
         // @ts-expect-error Class type is too broad for anonymous class
         RouterClass,
-        { kind, name, addInitializer, metadata }
-      )
+        { kind, name, addInitializer, metadata },
+      ),
     ).toThrow();
   });
 });

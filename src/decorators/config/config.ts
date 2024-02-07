@@ -37,7 +37,7 @@ export const Config = <T extends Class<object>>(container = defaultContainer) =>
 
         if (value === undefined) {
           throw new Error(
-            `${annotationName} property ${property.toString()} is undefined`
+            `${annotationName} property ${property.toString()} is undefined`,
           );
         }
 
