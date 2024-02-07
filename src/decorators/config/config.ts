@@ -9,7 +9,33 @@ import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
-export const Config = <T extends Class<object>>(container = defaultContainer) =>
+/**
+ * A configuration decorator that specifies injectable properties
+ *
+ * @param container - Object that stores the configured properties
+ *
+ * @example
+ * ```ts
+ * import { Config } from "@fork-git-it/annotatedjs";
+ *
+ * @Config()
+ * export class ExampleConfig {
+ *   @Property("Injected")
+ *   getInjected(): unknown {
+ *     // return some value to be injected
+ *   }
+ *
+ *   @Property("AnotherInjected")
+ *   getAnotherInjected(): unknown {
+ *     this.getInjected(); // will return singleton
+ *     // return value to be injected
+ *   }
+ *}
+ * ```
+ */
+export const Config = <T extends Class<object>>(
+  container: Record<string, Array<T>> = defaultContainer,
+) =>
   ((constructor, context) => {
     validateContainer(container);
 
