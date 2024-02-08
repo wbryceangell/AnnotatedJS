@@ -1,5 +1,9 @@
 import { keys } from "../../container/keys";
-import { ClassMethodDecorator, type ConfigMetadataProperties } from "../types";
+import {
+  ClassMethodDecorator,
+  PropertyMethod,
+  type ConfigMetadataProperties,
+} from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { setMetadataProperty } from "../utils/setMetadataProperty";
@@ -46,4 +50,4 @@ export const Property = <T>(property: string) =>
 
     properties.push([property, method]);
     setMetadataProperty(metadata, MetadataProperties.properties, properties);
-  }) as ClassMethodDecorator<T>;
+  }) as ClassMethodDecorator<PropertyMethod<T>>;

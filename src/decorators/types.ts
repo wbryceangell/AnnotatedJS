@@ -25,12 +25,16 @@ export type InjectableMetadata = {
   key: string;
   set(object: unknown, value: unknown): void;
 };
+export type PropertyMethod<T> = () => T;
 export type Class<T> = new (...args: unknown[]) => T;
 export type ClassDecorator<T extends Class<unknown>> = (
   constructor: T,
   context: ClassDecoratorContext<T>,
 ) => void;
-export type ClassMethodDecorator<T> = (
-  method: () => T,
-  context: ClassMethodDecoratorContext<unknown, () => T>,
-) => void;
+export type ClassMethodDecorator<
+  T extends (...args: Array<unknown>) => unknown,
+> = (method: T, context: ClassMethodDecoratorContext<unknown, T>) => void;
+export type ControllerMethodDecorator = (
+  path?: string,
+) => // @ts-expect-error request handler type does not conform to unknown
+ClassMethodDecorator<RequestHandler>;

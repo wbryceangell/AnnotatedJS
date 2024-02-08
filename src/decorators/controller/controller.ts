@@ -53,6 +53,9 @@ import { MetadataProperties } from "./metadataProperties";
  *   @Patch("/:id")
  *   async patchItem(req: Request): Promise<Response> {}
  *
+ *   @Delete()
+ *   async deleteItems(req: Request): Promise<Response> {}
+ *
  *   @Delete("/:id")
  *   async deleteItem(req: Request): Promise<Response> {}
  * }

@@ -4,6 +4,7 @@ import {
   AnnotatedRouter,
   Config,
   Controller,
+  Delete,
   Get,
   Inject,
   Property,
@@ -85,7 +86,8 @@ describe("Initialization", () => {
       }
 
       delete(uri: string, handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+        this.ittyRouter.delete(uri, handler);
+        return this;
       }
 
       all(uri: string, handler: RequestHandler): AnnotatedRouter {
@@ -106,6 +108,11 @@ describe("Initialization", () => {
       @Get("get")
       async get(req: Request) {
         return new Response(expectedGetBody);
+      }
+
+      @Delete()
+      async delete() {
+        return new Response(null, { status: 204 });
       }
     }
 
