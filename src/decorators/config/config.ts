@@ -12,6 +12,8 @@ import { MetadataProperties } from "./metadataProperties";
 /**
  * A configuration decorator that specifies injectable properties
  *
+ * @typeParam T - Type of the annotated configuration class
+ *
  * @param container - Object that stores the configured properties
  *
  * @example

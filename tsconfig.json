@@ -9,7 +9,7 @@
     "strict": true,
     "declaration": true,
     "declarationDir": "types",
-	"removeComments": true
+    "removeComments": true
   },
   "include": ["src"]
 }

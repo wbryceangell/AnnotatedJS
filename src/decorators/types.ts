@@ -30,3 +30,7 @@ export type ClassDecorator<T extends Class<unknown>> = (
   constructor: T,
   context: ClassDecoratorContext<T>,
 ) => void;
+export type ClassMethodDecorator<T> = (
+  method: () => T,
+  context: ClassMethodDecoratorContext<unknown, () => T>,
+) => void;

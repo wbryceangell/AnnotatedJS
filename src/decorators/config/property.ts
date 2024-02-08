@@ -1,14 +1,23 @@
 import { keys } from "../../container/keys";
-import { type ConfigMetadataProperties } from "../types";
+import { ClassMethodDecorator, type ConfigMetadataProperties } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { setMetadataProperty } from "../utils/setMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
-export const Property =
-  (property: string) =>
-  (method: () => unknown, context: ClassMethodDecoratorContext) => {
+/**
+ * A configuration property decorator that specifies an injectable property
+ *
+ * @see {@link Config} for example
+ *
+ * @typeParam T - Return type of the annotated class method
+ *
+ * @param property - A unique string used to represent the property
+ *
+ */
+export const Property = <T>(property: string) =>
+  ((method, context) => {
     const annotationName = `@${Property.name}`;
     validateKind(annotationName, context, "method");
 
@@ -37,4 +46,4 @@ export const Property =
 
     properties.push([property, method]);
     setMetadataProperty(metadata, MetadataProperties.properties, properties);
-  };
+  }) as ClassMethodDecorator<T>;
