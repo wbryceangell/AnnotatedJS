@@ -7,11 +7,11 @@ import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
 /**
- * A configuration property decorator that specifies an injectable property
+ * A class method decorator that specifies an injectable property
  *
  * @see {@link Config} for example
  *
- * @typeParam T - Return type of the annotated class method
+ * @typeParam T - Return type of the annotated method
  *
  * @param property - A unique string used to represent the property
  *
