@@ -8,6 +8,7 @@ import {
   Get,
   Inject,
   Patch,
+  Post,
   Property,
   Router,
   initialize,
@@ -79,7 +80,8 @@ describe("Initialization", () => {
       }
 
       post(uri: string, handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+        this.ittyRouter.post(uri, handler);
+        return this;
       }
 
       patch(uri: string, handler: RequestHandler): AnnotatedRouter {
@@ -121,6 +123,11 @@ describe("Initialization", () => {
       async patch() {
         return new Response(null, { status: 204 });
       }
+
+      @Post()
+      async post() {
+        return new Response(null, { status: 201 });
+      }
     }
 
     const handle = initialize(container);
@@ -154,5 +161,12 @@ describe("Initialization", () => {
 
     expect(patchResponse).toBeDefined();
     expect(patchResponse.status).toBe(204);
+
+    const postResponse: Response = await handle(
+      new Request("https://test.com/controller", { method: "POST" }),
+    );
+
+    expect(postResponse).toBeDefined();
+    expect(postResponse.status).toBe(201);
   });
 });
