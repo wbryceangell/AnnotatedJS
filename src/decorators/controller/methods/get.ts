@@ -1,5 +1,5 @@
-import { getHttpMethod } from "./getHttpMethod";
 import { ClassMethodDecorator, RequestHandler } from "../../types";
+import { getHttpMethod } from "./getHttpMethod";
 
 /**
  * A class method decorator that specifies a GET endpoint

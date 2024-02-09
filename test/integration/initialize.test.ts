@@ -7,6 +7,7 @@ import {
   Delete,
   Get,
   Inject,
+  Patch,
   Property,
   Router,
   initialize,
@@ -82,7 +83,8 @@ describe("Initialization", () => {
       }
 
       patch(uri: string, handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+        this.ittyRouter.patch(uri, handler);
+        return this;
       }
 
       delete(uri: string, handler: RequestHandler): AnnotatedRouter {
@@ -114,6 +116,11 @@ describe("Initialization", () => {
       async delete() {
         return new Response(null, { status: 204 });
       }
+
+      @Patch()
+      async patch() {
+        return new Response(null, { status: 204 });
+      }
     }
 
     const handle = initialize(container);
@@ -133,5 +140,19 @@ describe("Initialization", () => {
 
     const getBody = await getResponse.text();
     expect(getBody).toBe(expectedGetBody);
+
+    const deleteResponse: Response = await handle(
+      new Request("https://test.com/controller", { method: "DELETE" }),
+    );
+
+    expect(deleteResponse).toBeDefined();
+    expect(deleteResponse.status).toBe(204);
+
+    const patchResponse: Response = await handle(
+      new Request("https://test.com/controller", { method: "PATCH" }),
+    );
+
+    expect(patchResponse).toBeDefined();
+    expect(patchResponse.status).toBe(204);
   });
 });
