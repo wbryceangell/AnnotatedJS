@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Property,
+  Put,
   Router,
   initialize,
 } from "../../src/index";
@@ -76,7 +77,8 @@ describe("Initialization", () => {
       }
 
       put(uri: string, handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+        this.ittyRouter.put(uri, handler);
+        return this;
       }
 
       post(uri: string, handler: RequestHandler): AnnotatedRouter {
@@ -128,6 +130,11 @@ describe("Initialization", () => {
       async post() {
         return new Response(null, { status: 201 });
       }
+
+      @Put()
+      async put() {
+        return new Response(null, { status: 204 });
+      }
     }
 
     const handle = initialize(container);
@@ -168,5 +175,12 @@ describe("Initialization", () => {
 
     expect(postResponse).toBeDefined();
     expect(postResponse.status).toBe(201);
+
+    const putResponse: Response = await handle(
+      new Request("https://test.com/controller", { method: "PUT" }),
+    );
+
+    expect(putResponse).toBeDefined();
+    expect(putResponse.status).toBe(204);
   });
 });
