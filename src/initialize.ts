@@ -1,9 +1,51 @@
 import { container as defaultContainer } from "./container/container";
 import { keys } from "./container/keys";
 import { getGlobal } from "./container/utils/getGlobal";
-import { AnnotatedRouter, Class } from "./decorators/types";
+import { AnnotatedRouter, Class, RequestHandler } from "./decorators/types";
 
-export const initialize = (container = defaultContainer) => {
+/**
+ * Initialize the framework
+ *
+ * @remarks
+ *
+ * AnnotatedJS starts with the `initialize()` method
+ *
+ * This method will return back a request handler. The request handler can then be used in different runtimes such as a service worker, or node
+ *
+ * @example
+ * ```ts
+ * // service worker entrypoint
+ *
+ * import { initialize } from "@fork-git-it/annotatedjs";
+ * // import annotated classes
+ *
+ * const handleRequest = initialize();
+ * const eventHandler = (evt: Event) => {
+ *   evt.respondWith(handleRequest(evt.request));
+ * };
+ * addEventListener("fetch", eventHandler);
+ * ```
+ *
+ * ```ts
+ * // node entrypoint
+ *
+ * import { initialize } from "@fork-git-it/annotatedjs";
+ * import { createServerAdapter } from "@whatwg-node/server";
+ * import { createServer } from "http";
+ * import "isomorphic-fetch";
+ * // import annotated classes
+ *
+ * const handleRequest = initialize();
+ * const ittyServer = createServerAdapter(handleRequest);
+ * const httpServer = createServer(ittyServer);
+ * httpServer.listen(3001);
+ * console.log("listening at https://localhost:3001");
+ * ```
+ *
+ *
+ * @param container - Object that stores injectables
+ */
+export function initialize(container = defaultContainer): RequestHandler {
   instantiateClasses(container, keys.configClasses);
   instantiateClasses(container, keys.serviceClasses);
 
@@ -22,7 +64,7 @@ export const initialize = (container = defaultContainer) => {
 
   const router: AnnotatedRouter = getGlobal(container, keys.router);
   return router.handle.bind(router);
-};
+}
 
 const instantiateClasses = (
   container: Record<string, Array<Class<unknown>>>,
