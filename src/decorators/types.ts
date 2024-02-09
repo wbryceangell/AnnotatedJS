@@ -34,7 +34,7 @@ export type ClassDecorator<T extends Class<unknown>> = (
 export type ClassMethodDecorator<
   T extends (...args: Array<unknown>) => unknown,
 > = (method: T, context: ClassMethodDecoratorContext<unknown, T>) => void;
-export type ControllerMethodDecorator = (
-  path?: string,
-) => // @ts-expect-error request handler type does not conform to unknown
-ClassMethodDecorator<RequestHandler>;
+export type ClassAccessorDecorator<T, K> = (
+  target: ClassAccessorDecoratorTarget<T, K>,
+  context: ClassAccessorDecoratorContext,
+) => void;
