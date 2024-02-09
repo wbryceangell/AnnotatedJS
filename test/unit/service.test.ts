@@ -41,7 +41,7 @@ describe("@Service", () => {
         name: undefined,
         addInitializer: () => {},
         metadata: {},
-      })
+      }),
     ).toThrow();
   });
 });

@@ -18,12 +18,12 @@ describe("@Controller", () => {
   itAddsClassToContainer(
     name,
     R.curryN(2, Controller)(path),
-    keys.controllerClasses
+    keys.controllerClasses,
   );
   itHasInitializationHook(name, Controller(path, {}));
   itCreatesClassInstanceInInitHook(
     name,
-    Controller(path, { [keys.router]: {} })
+    Controller(path, { [keys.router]: {} }),
   );
 
   let container = { [keys.router]: {} };
@@ -52,7 +52,7 @@ describe("@Controller", () => {
 
     expect(get).toHaveBeenCalledWith(
       `/${controllerPath}/${methodPath}`,
-      boundFunction
+      boundFunction,
     );
     expect(bind).toHaveBeenCalledWith(expect.any(ControllerClass));
   });

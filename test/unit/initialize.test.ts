@@ -37,7 +37,7 @@ describe("initialize", () => {
 
   it("errors if a router class is not in the container", () => {
     expect(() =>
-      initialize({ [keys.configClasses]: [class {}], [keys.router]: router })
+      initialize({ [keys.configClasses]: [class {}], [keys.router]: router }),
     ).toThrow();
   });
 

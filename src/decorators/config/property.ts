@@ -1,22 +1,35 @@
 import { keys } from "../../container/keys";
-import { type ConfigMetadataProperties } from "../types";
+import {
+  ClassMethodDecorator,
+  PropertyMethod,
+  type ConfigMetadataProperties,
+} from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { setMetadataProperty } from "../utils/setMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 import { MetadataProperties } from "./metadataProperties";
 
-export const Property =
-  (property: string) =>
-  (method: () => unknown, context: ClassMethodDecoratorContext) => {
+/**
+ * A class method decorator that specifies an injectable property
+ *
+ * @see {@link Config} for example
+ *
+ * @typeParam T - Return type of the annotated method
+ *
+ * @param property - A unique string used to represent the property
+ *
+ */
+export const Property = <T>(property: string) =>
+  ((method, context) => {
     const annotationName = `@${Property.name}`;
     validateKind(annotationName, context, "method");
 
     if (typeof property !== "string") {
       throw new Error(
         `Invalid property argument ${JSON.stringify(
-          property
-        )}. It must be a string`
+          property,
+        )}. It must be a string`,
       );
     }
 
@@ -37,4 +50,4 @@ export const Property =
 
     properties.push([property, method]);
     setMetadataProperty(metadata, MetadataProperties.properties, properties);
-  };
+  }) as ClassMethodDecorator<PropertyMethod<T>>;

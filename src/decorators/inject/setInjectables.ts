@@ -6,7 +6,7 @@ import { MetadataProperties } from "./metadataProperties";
 export const setInjectables = (
   container: Record<string, unknown>,
   instance: object,
-  metadata: DecoratorMetadataObject
+  metadata: DecoratorMetadataObject,
 ) => {
   const injectables = <Array<InjectableMetadata>>(
     getMetadataProperty(metadata, MetadataProperties.injectables, [])

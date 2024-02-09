@@ -47,7 +47,7 @@ describe("@Config", () => {
         metadata: {
           [MetadataProperties.properties]: [["key", () => undefined]],
         },
-      })
+      }),
     ).toThrow();
   });
 
@@ -113,7 +113,7 @@ describe("@Config", () => {
             ["firstKey", firstGetter],
           ],
         },
-      })
+      }),
     ).toThrow();
 
     expect(callFirstGetter).not.toHaveBeenCalled();
@@ -131,7 +131,7 @@ describe("@Config", () => {
         metadata: {
           [MetadataProperties.properties]: [property, property],
         },
-      })
+      }),
     ).toThrow();
   });
 });

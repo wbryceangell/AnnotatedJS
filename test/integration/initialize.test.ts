@@ -4,9 +4,13 @@ import {
   AnnotatedRouter,
   Config,
   Controller,
+  Delete,
   Get,
   Inject,
+  Patch,
+  Post,
   Property,
+  Put,
   Router,
   initialize,
 } from "../../src/index";
@@ -73,19 +77,23 @@ describe("Initialization", () => {
       }
 
       put(uri: string, handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+        this.ittyRouter.put(uri, handler);
+        return this;
       }
 
       post(uri: string, handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+        this.ittyRouter.post(uri, handler);
+        return this;
       }
 
       patch(uri: string, handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+        this.ittyRouter.patch(uri, handler);
+        return this;
       }
 
       delete(uri: string, handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+        this.ittyRouter.delete(uri, handler);
+        return this;
       }
 
       all(uri: string, handler: RequestHandler): AnnotatedRouter {
@@ -99,20 +107,40 @@ describe("Initialization", () => {
     @Controller("/controller", container)
     class TestController {
       @Get()
-      async getAll(req: Request) {
+      async getAll() {
         return new Response(expectedGetAllBody);
       }
 
       @Get("get")
-      async get(req: Request) {
+      async get() {
         return new Response(expectedGetBody);
+      }
+
+      @Delete()
+      async delete() {
+        return new Response(null, { status: 204 });
+      }
+
+      @Patch()
+      async patch() {
+        return new Response(null, { status: 204 });
+      }
+
+      @Post()
+      async post() {
+        return new Response(null, { status: 201 });
+      }
+
+      @Put()
+      async put() {
+        return new Response(null, { status: 204 });
       }
     }
 
     const handle = initialize(container);
 
     const getAllResponse = await handle(
-      new Request("https://test.com/controller")
+      new Request("https://test.com/controller"),
     );
     expect(getAllResponse).toBeDefined();
 
@@ -120,11 +148,39 @@ describe("Initialization", () => {
     expect(getAllBody).toBe(expectedGetAllBody);
 
     const getResponse = await handle(
-      new Request("https://test.com/controller/get")
+      new Request("https://test.com/controller/get"),
     );
     expect(getResponse).toBeDefined();
 
     const getBody = await getResponse.text();
     expect(getBody).toBe(expectedGetBody);
+
+    const deleteResponse: Response = await handle(
+      new Request("https://test.com/controller", { method: "DELETE" }),
+    );
+
+    expect(deleteResponse).toBeDefined();
+    expect(deleteResponse.status).toBe(204);
+
+    const patchResponse: Response = await handle(
+      new Request("https://test.com/controller", { method: "PATCH" }),
+    );
+
+    expect(patchResponse).toBeDefined();
+    expect(patchResponse.status).toBe(204);
+
+    const postResponse: Response = await handle(
+      new Request("https://test.com/controller", { method: "POST" }),
+    );
+
+    expect(postResponse).toBeDefined();
+    expect(postResponse.status).toBe(201);
+
+    const putResponse: Response = await handle(
+      new Request("https://test.com/controller", { method: "PUT" }),
+    );
+
+    expect(putResponse).toBeDefined();
+    expect(putResponse.status).toBe(204);
   });
 });

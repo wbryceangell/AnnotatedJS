@@ -9,7 +9,7 @@ const kind = "class";
 
 export const itCreatesInstanceOfClass = <T extends Class<object>>(
   name: string,
-  classDecorator: ClassDecorator<T>
+  classDecorator: ClassDecorator<T>,
 ) =>
   it(`creates an instance of the ${name} class`, () => {
     const spy = jest.fn();
@@ -26,7 +26,7 @@ export const itCreatesInstanceOfClass = <T extends Class<object>>(
         name,
         addInitializer: () => {},
         metadata: {},
-      }
+      },
     );
 
     expect(spy).toHaveBeenCalled();
@@ -34,7 +34,7 @@ export const itCreatesInstanceOfClass = <T extends Class<object>>(
 
 export const itHasInitializationHook = <T extends Class<object>>(
   name: string,
-  classDecorator: ClassDecorator<T>
+  classDecorator: ClassDecorator<T>,
 ) =>
   it("has an initialization hook", () => {
     const spy = jest.fn();
@@ -47,7 +47,7 @@ export const itHasInitializationHook = <T extends Class<object>>(
         name,
         addInitializer: spy,
         metadata: {},
-      }
+      },
     );
 
     expect(spy).toHaveBeenCalledWith(expect.any(Function));
@@ -55,7 +55,7 @@ export const itHasInitializationHook = <T extends Class<object>>(
 
 export const itCreatesClassInstanceInInitHook = <T extends Class<object>>(
   name: string,
-  classDecorator: ClassDecorator<T>
+  classDecorator: ClassDecorator<T>,
 ) =>
   it("initialization hook to create instance of class", () => {
     const spy = jest.fn();
@@ -72,11 +72,11 @@ export const itCreatesClassInstanceInInitHook = <T extends Class<object>>(
               constructor() {
                 spy();
               }
-            }
-          )
+            },
+          ),
         ),
         metadata: {},
-      }
+      },
     );
 
     expect(spy).toHaveBeenCalled();
@@ -85,7 +85,7 @@ export const itCreatesClassInstanceInInitHook = <T extends Class<object>>(
 export const itSetsInjectablesOnInstance = <T extends Class<object>>(
   name: string,
   classDecorator: ClassDecorator<T>,
-  container: object
+  container: object,
 ) =>
   it("sets injectables on class instance", () => {
     const key = "key";
@@ -106,7 +106,7 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
         metadata: {
           [MetadataProperties.injectables]: [{ key, set }],
         },
-      }
+      },
     );
 
     expect(set).toHaveBeenCalledWith(expect.any(ServiceClass), value);
@@ -115,9 +115,9 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
 export const itAddsClassToContainer = <T extends Class<object>>(
   name: string,
   getClassDecorator: (
-    container: Record<string, Array<Class<unknown>>>
+    container: Record<string, Array<Class<unknown>>>,
   ) => ClassDecorator<T>,
-  key: string
+  key: string,
 ) =>
   it("adds class to container", () => {
     const container = {};
@@ -130,10 +130,10 @@ export const itAddsClassToContainer = <T extends Class<object>>(
         name,
         addInitializer: () => {},
         metadata: {},
-      }
+      },
     );
 
     expect(container[key]).toStrictEqual(
-      expect.arrayContaining([expect.anything()])
+      expect.arrayContaining([expect.anything()]),
     );
   });
