@@ -101,12 +101,12 @@ describe("Initialization", () => {
     @Controller("/controller", container)
     class TestController {
       @Get()
-      async getAll(req: Request) {
+      async getAll() {
         return new Response(expectedGetAllBody);
       }
 
       @Get("get")
-      async get(req: Request) {
+      async get() {
         return new Response(expectedGetBody);
       }
 
