@@ -8,6 +8,29 @@ import { addClassToContainer } from "./utils/addClassToContainer";
 import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 
+/**
+ * A class decorator that makes the class injectable
+ *
+ * @remarks
+ *
+ * `@Service` will specify the class as one that can be injected
+ *
+ * The class is used as the lookup when injecting the service
+ *
+ * @example
+ * ```ts
+ * import { Service } from "@fork-git-it/annotatedjs";
+ *
+ * @Service()
+ * export class ExampleService {
+ *   doSomething() {}
+ * }
+ * ```
+ *
+ * @typeParam T - Type of the annotated class
+ *
+ * @param container - Object that stores injectables
+ */
 export const Service = <T extends Class<object>>(
   container = defaultContainer,
 ) =>
