@@ -18,176 +18,18 @@ The framework is heavily inspired by <a href="https://spring.io/" target="_blank
 
 This framework relies on the <a href="https://github.com/tc39/proposal-decorators" target="_blank">decorators</a> experimental JavaScript feature. It is recommended to use [Babel](https://babeljs.io/docs/babel-plugin-proposal-decorators) to compile codebases that include AnnotatedJS.
 
-## Initialization
+## Installation
 
-```typescript
-// service worker entrypoint
-
-import { initialize } from "@fork-git-it/annotatedjs";
-// import annotated classes
-
-const handleRequest = initialize();
-const eventHandler = (evt: Event) => {
-  evt.respondWith(handleRequest(evt.request));
-};
-addEventListener("fetch", eventHandler);
+```
+// .npmrc
+@fork-git-it:registry=https://npm.pkg.github.com
 ```
 
-```typescript
-// node entrypoint
-
-import { initialize } from "@fork-git-it/annotatedjs";
-import { createServerAdapter } from "@whatwg-node/server";
-import { createServer } from "http";
-import "isomorphic-fetch";
-// import annotated classes
-
-const handleRequest = initialize();
-const ittyServer = createServerAdapter(handleRequest);
-const httpServer = createServer(ittyServer);
-httpServer.listen(3001);
-console.log("listening at https://localhost:3001");
+```bash
+$ npm install @fork-git-it/annotatedjs
 ```
 
-AnnotatedJS starts with the `initialize()` method. This method will return back a request handler. The request handler can then be used in different runtimes such as a service worker, or node (see above).
-
-## Annotations
-
-### [@Config](#config-1)
-
-### [@Router](#router-1)
-
-### [@Controller](#controller-1)
-
-### [@Service](#service-1)
-
-### [@Inject](#inject-1)
-
-## @Config
-
-```typescript
-import { Config } from "@fork-git-it/annotatedjs";
-
-@Config()
-export class ExampleConfig {
-  @Property("Injected")
-  getInjected(): unknown {
-    // return some value to be injected
-  }
-
-  @Property("AnotherInjected")
-  getAnotherInjected(): unknown {
-    this.getInjected(); // will return singleton
-    // return value to be injected
-  }
-}
-```
-
-`@Config` defines values that will be available for injection.
-
-`@Config` encapsulates `@Property` annotations. `@Property` takes a string as an argument and injects the returned value of the method using that string, see [@Inject](#inject-1).
-
-Properties may also use other properties in the config as long as they are declared in order.
-
-## @Router
-
-```typescript
-import { AnnotatedRouter, Router } from "@fork-git-it/annotatedjs";
-
-@Router()
-export class ExampleRouter implements AnnotatedRouter {
-  get(uri: string, handler: RequestHandler): AnnotatedRouter {
-    // configure router to handle GET request
-    return this;
-  }
-
-  put(uri: string, handler: RequestHandler): AnnotatedRouter {
-    // configure router to handle PUT request
-    return this;
-  }
-
-  post(uri: string, handler: RequestHandler): AnnotatedRouter {
-    // configure router to handle POST request
-    return this;
-  }
-
-  patch(uri: string, handler: RequestHandler): AnnotatedRouter {
-    // configure router to handle PATCH request
-    return this;
-  }
-
-  delete(uri: string, handler: RequestHandler): AnnotatedRouter {
-    // configure router to handle DELETE request
-    return this;
-  }
-
-  all(uri: string, handler: RequestHandler): AnnotatedRouter {
-    // configure router to handle all requests
-    return this;
-  }
-
-  handle(req: Request): Promise<Response> {
-    // handle incoming request using the router
-  }
-}
-```
-
-`@Router` annotates the class that will handle incoming requests. The class should implement the `AnnotatedRouter` interface. It is a [Fluent interface](https://en.wikipedia.org/wiki/Fluent_interface).
-
-## @Controller
-
-```typescript
-import {
-  Controller,
-  Get,
-  Put,
-  Post,
-  Patch,
-  Delete,
-} from "@fork-git-it/annotatedjs";
-
-@Controller("/items")
-export class ExampleController {
-  @Get()
-  async getItems(req: Request): Promise<Response> {}
-
-  @Get("/:id")
-  async getItem(req: Request): Promise<Response> {}
-
-  @Put("/:id")
-  async putItem(req: Request): Promise<Response> {}
-
-  @Post("/:id")
-  async postItem(req: Request): Promise<Response> {}
-
-  @Patch("/:id")
-  async patchItem(req: Request): Promise<Response> {}
-
-  @Delete("/:id")
-  async deleteItem(req: Request): Promise<Response> {}
-}
-```
-
-`@Controller` represents a specific API entrypoint. It expects the API path as a parameter.
-
-The HTTP method annotations `@Get`, `@Put`, `@Post`, `@Patch`, `@Delete` take the API endpoint path as an optional paramater.
-
-## @Service
-
-```typescript
-import { Service } from "@fork-git-it/annotatedjs";
-
-@Service()
-export class ExampleService {
-  doSomething() {}
-}
-```
-
-`@Service` will specify the class as one that can be injeted. The class is used as the lookup when injecting the service, see [@Inject](#inject-1).
-
-## @Inject
-
-`@Inject` is the annotation that allows for injection across classes. Here is a full example:
+## Example
 
 ```typescript
 // exampleConfig.ts
@@ -284,6 +126,7 @@ export class StorageService {
 ```
 
 ```typescript
+// storageController.ts
 import { Controller, Get, Put, Delete } from "@fork-git-it/annotatedjs";
 import { StorageService } from "./storageService";
 
@@ -320,7 +163,25 @@ export class StorageController {
 }
 ```
 
-`@Inject` accepts two different types of arguments: a string or a class. The `StorageService` class above uses a string to get the `Storage` instance. The `StorageController` class uses the `StorageService` class as the injection argument.
+```typescript
+// index.ts
+
+import { initialize } from "@fork-git-it/annotatedjs";
+import { createServerAdapter } from "@whatwg-node/server";
+import { createServer } from "http";
+import "isomorphic-fetch";
+
+import "./exampleConfig.ts";
+import "./exampleRouter.ts";
+import "./storageService.ts";
+import "./storageController.ts";
+
+const handleRequest = initialize();
+const ittyServer = createServerAdapter(handleRequest);
+const httpServer = createServer(ittyServer);
+httpServer.listen(3001);
+console.log("listening at https://localhost:3001");
+```
 
 ## Containers
 
