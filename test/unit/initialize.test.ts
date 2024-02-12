@@ -41,6 +41,22 @@ describe("initialize", () => {
     ).toThrow();
   });
 
+  it("instantiates cache storage class", () => {
+    const spy = jest.fn();
+
+    initialize({
+      [keys.routerClass]: Router,
+      [keys.router]: router,
+      [keys.cacheStorageClass]: class {
+        constructor() {
+          spy();
+        }
+      },
+    });
+
+    expect(spy).toHaveBeenCalled();
+  });
+
   it("instantiates router class", () => {
     const spy = jest.fn();
     class Router {

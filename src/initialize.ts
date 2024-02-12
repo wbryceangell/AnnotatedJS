@@ -51,6 +51,15 @@ export function initialize(container = defaultContainer): RequestHandler {
   instantiateClasses(container, keys.configClasses);
   instantiateClasses(container, keys.serviceClasses);
 
+  const cacheStorageClass: Class<CacheStorage> = getGlobal(
+    container,
+    keys.cacheStorageClass,
+  );
+
+  if (typeof cacheStorageClass === "function") {
+    new cacheStorageClass();
+  }
+
   const routerClass: Class<AnnotatedRouter> = getGlobal(
     container,
     keys.routerClass,
