@@ -6,7 +6,6 @@ import {
   initializerFor,
   itAddsClassToContainer,
   itCreatesClassInstanceInInitHook,
-  itCreatesInstanceOfClass,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
 } from "./utils";
@@ -26,7 +25,7 @@ describe("@Controller", () => {
     Controller(path, { [keys.router]: {} }),
   );
 
-  let container = { [keys.router]: {} };
+  const container = { [keys.router]: {} };
   itSetsInjectablesOnInstance(name, Controller(path, container), container);
 
   it("configures router with annotated methods", () => {

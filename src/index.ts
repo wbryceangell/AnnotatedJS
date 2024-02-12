@@ -9,5 +9,6 @@ export { Put } from "./decorators/controller/methods/put";
 export { Inject } from "./decorators/inject/inject";
 export { Router } from "./decorators/router";
 export { Service } from "./decorators/service";
-export { AnnotatedRouter } from "./decorators/types";
 export { initialize } from "./initialize";
+export { AnnotatedCache } from "./interfaces/cache";
+export { AnnotatedRouter } from "./interfaces/router";

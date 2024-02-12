@@ -1,4 +1,5 @@
-import type { HttpMethodMetadata, RequestHandler } from "../../types";
+import { RequestHandler } from "../../../interfaces/types";
+import type { HttpMethodMetadata } from "../../types";
 import { getMetadata } from "../../utils/getMetadata";
 import { getMetadataProperty } from "../../utils/getMetadataProperty";
 import { setMetadataProperty } from "../../utils/setMetadataProperty";

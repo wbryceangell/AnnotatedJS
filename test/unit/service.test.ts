@@ -16,7 +16,7 @@ describe("@Service", () => {
   itHasInitializationHook(name, Service({}));
   itCreatesClassInstanceInInitHook(name, Service({}));
 
-  let container = {};
+  const container = {};
   itSetsInjectablesOnInstance(name, Service(container), container);
 
   it("sets global value to class instance", () => {
