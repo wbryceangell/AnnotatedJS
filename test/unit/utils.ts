@@ -2,7 +2,7 @@ import { MetadataProperties } from "../../src/decorators/inject/metadataProperti
 import { Class, ClassDecorator } from "../../src/decorators/types";
 
 export const initializerFor =
-  (classDef: Class<unknown>) => (initializer: Function) =>
+  (classDef: Class<unknown>) => (initializer: () => void) =>
     initializer.call(classDef);
 
 const kind = "class";
@@ -114,9 +114,7 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
 
 export const itAddsClassToContainer = <T extends Class<object>>(
   name: string,
-  getClassDecorator: (
-    container: Record<string, Array<Class<unknown>>>,
-  ) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
   key: string,
 ) =>
   it("adds class to container", () => {

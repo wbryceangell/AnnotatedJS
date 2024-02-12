@@ -3,7 +3,8 @@ import { keys } from "../container/keys";
 import { setGlobal } from "../container/utils/setGlobal";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
-import { AnnotatedRouter, Class, ClassDecorator } from "./types";
+import { Class, ClassDecorator } from "./types";
+import { AnnotatedRouter } from "../interfaces/router";
 import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 

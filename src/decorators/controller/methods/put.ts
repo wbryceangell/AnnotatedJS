@@ -1,4 +1,5 @@
-import { ClassMethodDecorator, RequestHandler } from "../../types";
+import { RequestHandler } from "../../../interfaces/types";
+import { ClassMethodDecorator } from "../../types";
 import { getHttpMethod } from "./getHttpMethod";
 
 /**

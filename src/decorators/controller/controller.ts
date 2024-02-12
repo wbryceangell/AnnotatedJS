@@ -4,12 +4,8 @@ import { keys } from "../../container/keys";
 import { getGlobal } from "../../container/utils/getGlobal";
 import { validateContainer } from "../../container/utils/validateContainer";
 import { setInjectables } from "../inject/setInjectables";
-import type {
-  AnnotatedRouter,
-  Class,
-  ClassDecorator,
-  HttpMethodMetadata,
-} from "../types";
+import type { Class, ClassDecorator, HttpMethodMetadata } from "../types";
+import type { AnnotatedRouter } from "../../interfaces/router";
 import { addClassToContainer } from "../utils/addClassToContainer";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
