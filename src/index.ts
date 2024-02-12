@@ -1,3 +1,4 @@
+export { CacheStorage } from "./decorators/cacheStorage";
 export { Config } from "./decorators/config/config";
 export { Property } from "./decorators/config/property";
 export { Controller } from "./decorators/controller/controller";
@@ -7,9 +8,9 @@ export { Patch } from "./decorators/controller/methods/patch";
 export { Post } from "./decorators/controller/methods/post";
 export { Put } from "./decorators/controller/methods/put";
 export { Inject } from "./decorators/inject/inject";
-export { CacheStorage } from "./decorators/cacheStorage";
 export { Router } from "./decorators/router";
 export { Service } from "./decorators/service";
 export { initialize } from "./initialize";
 export { AnnotatedCache } from "./interfaces/cache";
+export { AnnotatedCacheStorage } from "./interfaces/cacheStorage";
 export { AnnotatedRouter } from "./interfaces/router";

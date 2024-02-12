@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Controller, Get, Router } from "../../src/index";
 
 describe("Controller", () => {
@@ -5,11 +7,11 @@ describe("Controller", () => {
     expect(() => {
       const container = {};
 
-      // @ts-ignore
+      // @ts-expect-error invalid router implementation
       @Router(container)
       class TestRouter {}
 
-      // @ts-ignore
+      // @ts-expect-error invalid path argument
       @Controller({}, container)
       class TestController {}
     }).toThrow();
@@ -19,7 +21,7 @@ describe("Controller", () => {
     expect(() => {
       const container = {};
 
-      // @ts-ignore
+      // @ts-expect-error invalid router implementation
       @Router(container)
       class TestRouter {}
 
@@ -32,7 +34,7 @@ describe("Controller", () => {
     expect(() => {
       const container = {};
 
-      // @ts-ignore
+      // @ts-expect-error invalid router implementation
       @Router(container)
       class TestRouter {
         get() {}
@@ -40,7 +42,7 @@ describe("Controller", () => {
 
       @Controller("test", container)
       class TestController {
-        // @ts-ignore
+        // @ts-expect-error invalid method argument
         @Get({})
         get() {}
       }
@@ -51,7 +53,7 @@ describe("Controller", () => {
     expect(() => {
       const container = {};
 
-      // @ts-ignore
+      // @ts-expect-error invalid router implementation
       @Router(container)
       class TestRouter {
         get() {}
@@ -59,7 +61,7 @@ describe("Controller", () => {
 
       @Controller("test", container)
       class TestController {
-        // @ts-ignore
+        // @ts-expect-error method is not a request handler
         @Get("")
         get() {}
       }
@@ -70,7 +72,7 @@ describe("Controller", () => {
     expect(() => {
       const container = {};
 
-      // @ts-ignore
+      // @ts-expect-error invalid router implementation
       @Router(container)
       class TestRouter {
         get() {}
@@ -78,7 +80,7 @@ describe("Controller", () => {
 
       @Controller("test", container)
       class TestController {
-        // @ts-ignore
+        // @ts-expect-error annotated something that is not a method
         @Get()
         private notMethod: unknown;
       }
@@ -89,7 +91,7 @@ describe("Controller", () => {
     expect(() => {
       const container = {};
 
-      // @ts-ignore
+      // @ts-expect-error invalid router implementation
       @Router(container)
       class TestRouter {
         get() {}
@@ -97,7 +99,7 @@ describe("Controller", () => {
 
       @Controller("test", container)
       class TestController {
-        // @ts-ignore
+        // @ts-expect-error method is not a request handler
         @Get()
         get() {}
       }
@@ -108,7 +110,7 @@ describe("Controller", () => {
     expect(() => {
       const container = {};
 
-      // @ts-ignore
+      // @ts-expect-error invalid router implementation
       @Router(container)
       class TestRouter {
         get() {}
@@ -116,7 +118,7 @@ describe("Controller", () => {
 
       @Controller("test", container)
       class TestController {
-        // @ts-ignore
+        // @ts-expect-error method is not a request handler
         @Get("path")
         get() {}
       }

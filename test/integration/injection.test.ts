@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Config, Inject, Property } from "../../src/index";
 
 describe("Injection", () => {

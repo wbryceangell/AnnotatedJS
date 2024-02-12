@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Router as IttyRouter, RouterType } from "itty-router";
-import { RequestHandler } from "../../src/decorators/types";
 import {
   AnnotatedRouter,
   Config,
@@ -14,6 +15,7 @@ import {
   Router,
   initialize,
 } from "../../src/index";
+import { RequestHandler } from "../../src/interfaces/types";
 
 describe("Initialization", () => {
   it("fails when router is not configured", () => {
@@ -25,25 +27,25 @@ describe("Initialization", () => {
 
     @Router(container)
     class TestRouter implements AnnotatedRouter {
-      get(uri: string, handler: RequestHandler): AnnotatedRouter {
+      get(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      put(uri: string, handler: RequestHandler): AnnotatedRouter {
+      put(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      post(uri: string, handler: RequestHandler): AnnotatedRouter {
+      post(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      patch(uri: string, handler: RequestHandler): AnnotatedRouter {
+      patch(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      delete(uri: string, handler: RequestHandler): AnnotatedRouter {
+      delete(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      all(uri: string, handler: RequestHandler): AnnotatedRouter {
+      all(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      handle(req: Request): Promise<Response> {
+      handle(_req: Request): Promise<Response> {
         throw new Error("Method not implemented.");
       }
     }
@@ -96,7 +98,7 @@ describe("Initialization", () => {
         return this;
       }
 
-      all(uri: string, handler: RequestHandler): AnnotatedRouter {
+      all(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
     }
