@@ -14,6 +14,10 @@ AnnotatedJS is a lightweight framework for building JavaScript backends. It is b
 
 The framework is heavily inspired by <a href="https://spring.io/" target="_blank">Spring</a> and <a href="https://nestjs.com/" target="_blank">NestJS</a>.
 
+## Documentation
+
+Full documentation can be found on the [GitHub page](https://fork-git-it.github.io/AnnotatedJS/)
+
 ## Decorators
 
 This framework relies on the <a href="https://github.com/tc39/proposal-decorators" target="_blank">decorators</a> experimental JavaScript feature. It is recommended to use [Babel](https://babeljs.io/docs/babel-plugin-proposal-decorators) to compile codebases that include AnnotatedJS.
