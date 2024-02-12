@@ -20,10 +20,13 @@ This framework relies on the <a href="https://github.com/tc39/proposal-decorator
 
 ## Installation
 
+Create a [GitHub Personal Access Token](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry) and use it to login to npm via:
+
+```bash
+npm login --scope=@fork-git-it --registry=https://npm.pkg.github.com
 ```
-// .npmrc
-@fork-git-it:registry=https://npm.pkg.github.com
-```
+
+Then proceed to install the npm package via:
 
 ```bash
 npm install @fork-git-it/annotatedjs
