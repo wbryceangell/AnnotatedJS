@@ -26,7 +26,7 @@ This framework relies on the <a href="https://github.com/tc39/proposal-decorator
 ```
 
 ```bash
-$ npm install @fork-git-it/annotatedjs
+npm install @fork-git-it/annotatedjs
 ```
 
 ## Example
