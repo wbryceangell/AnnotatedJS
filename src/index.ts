@@ -1,4 +1,3 @@
-export { CacheStorage } from "./decorators/cacheStorage";
 export { Config } from "./decorators/config/config";
 export { Property } from "./decorators/config/property";
 export { Controller } from "./decorators/controller/controller";
@@ -11,6 +10,4 @@ export { Inject } from "./decorators/inject/inject";
 export { Router } from "./decorators/router";
 export { Service } from "./decorators/service";
 export { initialize } from "./initialize";
-export { AnnotatedCache } from "./interfaces/cache";
-export { AnnotatedCacheStorage } from "./interfaces/cacheStorage";
 export { AnnotatedRouter } from "./interfaces/router";
