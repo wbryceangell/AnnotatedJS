@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Config, Property } from "../../src";
 
 describe("Config", () => {
@@ -5,7 +7,7 @@ describe("Config", () => {
     expect(() => {
       @Config({})
       class Configuration {
-        //@ts-ignore
+        // @ts-expect-error property arg is not a string
         @Property(0)
         getProp() {}
       }
@@ -38,7 +40,7 @@ describe("Config", () => {
     expect(() => {
       @Config({})
       class Configuration {
-        // @ts-ignore
+        // @ts-expect-error annotation used on a non-method
         @Property("prop")
         private prop: unknown;
       }

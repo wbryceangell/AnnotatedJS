@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { AnnotatedRouter, Router } from "../../src";
 import { keys } from "../../src/container/keys";
-import { RequestHandler } from "../../src/decorators/types";
+import { RequestHandler } from "../../src/interfaces/types";
 
 describe("Router", () => {
   it("should work when it is used on a class", () => {
     expect(() => {
-      // @ts-ignore
+      // @ts-expect-error testing invalid router implementation
       @Router({})
       class TestRouter {}
     }).not.toThrow();
@@ -17,25 +19,25 @@ describe("Router", () => {
 
     @Router(container)
     class TestRouter implements AnnotatedRouter {
-      get(uri: string, handler: RequestHandler): AnnotatedRouter {
+      get(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      put(uri: string, handler: RequestHandler): AnnotatedRouter {
+      put(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      post(uri: string, handler: RequestHandler): AnnotatedRouter {
+      post(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      patch(uri: string, handler: RequestHandler): AnnotatedRouter {
+      patch(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      delete(uri: string, handler: RequestHandler): AnnotatedRouter {
+      delete(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      all(uri: string, handler: RequestHandler): AnnotatedRouter {
+      all(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
-      async handle(req: Request): Promise<Response> {
+      async handle(_req: Request): Promise<Response> {
         return new Response(expectedBody);
       }
     }
