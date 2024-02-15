@@ -11,3 +11,4 @@ export { Router } from "./decorators/router";
 export { Service } from "./decorators/service";
 export { initialize } from "./initialize";
 export { AnnotatedRouter } from "./interfaces/router";
+export { RequestHandler } from "./interfaces/types";
