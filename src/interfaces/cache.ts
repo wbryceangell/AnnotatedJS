@@ -1,7 +1,5 @@
-import { RequestHandler } from "./types";
-
 export interface Cache {
-  get: RequestHandler;
-  put(request: Request, response: Response): Promise<void>;
-  delete(request: Request): Promise<void>;
+  match(request: Request): Promise<Response | undefined>;
+  put(request: Request, response: Response): Promise<undefined>;
+  delete(request: Request): Promise<boolean>;
 }
