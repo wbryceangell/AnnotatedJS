@@ -4,7 +4,7 @@ import { setGlobal } from "../container/utils/setGlobal";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
 import { Class, ClassDecorator } from "./types";
-import { AnnotatedRouter } from "../interfaces/router";
+import { AnnotatedRouter } from "../interfaces/annotatedRouter";
 import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 

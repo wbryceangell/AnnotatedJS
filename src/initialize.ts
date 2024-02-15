@@ -2,7 +2,7 @@ import { container as defaultContainer } from "./container/container";
 import { keys } from "./container/keys";
 import { getGlobal } from "./container/utils/getGlobal";
 import { Class } from "./decorators/types";
-import { AnnotatedRouter } from "./interfaces/router";
+import { AnnotatedRouter } from "./interfaces/annotatedRouter";
 import { RequestHandler } from "./interfaces/types";
 
 /**
