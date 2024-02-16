@@ -2,7 +2,7 @@ import { keys } from "../../src/container/keys";
 import { Service } from "../../src/index";
 import {
   initializerFor,
-  itAddsClassToContainer,
+  itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
@@ -12,7 +12,7 @@ describe("@Service", () => {
   const kind = "class";
   const name = "Service";
 
-  itAddsClassToContainer(name, Service, keys.serviceClasses);
+  itAddsClassToArrayInContainer(name, Service, keys.serviceClasses);
   itHasInitializationHook(name, Service({}));
   itCreatesClassInstanceInInitHook(name, Service({}));
 
