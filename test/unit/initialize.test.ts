@@ -57,6 +57,22 @@ describe("initialize", () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it("instantiates cache storage", () => {
+    const spy = jest.fn();
+
+    initialize({
+      [keys.routerClass]: Router,
+      [keys.router]: router,
+      [keys.cacheStorageClass]: class {
+        constructor() {
+          spy();
+        }
+      },
+    });
+
+    expect(spy).toHaveBeenCalled();
+  });
+
   it("instantiates in order", () => {
     const spy = jest.fn();
     class Config {
