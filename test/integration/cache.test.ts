@@ -7,7 +7,7 @@ describe("Cache", () => {
     expect(() => {
       // @ts-expect-error testing invalid container
       @CacheStorage(null)
-      class TestCacheStorage {}
+      class TestClass {}
     }).toThrow();
   });
 
@@ -19,5 +19,13 @@ describe("Cache", () => {
         notClass() {}
       }
     }).toThrow();
+  });
+
+  it("does not error when @CacheStorage is used with valid container and on class", () => {
+    expect(() => {
+      // @ts-expect-error needs to be an AnnotatedCacheStorage implementation
+      @CacheStorage({})
+      class TestClass {}
+    }).not.toThrow();
   });
 });
