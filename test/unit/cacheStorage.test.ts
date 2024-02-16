@@ -6,6 +6,7 @@ import {
   itAddsClassToContainerOnlyOnce,
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
+  itSetsInjectablesOnInstance,
 } from "./utils";
 
 describe("@CacheStorage", () => {
@@ -16,4 +17,7 @@ describe("@CacheStorage", () => {
   itHasInitializationHook(name, CacheStorage({}));
   itCreatesClassInstanceInInitHook(name, CacheStorage({}));
   itAddsClassInstanceToContainerOnInit(name, CacheStorage, keys.cacheStorage);
+
+  const container = {};
+  itSetsInjectablesOnInstance(name, CacheStorage(container), container);
 });
