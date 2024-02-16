@@ -13,5 +13,9 @@ export const CacheStorage = (container = defaultContainer) =>
     const annotationName = `@${CacheStorage.name}`;
     validateKind(annotationName, context, "class");
 
+    context.addInitializer(function () {
+      setGlobal(container, keys.cacheStorage, new this());
+    });
+
     setGlobal(container, keys.cacheStorageClass, constructor);
   }) as ClassDecorator<Class<AnnotatedCacheStorage>>;

@@ -6,4 +6,5 @@ export const keys = {
   routerClass: "_routerClass",
   controllerClasses: "_controllerClasses",
   router: "_router",
+  cacheStorage: "_cacheStorage",
 };

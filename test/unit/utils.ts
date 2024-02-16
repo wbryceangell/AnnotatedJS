@@ -6,6 +6,7 @@ export const initializerFor =
     initializer.call(classDef);
 
 const kind = "class";
+class ExampleClass {}
 
 export const itCreatesInstanceOfClass = <T extends Class<object>>(
   name: string,
@@ -163,7 +164,6 @@ export const itAddsClassToContainerOnlyOnce = <T extends Class<object>>(
   getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
 ) =>
   it("adds class to container only once", () => {
-    class ExampleClass {}
     const container = {};
     const addInitializer = () => {};
     const metadata = {};
@@ -186,4 +186,26 @@ export const itAddsClassToContainerOnlyOnce = <T extends Class<object>>(
         { kind, name, addInitializer, metadata },
       ),
     ).toThrow();
+  });
+
+export const itAddsClassInstanceToContainerOnInit = <T extends Class<object>>(
+  name: string,
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+  key: string,
+) =>
+  it("adds class instance to container when initialized", () => {
+    const container = {};
+
+    getClassDecorator(container)(
+      // @ts-expect-error Class type is too broad for anonymous class
+      ExampleClass,
+      {
+        kind,
+        name,
+        addInitializer: initializerFor(ExampleClass),
+        metadata: {},
+      },
+    );
+
+    expect(container[key]).toStrictEqual(expect.any(ExampleClass));
   });
