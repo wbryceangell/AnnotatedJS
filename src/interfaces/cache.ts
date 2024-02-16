@@ -1,6 +1,9 @@
 /**
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Cache | MDN} for spec
- * @see {@link AnnotatedCacheStorage.open} for usage
+ * @see
+ *
+ * {@link https://developer.mozilla.org/en-US/docs/Web/API/Cache | MDN} for spec
+ *
+ * {@link AnnotatedCacheStorage.open} for usage
  */
 export interface Cache {
   match(request: Request): Promise<Response | undefined>;

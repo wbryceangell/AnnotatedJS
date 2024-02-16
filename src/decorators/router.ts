@@ -15,7 +15,9 @@ import { validateKind } from "./utils/validateKind";
  *
  * `@Router` annotates the class that will handle incoming requests
  *
- * The class should implement the `AnnotatedRouter` interface. It is a [Fluent interface](https://en.wikipedia.org/wiki/Fluent_interface)
+ * @see
+ *
+ * {@link AnnotatedRouter} for interface definition
  *
  * @example
  * ```ts
