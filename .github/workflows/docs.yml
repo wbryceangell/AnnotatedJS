@@ -35,9 +35,8 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Generate docs
         uses: actions/setup-node@v4
-        run: |
-          npm ci
-          npm run docs
+      - run: npm ci
+      - run: npm run docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
