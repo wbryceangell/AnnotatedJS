@@ -1,25 +1,48 @@
-name: Generate Documentation
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy Documentation to Pages
 
 on:
-  pull_request:
-    branches: [main]
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  format:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository.
-      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Generate docs
+        uses: actions/setup-node@v4
+        run: |
+          npm ci
+          npm run docs
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          ref: ${{ github.head_ref }}
-      - uses: actions/setup-node@v4
-      - run: npm ci
-      - run: npm run docs
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: Generate documentation
-          branch: ${{ github.head_ref }}
+          # Upload entire repository
+          path: "./docs"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
