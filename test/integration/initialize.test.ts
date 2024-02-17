@@ -12,10 +12,10 @@ import {
   Post,
   Property,
   Put,
+  RequestHandler,
   Router,
   initialize,
-} from "../../src/index";
-import { RequestHandler } from "../../src/interfaces/types";
+} from "../../src";
 
 describe("Initialization", () => {
   it("fails when router is not configured", () => {

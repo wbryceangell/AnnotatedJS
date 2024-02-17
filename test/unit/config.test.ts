@@ -3,7 +3,7 @@ import { MetadataProperties } from "../../src/decorators/config/metadataProperti
 import { Config } from "../../src/index";
 import {
   initializerFor,
-  itAddsClassToContainer,
+  itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
 } from "./utils";
@@ -12,7 +12,7 @@ describe("@Config", () => {
   const name = "Config";
   const kind = "class";
 
-  itAddsClassToContainer(name, Config, keys.configClasses);
+  itAddsClassToArrayInContainer(name, Config, keys.configClasses);
   itHasInitializationHook(name, Config({}));
   itCreatesClassInstanceInInitHook(name, Config({}));
 

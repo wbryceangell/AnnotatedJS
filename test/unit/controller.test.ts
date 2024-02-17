@@ -4,7 +4,7 @@ import { MetadataProperties } from "../../src/decorators/controller/metadataProp
 import { Controller } from "../../src/index";
 import {
   initializerFor,
-  itAddsClassToContainer,
+  itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
@@ -14,7 +14,7 @@ describe("@Controller", () => {
   const name = "Controller";
   const path = "path";
 
-  itAddsClassToContainer(
+  itAddsClassToArrayInContainer(
     name,
     R.curryN(2, Controller)(path),
     keys.controllerClasses,

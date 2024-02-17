@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Controller, Get, Router } from "../../src/index";
+import { Controller, Get, Router } from "../../src";
 
 describe("Controller", () => {
   it("should not work when path argument is not a string", () => {
