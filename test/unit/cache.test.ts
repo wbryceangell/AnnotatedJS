@@ -12,4 +12,19 @@ describe("@Cache", () => {
       }),
     ).toThrow();
   });
+
+  it("throws an error when the cache name is not a string", () => {
+    expect(() =>
+      // @ts-expect-error testing invalid cache name
+      Cache(null)(requestHandler, {
+        kind: "method",
+        metadata: {},
+        addInitializer: () => {},
+        name: "Cache",
+        static: false,
+        private: false,
+        access: { has: () => false, get: () => requestHandler },
+      }),
+    ).toThrow();
+  });
 });
