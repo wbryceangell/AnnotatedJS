@@ -27,4 +27,18 @@ describe("@Cache", () => {
       }),
     ).toThrow();
   });
+
+  it("throws an error when the cache name is an empty string", () => {
+    expect(() =>
+      Cache("")(requestHandler, {
+        kind: "method",
+        metadata: {},
+        addInitializer: () => {},
+        name: "Cache",
+        static: false,
+        private: false,
+        access: { has: () => false, get: () => requestHandler },
+      }),
+    ).toThrow();
+  });
 });

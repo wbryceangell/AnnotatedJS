@@ -7,9 +7,12 @@ export const Cache = (cacheName?: string) =>
     const annotationName = `@${Cache.name}`;
     validateKind(annotationName, context, "method");
 
-    if (typeof cacheName !== "undefined" && typeof cacheName !== "string") {
+    if (
+      typeof cacheName !== "undefined" &&
+      (typeof cacheName !== "string" || cacheName.length === 0)
+    ) {
       throw new Error(
-        `Invalid cache name ${JSON.stringify(cacheName)}. It must be a string`,
+        `Invalid cache name ${JSON.stringify(cacheName)}. It must be a non-empty string`,
       );
     }
   }) as ClassMethodDecorator<RequestHandler>;
