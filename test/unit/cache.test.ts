@@ -1,4 +1,4 @@
-import { Cache } from "../../src/decorators/cache/cache";
+import { Cache } from "../../src/decorators/controller/cache/cache";
 import { RequestHandler } from "../../src/interfaces/types";
 
 describe("@Cache", () => {

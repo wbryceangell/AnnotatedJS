@@ -1,5 +1,5 @@
 import { keys } from "../../src/container/keys";
-import { CacheStorage } from "../../src/decorators/cache/cacheStorage";
+import { CacheStorage } from "../../src/decorators/cacheStorage";
 import {
   itAddsClassInstanceToContainerOnInit,
   itAddsClassToContainer,

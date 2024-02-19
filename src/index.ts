@@ -1,4 +1,4 @@
-export { CacheStorage } from "./decorators/cache/cacheStorage";
+export { CacheStorage } from "./decorators/cacheStorage";
 export { Config } from "./decorators/config/config";
 export { Property } from "./decorators/config/property";
 export { Controller } from "./decorators/controller/controller";

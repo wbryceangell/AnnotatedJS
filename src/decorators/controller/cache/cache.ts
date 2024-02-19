@@ -1,6 +1,6 @@
-import { RequestHandler } from "../../interfaces/types";
-import { ClassMethodDecorator } from "../types";
-import { validateKind } from "../utils/validateKind";
+import { RequestHandler } from "../../../interfaces/types";
+import { ClassMethodDecorator } from "../../types";
+import { validateKind } from "../../utils/validateKind";
 
 export const Cache = () =>
   ((method, context) => {
