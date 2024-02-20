@@ -2,7 +2,7 @@
 
 /** @type {import('jest').Config} */
 const config = {
-  testEnvironment: "./FixJSDOMEnvironment.ts",
+  testEnvironment: "./fixJSDOMEnvironment.ts",
 };
 
 module.exports = config;
