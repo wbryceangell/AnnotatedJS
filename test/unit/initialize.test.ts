@@ -57,8 +57,26 @@ describe("initialize", () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it("initializing key is set on initialization", () => {
+    const container = {
+      [keys.routerClass]: Router,
+      [keys.router]: router,
+    };
+
+    initialize(container);
+
+    expect(container[keys.initializing]).toBe(true);
+  });
+
+/* Commented to keep commit task seperate
+  it("errors when container is initialized more than once", () => {
+    expect(() => initialize({[keys.initializing]: true})).toThrow();
+  });
+*/
+
   it("instantiates in order", () => {
     const spy = jest.fn();
+
     class Config {
       constructor() {
         spy(this);

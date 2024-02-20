@@ -1,6 +1,8 @@
 import { container as defaultContainer } from "./container/container";
 import { keys } from "./container/keys";
 import { getGlobal } from "./container/utils/getGlobal";
+import { isInitializing } from "./container/utils/isInitializing";
+import { setGlobal } from "./container/utils/setGlobal";
 import { Class } from "./decorators/types";
 import { AnnotatedRouter } from "./interfaces/router";
 import { RequestHandler } from "./interfaces/types";
@@ -48,6 +50,7 @@ import { RequestHandler } from "./interfaces/types";
  * @param container - Object that stores injectables
  */
 export function initialize(container = defaultContainer): RequestHandler {
+  setGlobal(container, keys.initializing, true);
   instantiateClasses(container, keys.configClasses);
   instantiateClasses(container, keys.serviceClasses);
 
