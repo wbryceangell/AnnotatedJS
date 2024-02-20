@@ -3,7 +3,7 @@ import { ClassMethodDecorator } from "../../types";
 import { validateKind } from "../../utils/validateKind";
 
 export const Cache = (cacheName?: string) =>
-  ((method, context) => {
+  ((handler, context) => {
     const annotationName = `@${Cache.name}`;
     validateKind(annotationName, context, "method");
 
