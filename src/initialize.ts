@@ -62,7 +62,7 @@ export function initialize(container = defaultContainer): RequestHandler {
   if (typeof routerClass !== "function") {
     throw new Error("Router class is not in the container");
   }
-
+  
   new routerClass();
 
   instantiateClasses(container, keys.controllerClasses);
