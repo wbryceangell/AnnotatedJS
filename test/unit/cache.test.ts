@@ -1,9 +1,12 @@
 import { Cache } from "../../src/decorators/controller/cache/cache";
+import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
+import { HttpMethodMetadata } from "../../src/decorators/types";
 import { RequestHandler } from "../../src/interfaces/types";
 
 describe("@Cache", () => {
   const requestHandler = (() => {}) as unknown as RequestHandler;
   const name = "Cache";
+  const cacheName = "cacheName";
   const kind = "method";
   const staticValue = false;
   const privateValue = false;
@@ -51,7 +54,7 @@ describe("@Cache", () => {
 
   it("throws an error when method is not in metadata", () => {
     expect(() =>
-      Cache("cacheName")(requestHandler, {
+      Cache(cacheName)(requestHandler, {
         kind,
         metadata,
         addInitializer,
@@ -61,5 +64,26 @@ describe("@Cache", () => {
         access,
       }),
     ).toThrow();
+  });
+
+  it("adds the cache name to the controller metadata", () => {
+    const methodMetadata: HttpMethodMetadata = {
+      path: "",
+      httpMethod: "",
+      handler: requestHandler,
+    };
+    const metadata = { [MetadataProperties.methods]: [methodMetadata] };
+
+    Cache(cacheName)(requestHandler, {
+      kind,
+      metadata,
+      addInitializer,
+      name,
+      static: staticValue,
+      private: privateValue,
+      access,
+    });
+
+    expect(methodMetadata.cacheName).toBe(cacheName);
   });
 });

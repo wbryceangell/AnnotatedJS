@@ -25,10 +25,13 @@ export const Cache = (cacheName?: string) =>
       MetadataProperties.methods,
       [],
     );
+
     const methodMetadata = methods.find((value) => value.handler === handler);
     if (!methodMetadata) {
       throw new Error(
         `Cannot cache to ${cacheName} for an unconfigured controller method`,
       );
     }
+
+    methodMetadata.cacheName = cacheName;
   }) as ClassMethodDecorator<RequestHandler>;
