@@ -1,7 +1,7 @@
 import R from "ramda";
 import { keys } from "../../src/container/keys";
 import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
-import { Controller } from "../../src/index";
+import { Controller, RequestHandler } from "../../src/index";
 import {
   initializerFor,
   itAddsClassToArrayInContainer,
@@ -13,6 +13,7 @@ import {
 describe("@Controller", () => {
   const name = "Controller";
   const path = "path";
+  const methodPath = "method";
 
   itAddsClassToArrayInContainer(
     name,
@@ -30,15 +31,12 @@ describe("@Controller", () => {
 
   it("configures router with annotated methods", () => {
     const get = jest.fn();
-    const controllerPath = "controller";
-    const methodPath = "method";
     const handler = () => {};
-    const boundFunction = jest.fn();
-    const bind = jest.fn(() => boundFunction);
+    const bind = jest.fn(() => {});
     handler.bind = bind;
     class ControllerClass {}
 
-    Controller(controllerPath, { [keys.router]: { get } })(class {}, {
+    Controller(path, { [keys.router]: { get } })(class {}, {
       kind: "class",
       name,
       addInitializer: initializerFor(ControllerClass),
@@ -50,9 +48,46 @@ describe("@Controller", () => {
     });
 
     expect(get).toHaveBeenCalledWith(
-      `/${controllerPath}/${methodPath}`,
-      boundFunction,
+      `/${path}/${methodPath}`,
+      expect.any(Function),
     );
     expect(bind).toHaveBeenCalledWith(expect.any(ControllerClass));
+  });
+
+  it("configures router with annotated method and caches the response", async () => {
+    const get = jest.fn();
+    const put = jest.fn();
+    const open = jest.fn(async () => ({
+      put,
+    }));
+    class ControllerClass {}
+    const cacheName = "cacheName";
+    const expectedResponse = new Response();
+
+    Controller(path, { [keys.router]: { get }, [keys.cacheStorage]: { open } })(
+      class {},
+      {
+        kind: "class",
+        name,
+        addInitializer: initializerFor(ControllerClass),
+        metadata: {
+          [MetadataProperties.methods]: [
+            {
+              path: methodPath,
+              httpMethod: "Get",
+              handler: async () => expectedResponse,
+              cacheName,
+            },
+          ],
+        },
+      },
+    );
+
+    const request = new Request("https://test.com");
+    await expect((<RequestHandler>get.mock.lastCall[1])(request)).resolves.toBe(
+      expectedResponse,
+    );
+    expect(open).toHaveBeenCalledWith(cacheName);
+    expect(put).toHaveBeenCalledWith(request, expectedResponse);
   });
 });

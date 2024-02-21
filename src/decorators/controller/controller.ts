@@ -3,7 +3,9 @@ import { container as defaultContainer } from "../../container/container";
 import { keys } from "../../container/keys";
 import { getGlobal } from "../../container/utils/getGlobal";
 import { validateContainer } from "../../container/utils/validateContainer";
+import { AnnotatedCacheStorage } from "../../interfaces/annotatedCacheStorage";
 import type { AnnotatedRouter } from "../../interfaces/annotatedRouter";
+import { Cache } from "../../interfaces/cache";
 import { setInjectables } from "../inject/setInjectables";
 import type { Class, ClassDecorator, HttpMethodMetadata } from "../types";
 import { addClassToContainer } from "../utils/addClassToContainer";
@@ -101,10 +103,15 @@ export const Controller = <T extends Class<object>>(
       }));
 
       let router: AnnotatedRouter = getGlobal(container, keys.router);
+      const cacheStorage: AnnotatedCacheStorage = getGlobal(
+        container,
+        keys.cacheStorage,
+      );
       for (const {
         path: methodPath,
         handler,
         httpMethod,
+        cacheName,
       } of controllerMethodMetadata) {
         const routerMethod = <Exclude<keyof AnnotatedRouter, "handle">>(
           httpMethod.toLowerCase()
@@ -118,7 +125,20 @@ export const Controller = <T extends Class<object>>(
 
         router = router[routerMethod](
           normalizePath("/" + [controllerPath, methodPath].join("/"), true),
-          handler,
+          async (request: Request) => {
+            let cache: Cache | undefined;
+            if (cacheName) {
+              cache = await cacheStorage.open(cacheName);
+            }
+
+            const response = await handler.call(controller, request);
+
+            if (cache) {
+              await cache.put(request, response);
+            }
+
+            return response;
+          },
         );
       }
     });
