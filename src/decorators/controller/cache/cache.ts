@@ -5,15 +5,12 @@ import { getMetadataProperty } from "../../utils/getMetadataProperty";
 import { validateKind } from "../../utils/validateKind";
 import { MetadataProperties } from "../metadataProperties";
 
-export const Cache = (cacheName?: string) =>
+export const Cache = (cacheName: string) =>
   ((handler, context) => {
     const annotationName = `@${Cache.name}`;
     validateKind(annotationName, context, "method");
 
-    if (
-      typeof cacheName !== "undefined" &&
-      (typeof cacheName !== "string" || cacheName.length === 0)
-    ) {
+    if (typeof cacheName !== "string" || cacheName.length === 0) {
       throw new Error(
         `Invalid cache name ${JSON.stringify(cacheName)}. It must be a non-empty string`,
       );

@@ -7,7 +7,7 @@ export type HttpMethodMetadata = {
   httpMethod: string;
   handler: RequestHandler;
   cache?: {
-    name?: string;
+    name: string;
     operation: "cache" | "purge";
   };
 };

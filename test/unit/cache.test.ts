@@ -16,7 +16,7 @@ describe("@Cache", () => {
 
   it("throws an error when not used on a class method", () => {
     expect(() =>
-      Cache()(requestHandler, {
+      Cache(cacheName)(requestHandler, {
         // @ts-expect-error checking invalid context kind
         kind: "class",
       }),
