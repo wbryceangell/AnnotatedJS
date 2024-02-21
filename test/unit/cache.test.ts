@@ -3,6 +3,13 @@ import { RequestHandler } from "../../src/interfaces/types";
 
 describe("@Cache", () => {
   const requestHandler = (() => {}) as unknown as RequestHandler;
+  const name = "Cache";
+  const kind = "method";
+  const staticValue = false;
+  const privateValue = false;
+  const metadata = {};
+  const addInitializer = () => {};
+  const access = { has: () => false, get: () => requestHandler };
 
   it("throws an error when not used on a class method", () => {
     expect(() =>
@@ -17,13 +24,13 @@ describe("@Cache", () => {
     expect(() =>
       // @ts-expect-error testing invalid cache name
       Cache(null)(requestHandler, {
-        kind: "method",
-        metadata: {},
-        addInitializer: () => {},
-        name: "Cache",
-        static: false,
-        private: false,
-        access: { has: () => false, get: () => requestHandler },
+        kind,
+        metadata,
+        addInitializer,
+        name,
+        static: staticValue,
+        private: privateValue,
+        access,
       }),
     ).toThrow();
   });
@@ -31,13 +38,27 @@ describe("@Cache", () => {
   it("throws an error when the cache name is an empty string", () => {
     expect(() =>
       Cache("")(requestHandler, {
-        kind: "method",
-        metadata: {},
-        addInitializer: () => {},
-        name: "Cache",
-        static: false,
-        private: false,
-        access: { has: () => false, get: () => requestHandler },
+        kind,
+        metadata,
+        addInitializer,
+        name,
+        static: staticValue,
+        private: privateValue,
+        access,
+      }),
+    ).toThrow();
+  });
+
+  it("throws an error when method is not in metadata", () => {
+    expect(() =>
+      Cache("cacheName")(requestHandler, {
+        kind,
+        metadata,
+        addInitializer,
+        name,
+        static: staticValue,
+        private: privateValue,
+        access,
       }),
     ).toThrow();
   });

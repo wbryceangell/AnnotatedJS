@@ -6,6 +6,7 @@ export type HttpMethodMetadata = {
   path: string;
   httpMethod: string;
   handler: RequestHandler;
+  cacheName?: string;
 };
 
 export type ConfigMetadataProperties = Array<[string, () => unknown]>;

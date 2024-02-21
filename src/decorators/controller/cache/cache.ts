@@ -1,6 +1,9 @@
 import { RequestHandler } from "../../../interfaces/types";
-import { ClassMethodDecorator } from "../../types";
+import { ClassMethodDecorator, HttpMethodMetadata } from "../../types";
+import { getMetadata } from "../../utils/getMetadata";
+import { getMetadataProperty } from "../../utils/getMetadataProperty";
 import { validateKind } from "../../utils/validateKind";
+import { MetadataProperties } from "../metadataProperties";
 
 export const Cache = (cacheName?: string) =>
   ((handler, context) => {
@@ -13,6 +16,19 @@ export const Cache = (cacheName?: string) =>
     ) {
       throw new Error(
         `Invalid cache name ${JSON.stringify(cacheName)}. It must be a non-empty string`,
+      );
+    }
+
+    const metadata = getMetadata(annotationName, context);
+    const methods = getMetadataProperty<Array<HttpMethodMetadata>>(
+      metadata,
+      MetadataProperties.methods,
+      [],
+    );
+    const methodMetadata = methods.find((value) => value.handler === handler);
+    if (!methodMetadata) {
+      throw new Error(
+        `Cannot cache to ${cacheName} for an unconfigured controller method`,
       );
     }
   }) as ClassMethodDecorator<RequestHandler>;
