@@ -84,6 +84,9 @@ describe("@Cache", () => {
       access,
     });
 
-    expect(methodMetadata.cacheName).toBe(cacheName);
+    expect(methodMetadata.cache).toStrictEqual({
+      name: cacheName,
+      operation: "cache",
+    });
   });
 });

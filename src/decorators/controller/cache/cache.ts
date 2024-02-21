@@ -33,5 +33,8 @@ export const Cache = (cacheName?: string) =>
       );
     }
 
-    methodMetadata.cacheName = cacheName;
+    methodMetadata.cache = {
+      name: cacheName,
+      operation: "cache",
+    };
   }) as ClassMethodDecorator<RequestHandler>;
