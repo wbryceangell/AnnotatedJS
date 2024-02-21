@@ -129,6 +129,11 @@ export const Controller = <T extends Class<object>>(
             let cache: Cache | undefined;
             if (cacheName) {
               cache = await cacheStorage.open(cacheName);
+
+              const response = await cache.match(request);
+              if (response) {
+                return response;
+              }
             }
 
             const response = await handler.call(controller, request);
