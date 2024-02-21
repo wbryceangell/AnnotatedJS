@@ -6,6 +6,7 @@ export const initializerFor =
     initializer.call(classDef);
 
 const kind = "class";
+class ExampleClass {}
 
 export const itCreatesInstanceOfClass = <T extends Class<object>>(
   name: string,
@@ -112,6 +113,30 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
     expect(set).toHaveBeenCalledWith(expect.any(ServiceClass), value);
   });
 
+export const itAddsClassToArrayInContainer = <T extends Class<object>>(
+  name: string,
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+  key: string,
+) =>
+  it("adds class to array in container", () => {
+    const container = {};
+
+    getClassDecorator(container)(
+      // @ts-expect-error Class type is too broad for anonymous class
+      class {},
+      {
+        kind,
+        name,
+        addInitializer: () => {},
+        metadata: {},
+      },
+    );
+
+    expect(container[key]).toStrictEqual(
+      expect.arrayContaining([expect.anything()]),
+    );
+  });
+
 export const itAddsClassToContainer = <T extends Class<object>>(
   name: string,
   getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
@@ -131,7 +156,56 @@ export const itAddsClassToContainer = <T extends Class<object>>(
       },
     );
 
-    expect(container[key]).toStrictEqual(
-      expect.arrayContaining([expect.anything()]),
+    expect(container[key]).toBeDefined();
+  });
+
+export const itAddsClassToContainerOnlyOnce = <T extends Class<object>>(
+  name: string,
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+) =>
+  it("adds class to container only once", () => {
+    const container = {};
+    const addInitializer = () => {};
+    const metadata = {};
+
+    getClassDecorator(container)(
+      // @ts-expect-error Class type is too broad for anonymous class
+      ExampleClass,
+      {
+        kind,
+        name,
+        addInitializer,
+        metadata,
+      },
     );
+
+    expect(() =>
+      getClassDecorator(container)(
+        // @ts-expect-error Class type is too broad for anonymous class
+        ExampleClass,
+        { kind, name, addInitializer, metadata },
+      ),
+    ).toThrow();
+  });
+
+export const itAddsClassInstanceToContainerOnInit = <T extends Class<object>>(
+  name: string,
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+  key: string,
+) =>
+  it("adds class instance to container when initialized", () => {
+    const container = {};
+
+    getClassDecorator(container)(
+      // @ts-expect-error Class type is too broad for anonymous class
+      ExampleClass,
+      {
+        kind,
+        name,
+        addInitializer: initializerFor(ExampleClass),
+        metadata: {},
+      },
+    );
+
+    expect(container[key]).toStrictEqual(expect.any(ExampleClass));
   });

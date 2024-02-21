@@ -4,7 +4,8 @@ import { getGlobal } from "./container/utils/getGlobal";
 import { isInitializing } from "./container/utils/isInitializing";
 import { setGlobal } from "./container/utils/setGlobal";
 import { Class } from "./decorators/types";
-import { AnnotatedRouter } from "./interfaces/router";
+import { AnnotatedCacheStorage } from "./interfaces/annotatedCacheStorage";
+import { AnnotatedRouter } from "./interfaces/annotatedRouter";
 import { RequestHandler } from "./interfaces/types";
 
 /**
@@ -54,16 +55,25 @@ export function initialize(container = defaultContainer): RequestHandler {
   instantiateClasses(container, keys.configClasses);
   instantiateClasses(container, keys.serviceClasses);
 
-  const routerClass: Class<AnnotatedRouter> = getGlobal(
+  const RouterClass: Class<AnnotatedRouter> = getGlobal(
     container,
     keys.routerClass,
   );
 
-  if (typeof routerClass !== "function") {
+  if (typeof RouterClass !== "function") {
     throw new Error("Router class is not in the container");
   }
-  
-  new routerClass();
+
+  new RouterClass();
+
+  const CacheStorageClass: Class<AnnotatedCacheStorage> = getGlobal(
+    container,
+    keys.cacheStorageClass,
+  );
+
+  if (typeof CacheStorageClass === "function") {
+    new CacheStorageClass();
+  }
 
   instantiateClasses(container, keys.controllerClasses);
 

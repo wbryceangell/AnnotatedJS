@@ -4,7 +4,7 @@ import { setGlobal } from "../container/utils/setGlobal";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
 import { Class, ClassDecorator } from "./types";
-import { AnnotatedRouter } from "../interfaces/router";
+import { AnnotatedRouter } from "../interfaces/annotatedRouter";
 import { getMetadata } from "./utils/getMetadata";
 import { validateKind } from "./utils/validateKind";
 
@@ -15,7 +15,9 @@ import { validateKind } from "./utils/validateKind";
  *
  * `@Router` annotates the class that will handle incoming requests
  *
- * The class should implement the `AnnotatedRouter` interface. It is a [Fluent interface](https://en.wikipedia.org/wiki/Fluent_interface)
+ * @see
+ *
+ * {@link AnnotatedRouter} for interface definition
  *
  * @example
  * ```ts

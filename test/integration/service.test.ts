@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Inject, Service } from "../../src/index";
+import { Inject, Service } from "../../src";
 
 describe("Service", () => {
   it("should not work when it does not have @Service annotation", () => {

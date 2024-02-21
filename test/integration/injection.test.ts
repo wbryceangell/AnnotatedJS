@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Config, Inject, Property } from "../../src/index";
+import { Config, Inject, Property } from "../../src";
 
 describe("Injection", () => {
   it("should not work when property is configured and undefined", () => {
