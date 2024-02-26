@@ -1,4 +1,4 @@
-import { Cache } from "./cache";
+import { AnnotatedCache } from "./annotatedCache";
 
 /**
  * @see
@@ -7,6 +7,6 @@ import { Cache } from "./cache";
  */
 export interface AnnotatedCacheStorage {
   has(cacheName: string): Promise<boolean>;
-  open(cacheName: string): Promise<Cache>;
+  open(cacheName: string): Promise<AnnotatedCache>;
   delete(cacheName: string): Promise<boolean>;
 }
