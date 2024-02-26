@@ -9,7 +9,7 @@ export { Post } from "./decorators/controller/methods/post";
 export { Put } from "./decorators/controller/methods/put";
 export { Inject } from "./decorators/inject/inject";
 export { Router } from "./decorators/router/router";
-export { Service } from "./decorators/service";
+export { Service } from "./decorators/service/service";
 export { initialize } from "./initialize";
 export { AnnotatedCacheStorage } from "./interfaces/annotatedCacheStorage";
 export { AnnotatedRouter } from "./interfaces/annotatedRouter";
