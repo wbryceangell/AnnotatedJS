@@ -128,8 +128,8 @@ describe("Initialization", () => {
         this.map.set(request.url, response);
       }
 
-      delete(request: Request): Promise<boolean> {
-        throw new Error("Method not implemented.");
+      async delete(request: Request): Promise<boolean> {
+        return this.map.delete(request.url);
       }
     }
 
@@ -137,8 +137,8 @@ describe("Initialization", () => {
     class TestCacheStorage implements AnnotatedCacheStorage {
       private map = new Map<string, AnnotatedCache>();
 
-      has(cacheName: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
+      async has(cacheName: string): Promise<boolean> {
+        return this.map.has(cacheName);
       }
 
       async open(cacheName: string): Promise<AnnotatedCache> {
@@ -151,8 +151,8 @@ describe("Initialization", () => {
         return cache;
       }
 
-      delete(cacheName: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
+      async delete(cacheName: string): Promise<boolean> {
+        return this.map.delete(cacheName);
       }
     }
 

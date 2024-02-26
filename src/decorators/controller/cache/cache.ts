@@ -5,6 +5,14 @@ import { getMetadataProperty } from "../../utils/getMetadataProperty";
 import { validateKind } from "../../utils/validateKind";
 import { MetadataProperties } from "../metadataProperties";
 
+/**
+ * A class method decorator that specifies a request handler that should use the cache
+ *
+ * @see {@link Controller} for example
+ *
+ * @param cacheName - The name of the cache storage location to use
+ *
+ */
 export const Cache = (cacheName: string) =>
   ((handler, context) => {
     const annotationName = `@${Cache.name}`;
