@@ -1,5 +1,5 @@
-import { AnnotatedCacheStorage } from "../../../interfaces/annotatedCacheStorage";
-import { RequestHandler } from "../../../interfaces/types";
+import { AnnotatedCacheStorage } from "../../interfaces/annotatedCacheStorage";
+import { RequestHandler } from "../../interfaces/types";
 
 export const getRequestHandler =
   (

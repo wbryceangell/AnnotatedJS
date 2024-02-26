@@ -1,22 +1,22 @@
 import normalizePath from "normalize-path";
-import { keys } from "../../../container/keys";
-import { getGlobal } from "../../../container/utils/getGlobal";
-import { AnnotatedCacheStorage } from "../../../interfaces/annotatedCacheStorage";
-import { AnnotatedRouter } from "../../../interfaces/annotatedRouter";
-import { setInjectables } from "../../inject/setInjectables";
-import { Class, HttpMethodMetadata } from "../../types";
-import { getMetadata } from "../../utils/getMetadata";
-import { getMetadataProperty } from "../../utils/getMetadataProperty";
-import { MetadataProperties } from "../metadataProperties";
+import { keys } from "../../container/keys";
+import { getGlobal } from "../../container/utils/getGlobal";
+import { AnnotatedCacheStorage } from "../../interfaces/annotatedCacheStorage";
+import type { AnnotatedRouter } from "../../interfaces/annotatedRouter";
+import { setInjectables } from "../inject/setInjectables";
+import type { Class, HttpMethodMetadata } from "../types";
+import { getMetadata } from "../utils/getMetadata";
+import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { getRequestHandler } from "./getRequestHandler";
+import { MetadataProperties } from "./metadataProperties";
 
-export const getInitializer = <T extends Class<object>>(
-  container: Record<string, unknown>,
+export function getInitializer<T extends Class<object>>(
   annotationName: string,
   context: ClassDecoratorContext<T>,
+  container: Record<string, unknown>,
   controllerPath: string,
-) =>
-  function (this: T) {
+): (this: T) => void {
+  return function () {
     const controller = new this();
 
     const metadata = getMetadata(annotationName, context);
@@ -61,3 +61,4 @@ export const getInitializer = <T extends Class<object>>(
       );
     }
   };
+}

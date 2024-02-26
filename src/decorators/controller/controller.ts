@@ -4,7 +4,7 @@ import { validateContainer } from "../../container/utils/validateContainer";
 import type { Class, ClassDecorator } from "../types";
 import { addClassToContainer } from "../utils/addClassToContainer";
 import { validateKind } from "../utils/validateKind";
-import { getInitializer } from "./utils/getInitializer";
+import { getInitializer } from "./getInitializer";
 
 /**
  * A class decorator that encapsulates API endpoints
@@ -80,7 +80,8 @@ export const Controller = <T extends Class<object>>(
     }
 
     context.addInitializer(
-      getInitializer(container, annotationName, context, controllerPath),
+      getInitializer(annotationName, context, container, controllerPath),
     );
+
     addClassToContainer(container, keys.controllerClasses, constructor);
   }) as ClassDecorator<T>;
