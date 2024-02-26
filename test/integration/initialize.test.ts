@@ -2,7 +2,11 @@
 
 import { Router as IttyRouter, RouterType } from "itty-router";
 import {
+  AnnotatedCache,
+  AnnotatedCacheStorage,
   AnnotatedRouter,
+  Cache,
+  CacheStorage,
   Config,
   Controller,
   Delete,
@@ -103,6 +107,55 @@ describe("Initialization", () => {
       }
     }
 
+    const cacheHeader = "cached";
+
+    class TestCache implements AnnotatedCache {
+      private map = new Map<string, Response>();
+
+      async match(request: Request): Promise<Response | undefined> {
+        let response = this.map.get(request.url);
+
+        if (response) {
+          response = new Response(response.body, {
+            headers: { [cacheHeader]: "true" },
+          });
+        }
+
+        return response;
+      }
+
+      async put(request: Request, response: Response): Promise<undefined> {
+        this.map.set(request.url, response);
+      }
+
+      async delete(request: Request): Promise<boolean> {
+        return this.map.delete(request.url);
+      }
+    }
+
+    @CacheStorage(container)
+    class TestCacheStorage implements AnnotatedCacheStorage {
+      private map = new Map<string, AnnotatedCache>();
+
+      async has(cacheName: string): Promise<boolean> {
+        return this.map.has(cacheName);
+      }
+
+      async open(cacheName: string): Promise<AnnotatedCache> {
+        if (this.map.has(cacheName)) {
+          return this.map.get(cacheName) as AnnotatedCache;
+        }
+
+        const cache = new TestCache();
+        this.map.set(cacheName, cache);
+        return cache;
+      }
+
+      async delete(cacheName: string): Promise<boolean> {
+        return this.map.delete(cacheName);
+      }
+    }
+
     const expectedGetBody = "get";
     const expectedGetAllBody = "getAll";
 
@@ -113,6 +166,7 @@ describe("Initialization", () => {
         return new Response(expectedGetAllBody);
       }
 
+      @Cache("cacheName")
       @Get("get")
       async get() {
         return new Response(expectedGetBody);
@@ -149,10 +203,15 @@ describe("Initialization", () => {
     const getAllBody = await getAllResponse.text();
     expect(getAllBody).toBe(expectedGetAllBody);
 
-    const getResponse = await handle(
+    let getResponse = await handle(
       new Request("https://test.com/controller/get"),
     );
     expect(getResponse).toBeDefined();
+    expect(getResponse.headers.get(cacheHeader)).toBeFalsy();
+
+    getResponse = await handle(new Request("https://test.com/controller/get"));
+    expect(getResponse).toBeDefined();
+    expect(getResponse.headers.get(cacheHeader)).toBeTruthy();
 
     const getBody = await getResponse.text();
     expect(getBody).toBe(expectedGetBody);

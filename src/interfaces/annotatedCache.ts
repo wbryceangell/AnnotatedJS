@@ -5,7 +5,7 @@
  *
  * {@link AnnotatedCacheStorage.open} for usage
  */
-export interface Cache {
+export interface AnnotatedCache {
   match(request: Request): Promise<Response | undefined>;
   put(request: Request, response: Response): Promise<undefined>;
   delete(request: Request): Promise<boolean>;

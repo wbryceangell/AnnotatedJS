@@ -18,6 +18,7 @@ import { getInitializer } from "./getInitializer";
  * @example
  * ```ts
  * import {
+ *   Cache,
  *   Controller,
  *   Get,
  *   Put,
@@ -31,6 +32,7 @@ import { getInitializer } from "./getInitializer";
  *   @Get()
  *   async getItems(req: Request): Promise<Response> {}
  *
+ *   @Cache("cacheName")
  *   @Get("/:id")
  *   async getItem(req: Request): Promise<Response> {}
  *

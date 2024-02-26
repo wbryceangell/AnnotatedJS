@@ -9,7 +9,5 @@ import { getHttpMethod } from "./getHttpMethod";
  *
  * @param path - API endpoint path (optional)
  */
-export const Get: (
-  path?: string,
-) => // @ts-expect-error request handler type does not conform to T type
-ClassMethodDecorator<RequestHandler> = getHttpMethod("Get");
+export const Get: (path?: string) => ClassMethodDecorator<RequestHandler> =
+  getHttpMethod("Get");
