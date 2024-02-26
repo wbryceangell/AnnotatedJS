@@ -8,7 +8,7 @@ export { Patch } from "./decorators/controller/methods/patch";
 export { Post } from "./decorators/controller/methods/post";
 export { Put } from "./decorators/controller/methods/put";
 export { Inject } from "./decorators/inject/inject";
-export { Router } from "./decorators/router";
+export { Router } from "./decorators/router/router";
 export { Service } from "./decorators/service";
 export { initialize } from "./initialize";
 export { AnnotatedCacheStorage } from "./interfaces/annotatedCacheStorage";
