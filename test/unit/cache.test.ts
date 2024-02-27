@@ -3,6 +3,7 @@ import { Cache } from "../../src/decorators/controller/cache/cache";
 import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
 import { HttpMethodMetadata } from "../../src/decorators/types";
 import { RequestHandler } from "../../src/interfaces/types";
+import { itThrowsErrorIfNotAClassMethod } from "./utils/methodDecorators";
 
 describe("@Cache", () => {
   const requestHandler = (() => {}) as unknown as RequestHandler;
@@ -15,14 +16,7 @@ describe("@Cache", () => {
   const addInitializer = () => {};
   const access = { has: () => false, get: () => requestHandler };
 
-  it("throws an error when not used on a class method", () => {
-    expect(() =>
-      Cache(cacheName)(requestHandler, {
-        // @ts-expect-error checking invalid context kind
-        kind: "class",
-      }),
-    ).toThrow();
-  });
+  itThrowsErrorIfNotAClassMethod(Cache(cacheName));
 
   it("throws an error when the cache name is not a string", () => {
     expect(() =>

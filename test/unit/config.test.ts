@@ -6,7 +6,7 @@ import {
   itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
-} from "./utils";
+} from "./utils/classDecorators";
 
 describe("@Config", () => {
   const name = "Config";
