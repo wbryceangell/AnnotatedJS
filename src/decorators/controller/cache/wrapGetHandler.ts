@@ -3,7 +3,7 @@ import { getGlobal } from "../../../container/utils/getGlobal";
 import { AnnotatedCacheStorage } from "../../../interfaces/annotatedCacheStorage";
 import { GetHandler } from "../../types";
 
-export const buildGetHandler = (getHandler: GetHandler, cacheName: string) =>
+export const wrapGetHandler = (getHandler: GetHandler, cacheName: string) =>
   ((container, controller) => async (request: Request) => {
     const cacheStorage = getGlobal(
       container as Record<string, AnnotatedCacheStorage>,
