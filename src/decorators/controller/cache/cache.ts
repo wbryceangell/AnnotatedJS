@@ -4,7 +4,7 @@ import { getMetadata } from "../../utils/getMetadata";
 import { getMetadataProperty } from "../../utils/getMetadataProperty";
 import { validateKind } from "../../utils/validateKind";
 import { MetadataProperties } from "../metadataProperties";
-import { buildGetHandler } from "./buildGetHandler";
+import { wrapGetHandler } from "./wrapGetHandler";
 
 /**
  * A class method decorator that specifies a request handler that should use the cache
@@ -15,7 +15,7 @@ import { buildGetHandler } from "./buildGetHandler";
  *
  */
 export const Cache = (cacheName: string) =>
-  ((handler, context) => {
+  ((_handler, context) => {
     const annotationName = `@${Cache.name}`;
     validateKind(annotationName, context, "method");
 
@@ -42,7 +42,7 @@ export const Cache = (cacheName: string) =>
       );
     }
 
-    methodMetadata.getHandler = buildGetHandler(
+    methodMetadata.getHandler = wrapGetHandler(
       methodMetadata.getHandler,
       cacheName,
     );
