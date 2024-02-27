@@ -3,6 +3,7 @@ import { Cache } from "../../src/decorators/controller/cache/cache";
 import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
 import { HttpMethodMetadata } from "../../src/decorators/types";
 import { RequestHandler } from "../../src/interfaces/types";
+import { itThrowsErrorWhenCacheNameIsNotAString } from "./utils/cacheMethods";
 import { itThrowsErrorIfNotAClassMethod } from "./utils/methodDecorators";
 
 describe("@Cache", () => {
@@ -17,21 +18,7 @@ describe("@Cache", () => {
   const access = { has: () => false, get: () => requestHandler };
 
   itThrowsErrorIfNotAClassMethod(Cache(cacheName));
-
-  it("throws an error when the cache name is not a string", () => {
-    expect(() =>
-      // @ts-expect-error testing invalid cache name
-      Cache(null)(requestHandler, {
-        kind,
-        metadata,
-        addInitializer,
-        name,
-        static: staticValue,
-        private: privateValue,
-        access,
-      }),
-    ).toThrow();
-  });
+  itThrowsErrorWhenCacheNameIsNotAString(name, Cache);
 
   it("throws an error when the cache name is an empty string", () => {
     expect(() =>
