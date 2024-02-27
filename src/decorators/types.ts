@@ -3,11 +3,16 @@
 import { RequestHandler } from "../interfaces/types";
 
 export type HttpMethodMetadata = {
+  methodName: string | symbol;
   path: string;
   httpMethod: string;
-  handler: RequestHandler;
-  cacheName?: string;
+  getHandler: GetHandler;
 };
+
+export type GetHandler = (
+  container: Record<string, unknown>,
+  controller: object,
+) => RequestHandler;
 
 export type ConfigMetadataProperties = Array<[string, () => unknown]>;
 

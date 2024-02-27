@@ -42,9 +42,12 @@ export const getHttpMethod =
       }
 
       methods.push({
+        methodName: context.name,
         httpMethod,
         path,
-        handler,
+        getHandler: (_container: Record<string, unknown>, controller: object) =>
+          handler.bind(controller),
       });
+
       setMetadataProperty(metadata, MetadataProperties.methods, methods);
     }) as ClassMethodDecorator<RequestHandler>;

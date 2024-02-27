@@ -4,6 +4,7 @@ import { getMetadata } from "../../utils/getMetadata";
 import { getMetadataProperty } from "../../utils/getMetadataProperty";
 import { validateKind } from "../../utils/validateKind";
 import { MetadataProperties } from "../metadataProperties";
+import { buildGetHandler } from "./buildGetHandler";
 
 /**
  * A class method decorator that specifies a request handler that should use the cache
@@ -31,12 +32,18 @@ export const Cache = (cacheName: string) =>
       [],
     );
 
-    const methodMetadata = methods.find((value) => value.handler === handler);
+    const methodMetadata = methods.find(
+      (value) => value.methodName === context.name,
+    );
+
     if (!methodMetadata) {
       throw new Error(
         `Cannot cache to ${cacheName} for an unconfigured controller method`,
       );
     }
 
-    methodMetadata.cacheName = cacheName;
+    methodMetadata.getHandler = buildGetHandler(
+      methodMetadata.getHandler,
+      cacheName,
+    );
   }) as ClassMethodDecorator<RequestHandler>;
