@@ -29,3 +29,23 @@ export const itThrowsErrorWhenCacheNameIsNotAString = (
       }),
     ).toThrow();
   });
+
+export const itThrowsErrorWhenCacheNameIsAnEmptyString = (
+  name: string,
+  getCacheDecorator: (
+    cacheName: string,
+  ) => ClassMethodDecorator<RequestHandler>,
+) =>
+  it("throws an error when the cache name is an empty string", () => {
+    expect(() =>
+      getCacheDecorator("")(requestHandler, {
+        kind,
+        metadata,
+        addInitializer,
+        name,
+        static: staticValue,
+        private: privateValue,
+        access,
+      }),
+    ).toThrow();
+  });

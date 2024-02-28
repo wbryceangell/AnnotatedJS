@@ -1,5 +1,8 @@
 import { Purge } from "../../src/decorators/controller/purge/purge";
-import { itThrowsErrorWhenCacheNameIsNotAString } from "./utils/cacheMethods";
+import {
+  itThrowsErrorWhenCacheNameIsAnEmptyString,
+  itThrowsErrorWhenCacheNameIsNotAString,
+} from "./utils/cacheMethods";
 import { itThrowsErrorIfNotAClassMethod } from "./utils/methodDecorators";
 
 describe("@Purge", () => {
@@ -8,4 +11,5 @@ describe("@Purge", () => {
 
   itThrowsErrorIfNotAClassMethod(Purge(cacheName));
   itThrowsErrorWhenCacheNameIsNotAString(name, Purge);
+  itThrowsErrorWhenCacheNameIsAnEmptyString(name, Purge);
 });

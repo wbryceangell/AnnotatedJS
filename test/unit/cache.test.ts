@@ -3,7 +3,10 @@ import { Cache } from "../../src/decorators/controller/cache/cache";
 import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
 import { HttpMethodMetadata } from "../../src/decorators/types";
 import { RequestHandler } from "../../src/interfaces/types";
-import { itThrowsErrorWhenCacheNameIsNotAString } from "./utils/cacheMethods";
+import {
+  itThrowsErrorWhenCacheNameIsAnEmptyString,
+  itThrowsErrorWhenCacheNameIsNotAString,
+} from "./utils/cacheMethods";
 import { itThrowsErrorIfNotAClassMethod } from "./utils/methodDecorators";
 
 describe("@Cache", () => {
@@ -19,20 +22,7 @@ describe("@Cache", () => {
 
   itThrowsErrorIfNotAClassMethod(Cache(cacheName));
   itThrowsErrorWhenCacheNameIsNotAString(name, Cache);
-
-  it("throws an error when the cache name is an empty string", () => {
-    expect(() =>
-      Cache("")(requestHandler, {
-        kind,
-        metadata,
-        addInitializer,
-        name,
-        static: staticValue,
-        private: privateValue,
-        access,
-      }),
-    ).toThrow();
-  });
+  itThrowsErrorWhenCacheNameIsAnEmptyString(name, Cache);
 
   it("throws an error when method is not in metadata", () => {
     expect(() =>
