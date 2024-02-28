@@ -185,6 +185,7 @@ describe("Initialization", () => {
     expect(putResponse).toBeDefined();
     expect(putResponse.status).toBe(204);
   });
+
   it("Initialize twice expects returns error on second init", () =>{
     const container = {};
 

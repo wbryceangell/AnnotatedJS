@@ -1,6 +1,7 @@
 import { container as defaultContainer } from "../container/container";
 import { keys } from "../container/keys";
 import { setGlobal } from "../container/utils/setGlobal";
+import { isInitializing } from "../container/utils/isInitializing";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
 import { Class, ClassDecorator } from "./types";
@@ -35,6 +36,8 @@ export const Service = <T extends Class<object>>(
   container = defaultContainer,
 ) =>
   ((constructor, context) => {
+    
+
     validateContainer(container);
 
     const annotationName = `@${Service.name}`;
@@ -43,7 +46,9 @@ export const Service = <T extends Class<object>>(
     if (typeof context.name !== "string") {
       throw new Error(`${annotationName} must be used on a named class`);
     }
-
+    if(!isInitializing) {
+      return;
+    }
     context.addInitializer(function () {
       const service = new this();
 
@@ -51,8 +56,10 @@ export const Service = <T extends Class<object>>(
       setInjectables(container, service, metadata);
 
       // @ts-expect-error we need to use object type but it is actually a class
-      setGlobal(container, context.name, service);
+        setGlobal(container, context.name, service);
     });
+
+
 
     addClassToContainer(container, keys.serviceClasses, constructor);
   }) as ClassDecorator<T>;

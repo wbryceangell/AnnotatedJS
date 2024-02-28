@@ -1,9 +1,11 @@
 import { keys } from "../../src/container/keys";
 import { Service } from "../../src/index";
 import {
+  initializerFor,
   itAddsClassInstanceToContainerOnInit,
   itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
+  itDoesNotAddClassInstanceBeforeInit,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
 } from "./utils";
@@ -15,6 +17,7 @@ describe("@Service", () => {
   itAddsClassToArrayInContainer(name, Service, keys.serviceClasses);
   itHasInitializationHook(name, Service({}));
   itCreatesClassInstanceInInitHook(name, Service({}));
+  itDoesNotAddClassInstanceBeforeInit(name, Service, name);
   itAddsClassInstanceToContainerOnInit(name, Service, name);
 
   const container = {};
