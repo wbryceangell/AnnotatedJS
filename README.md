@@ -192,7 +192,14 @@ class NodeCacheStorage implements AnnotatedCacheStorage {
 
 ```typescript
 // storageController.ts
-import { Controller, Get, Put, Delete } from "@fork-git-it/annotatedjs";
+import {
+  Cache,
+  Controller,
+  Get,
+  Purge,
+  Put,
+  Delete,
+} from "@fork-git-it/annotatedjs";
 import { StorageService } from "./storageService";
 
 @Controller("/storage")
@@ -212,6 +219,7 @@ export class StorageController {
     }
   }
 
+  @Purge("storageCache")
   @Put("/:key")
   async put(req: Request): Promise<Response> {
     const ittyRequest: IRequest = <IRequest>req;
@@ -220,6 +228,7 @@ export class StorageController {
     return new Response(null, { status: 204 });
   }
 
+  @Purge("storageCache")
   @Delete("/:key")
   async delete(req: Request): Promise<Response> {
     const ittyRequest: IRequest = <IRequest>req;

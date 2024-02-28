@@ -6,6 +6,14 @@ import { validateKind } from "../../utils/validateKind";
 import { MetadataProperties } from "../metadataProperties";
 import { wrapGetHandler } from "./wrapGetHandler";
 
+/**
+ * A class method decorator that specifies a request handler that should purge the cache
+ *
+ * @see {@link Controller} for example
+ *
+ * @param cacheName - The name of the cache storage location to purge
+ *
+ */
 export const Purge = (cacheName: string) =>
   ((_handler, context) => {
     const annotationName = `@${Purge.name}`;
