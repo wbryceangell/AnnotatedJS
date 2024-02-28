@@ -4,6 +4,7 @@ import { getMetadata } from "../../utils/getMetadata";
 import { getMetadataProperty } from "../../utils/getMetadataProperty";
 import { validateKind } from "../../utils/validateKind";
 import { MetadataProperties } from "../metadataProperties";
+import { wrapGetHandler } from "./wrapGetHandler";
 
 export const Purge = (cacheName: string) =>
   ((_handler, context) => {
@@ -32,4 +33,9 @@ export const Purge = (cacheName: string) =>
         `Cannot purge ${cacheName} for an unconfigured controller method`,
       );
     }
+
+    methodMetadata.getHandler = wrapGetHandler(
+      methodMetadata.getHandler,
+      cacheName,
+    );
   }) as ClassMethodDecorator<RequestHandler>;
