@@ -1,5 +1,5 @@
-import { MetadataProperties } from "../../src/decorators/inject/metadataProperties";
-import { Class, ClassDecorator } from "../../src/decorators/types";
+import { MetadataProperties } from "../../../src/decorators/inject/metadataProperties";
+import { Class, ClassDecorator } from "../../../src/decorators/types";
 
 export const initializerFor =
   (classDef: Class<unknown>) => (initializer: () => void) =>

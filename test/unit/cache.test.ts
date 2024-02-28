@@ -3,6 +3,12 @@ import { Cache } from "../../src/decorators/controller/cache/cache";
 import { MetadataProperties } from "../../src/decorators/controller/metadataProperties";
 import { HttpMethodMetadata } from "../../src/decorators/types";
 import { RequestHandler } from "../../src/interfaces/types";
+import {
+  itThrowsErrorWhenCacheNameIsAnEmptyString,
+  itThrowsErrorWhenCacheNameIsNotAString,
+  itThrowsErrorWhenMethodMetadataIsMissing,
+} from "./utils/cacheMethods";
+import { itThrowsErrorIfNotAClassMethod } from "./utils/methodDecorators";
 
 describe("@Cache", () => {
   const requestHandler = (() => {}) as unknown as RequestHandler;
@@ -11,61 +17,13 @@ describe("@Cache", () => {
   const kind = "method";
   const staticValue = false;
   const privateValue = false;
-  const metadata = {};
   const addInitializer = () => {};
   const access = { has: () => false, get: () => requestHandler };
 
-  it("throws an error when not used on a class method", () => {
-    expect(() =>
-      Cache(cacheName)(requestHandler, {
-        // @ts-expect-error checking invalid context kind
-        kind: "class",
-      }),
-    ).toThrow();
-  });
-
-  it("throws an error when the cache name is not a string", () => {
-    expect(() =>
-      // @ts-expect-error testing invalid cache name
-      Cache(null)(requestHandler, {
-        kind,
-        metadata,
-        addInitializer,
-        name,
-        static: staticValue,
-        private: privateValue,
-        access,
-      }),
-    ).toThrow();
-  });
-
-  it("throws an error when the cache name is an empty string", () => {
-    expect(() =>
-      Cache("")(requestHandler, {
-        kind,
-        metadata,
-        addInitializer,
-        name,
-        static: staticValue,
-        private: privateValue,
-        access,
-      }),
-    ).toThrow();
-  });
-
-  it("throws an error when method is not in metadata", () => {
-    expect(() =>
-      Cache(cacheName)(requestHandler, {
-        kind,
-        metadata,
-        addInitializer,
-        name,
-        static: staticValue,
-        private: privateValue,
-        access,
-      }),
-    ).toThrow();
-  });
+  itThrowsErrorIfNotAClassMethod(Cache(cacheName));
+  itThrowsErrorWhenCacheNameIsNotAString(name, Cache);
+  itThrowsErrorWhenCacheNameIsAnEmptyString(name, Cache);
+  itThrowsErrorWhenMethodMetadataIsMissing(name, Cache);
 
   it("adds cache handler to controller metadata that caches response", async () => {
     const expectedResponse = new Response();

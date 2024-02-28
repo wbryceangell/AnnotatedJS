@@ -21,6 +21,7 @@ import { getInitializer } from "./getInitializer";
  *   Cache,
  *   Controller,
  *   Get,
+ *   Purge,
  *   Put,
  *   Post,
  *   Patch,
@@ -36,18 +37,21 @@ import { getInitializer } from "./getInitializer";
  *   @Get("/:id")
  *   async getItem(req: Request): Promise<Response> {}
  *
+ *   @Purge("cacheName")
  *   @Put("/:id")
  *   async putItem(req: Request): Promise<Response> {}
  *
  *   @Post("/:id")
  *   async postItem(req: Request): Promise<Response> {}
  *
+ *   @Purge("cacheName")
  *   @Patch("/:id")
  *   async patchItem(req: Request): Promise<Response> {}
  *
  *   @Delete()
  *   async deleteItems(req: Request): Promise<Response> {}
  *
+ *   @Purge("cacheName")
  *   @Delete("/:id")
  *   async deleteItem(req: Request): Promise<Response> {}
  * }

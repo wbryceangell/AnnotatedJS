@@ -7,7 +7,7 @@ import {
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
-} from "./utils";
+} from "./utils/classDecorators";
 
 describe("@Router", () => {
   const name = "Router";

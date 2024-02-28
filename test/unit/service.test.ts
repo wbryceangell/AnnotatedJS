@@ -6,7 +6,7 @@ import {
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
-} from "./utils";
+} from "./utils/classDecorators";
 
 describe("@Service", () => {
   const kind = "class";

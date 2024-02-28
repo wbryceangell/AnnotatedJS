@@ -8,7 +8,7 @@ import {
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
-} from "./utils";
+} from "./utils/classDecorators";
 
 describe("@Controller", () => {
   const name = "Controller";
