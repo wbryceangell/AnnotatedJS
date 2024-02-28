@@ -6,6 +6,7 @@ import { RequestHandler } from "../../src/interfaces/types";
 import {
   itThrowsErrorWhenCacheNameIsAnEmptyString,
   itThrowsErrorWhenCacheNameIsNotAString,
+  itThrowsErrorWhenMethodMetadataIsMissing,
 } from "./utils/cacheMethods";
 import { itThrowsErrorIfNotAClassMethod } from "./utils/methodDecorators";
 
@@ -16,27 +17,13 @@ describe("@Cache", () => {
   const kind = "method";
   const staticValue = false;
   const privateValue = false;
-  const metadata = {};
   const addInitializer = () => {};
   const access = { has: () => false, get: () => requestHandler };
 
   itThrowsErrorIfNotAClassMethod(Cache(cacheName));
   itThrowsErrorWhenCacheNameIsNotAString(name, Cache);
   itThrowsErrorWhenCacheNameIsAnEmptyString(name, Cache);
-
-  it("throws an error when method is not in metadata", () => {
-    expect(() =>
-      Cache(cacheName)(requestHandler, {
-        kind,
-        metadata,
-        addInitializer,
-        name,
-        static: staticValue,
-        private: privateValue,
-        access,
-      }),
-    ).toThrow();
-  });
+  itThrowsErrorWhenMethodMetadataIsMissing(name, Cache);
 
   it("adds cache handler to controller metadata that caches response", async () => {
     const expectedResponse = new Response();

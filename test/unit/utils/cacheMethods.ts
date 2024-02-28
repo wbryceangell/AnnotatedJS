@@ -49,3 +49,23 @@ export const itThrowsErrorWhenCacheNameIsAnEmptyString = (
       }),
     ).toThrow();
   });
+
+export const itThrowsErrorWhenMethodMetadataIsMissing = (
+  name: string,
+  getCacheDecorator: (
+    cacheName: string,
+  ) => ClassMethodDecorator<RequestHandler>,
+) =>
+  it("throws an error when method is not in metadata", () => {
+    expect(() =>
+      getCacheDecorator("cacheName")(requestHandler, {
+        kind,
+        metadata,
+        addInitializer,
+        name,
+        static: staticValue,
+        private: privateValue,
+        access,
+      }),
+    ).toThrow();
+  });
