@@ -15,6 +15,7 @@ import {
   Patch,
   Post,
   Property,
+  Purge,
   Put,
   RequestHandler,
   Router,
@@ -158,6 +159,7 @@ describe("Initialization", () => {
 
     const expectedGetBody = "get";
     const expectedGetAllBody = "getAll";
+    const cacheName = "cacheName";
 
     @Controller("/controller", container)
     class TestController {
@@ -166,7 +168,7 @@ describe("Initialization", () => {
         return new Response(expectedGetAllBody);
       }
 
-      @Cache("cacheName")
+      @Cache(cacheName)
       @Get("get")
       async get() {
         return new Response(expectedGetBody);
@@ -187,6 +189,7 @@ describe("Initialization", () => {
         return new Response(null, { status: 201 });
       }
 
+      @Purge(cacheName)
       @Put()
       async put() {
         return new Response(null, { status: 204 });
@@ -243,5 +246,9 @@ describe("Initialization", () => {
 
     expect(putResponse).toBeDefined();
     expect(putResponse.status).toBe(204);
+
+    getResponse = await handle(new Request("https://test.com/controller/get"));
+    expect(getResponse).toBeDefined();
+    expect(getResponse.headers.get(cacheHeader)).toBeFalsy();
   });
 });
