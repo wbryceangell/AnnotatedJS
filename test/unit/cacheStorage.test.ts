@@ -15,7 +15,7 @@ describe("@CacheStorage", () => {
   itAddsClassToContainer(name, CacheStorage, keys.cacheStorageClass);
   itAddsClassToContainerOnlyOnce(name, CacheStorage);
   itHasInitializationHook(name, CacheStorage({}));
-  itCreatesClassInstanceInInitHook(name, CacheStorage({}));
+  itCreatesClassInstanceInInitHook(name, CacheStorage);
   itAddsClassInstanceToContainerOnInit(name, CacheStorage, keys.cacheStorage);
 
   const container = {};

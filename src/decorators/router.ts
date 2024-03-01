@@ -1,6 +1,7 @@
 import { container as defaultContainer } from "../container/container";
 import { keys } from "../container/keys";
 import { setGlobal } from "../container/utils/setGlobal";
+import { isInitializing } from "../container/utils/isInitializing";
 import { validateContainer } from "../container/utils/validateContainer";
 import { setInjectables } from "./inject/setInjectables";
 import { Class, ClassDecorator } from "./types";
@@ -71,10 +72,17 @@ export const Router = (container = defaultContainer) =>
     validateKind(annotationName, context, "class");
 
     context.addInitializer(function () {
-      const router = new this();
-      const metadata = getMetadata(annotationName, context);
-      setInjectables(container, router, metadata);
-      setGlobal(container, keys.router, router);
+      if(isInitializing(container)){
+        console.log("is init");
+        const router = new this();
+        const metadata = getMetadata(annotationName, context);
+        setInjectables(container, router, metadata);
+      
+        // @ts-expect-error we need to use object type but it is actually a class
+        setGlobal(container, context.name, router);
+        } else {
+          console.log("no init");
+        }
     });
 
     setGlobal(container, keys.routerClass, constructor);

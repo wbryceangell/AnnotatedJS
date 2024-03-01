@@ -22,7 +22,8 @@ describe("@Controller", () => {
   itHasInitializationHook(name, Controller(path, {}));
   itCreatesClassInstanceInInitHook(
     name,
-    Controller(path, { [keys.router]: {} }),
+    R.curryN(2, Controller)(path),
+    {[keys.router]: {}}
   );
 
   const container = { [keys.router]: {} };

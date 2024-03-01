@@ -14,7 +14,7 @@ describe("@Config", () => {
 
   itAddsClassToArrayInContainer(name, Config, keys.configClasses);
   itHasInitializationHook(name, Config({}));
-  itCreatesClassInstanceInInitHook(name, Config({}));
+  itCreatesClassInstanceInInitHook(name, Config);
 
   it("adds properties to the container", () => {
     const key = "key";

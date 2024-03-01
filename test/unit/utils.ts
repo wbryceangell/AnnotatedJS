@@ -55,33 +55,85 @@ export const itHasInitializationHook = <T extends Class<object>>(
     expect(spy).toHaveBeenCalledWith(expect.any(Function));
   });
 
+  export const itDoesNotCreateClassIntanceBeforeInit = <T extends Class<object>>(
+    name: string,
+    getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
+    prefilledContainer?: Record<string, any>
+  ) =>
+    it("does not create class instance before initialization", () => {
+      const spy = jest.fn();
+  
+      getClassDecorator(Object.assign({}, prefilledContainer, {[keys.initializing]: false}))(
+        // @ts-expect-error Class type is too broad for anonymous class
+        class {},
+        {
+          kind,
+          name,
+          addInitializer: initializerFor(
+              class {
+                constructor() {
+                  spy();
+                }
+              },
+            ),
+          metadata: {},
+        },
+      );
+  
+      expect(spy).not.toHaveBeenCalled();
+    });
+
 export const itCreatesClassInstanceInInitHook = <T extends Class<object>>(
   name: string,
-  classDecorator: ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
+  prefilledContainer?: Record<string, any>
 ) =>
   it("initialization hook to create instance of class", () => {
     const spy = jest.fn();
 
-    classDecorator(
+    getClassDecorator(Object.assign({}, prefilledContainer, {[keys.initializing]: true}))(
       // @ts-expect-error Class type is too broad for anonymous class
       class {},
       {
         kind,
         name,
-        addInitializer: jest.fn(
-          initializerFor(
+        addInitializer: initializerFor(
             class {
               constructor() {
                 spy();
               }
             },
           ),
-        ),
         metadata: {},
       },
     );
 
     expect(spy).toHaveBeenCalled();
+  });
+
+export const itDoesNotSetInjectablesBeforeInit = <T extends Class<object>>(
+  name: string,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
+  prefilledContainer?: Record<string, any>
+) =>
+  it("does not set injectables before initialization", () => {
+    const set = jest.fn();
+    class ExampleClass {}
+
+    getClassDecorator(Object.assign({}, prefilledContainer, {[keys.initializing]: false}))(
+      // @ts-expect-error Class type is too broad for anonymous class
+      class {},
+      {
+        kind,
+        name,
+        addInitializer: initializerFor(ExampleClass),
+        metadata: {
+          [MetadataProperties.injectables]: [{ key: "key", set }],
+        },
+      },
+    );
+
+    expect(set).not.toHaveBeenCalled();
   });
 
 export const itSetsInjectablesOnInstance = <T extends Class<object>>(
@@ -90,13 +142,15 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
   container: object,
 ) =>
   it("sets injectables on class instance", () => {
+    console.log("it sets injectable");
     const key = "key";
     const value = null;
 
     container[key] = value;
+    container[keys.initializing] = true;
 
     const set = jest.fn();
-    class ServiceClass {}
+    class ExampleClass {}
 
     classDecorator(
       // @ts-expect-error Class type is too broad for anonymous class
@@ -104,14 +158,14 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
       {
         kind,
         name,
-        addInitializer: initializerFor(ServiceClass),
+        addInitializer: initializerFor(ExampleClass),
         metadata: {
           [MetadataProperties.injectables]: [{ key, set }],
         },
       },
     );
 
-    expect(set).toHaveBeenCalledWith(expect.any(ServiceClass), value);
+    expect(set).toHaveBeenCalledWith(expect.any(ExampleClass), value);
   });
 
 export const itAddsClassToArrayInContainer = <T extends Class<object>>(
@@ -195,6 +249,7 @@ export const itAddsClassInstanceToContainerOnInit = <T extends Class<object>>(
   key: string,
 ) =>
   it("adds class instance to container when initialized", () => {
+    console.log("addsclassinstancetoconainteroninit: \n   ")
     const container = {[keys.initializing]: true};
 
     getClassDecorator(container)(
@@ -205,6 +260,7 @@ export const itAddsClassInstanceToContainerOnInit = <T extends Class<object>>(
         name,
         addInitializer: initializerFor(ExampleClass),
         metadata: {},
+
       },
     );
 
@@ -229,3 +285,4 @@ export const itDoesNotAddClassInstanceBeforeInit = <T extends Class<object>>(
 
   expect(container[key]).not.toBeDefined();
 });
+

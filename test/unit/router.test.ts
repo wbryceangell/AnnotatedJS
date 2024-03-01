@@ -7,6 +7,7 @@ import {
   itCreatesClassInstanceInInitHook,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
+  itDoesNotAddClassInstanceBeforeInit,
 } from "./utils";
 
 describe("@Router", () => {
@@ -15,9 +16,11 @@ describe("@Router", () => {
   itAddsClassToContainer(name, Router, keys.routerClass);
   itAddsClassToContainerOnlyOnce(name, Router);
   itHasInitializationHook(name, Router({}));
-  itCreatesClassInstanceInInitHook(name, Router({}));
-  itAddsClassInstanceToContainerOnInit(name, Router, keys.router);
+  itCreatesClassInstanceInInitHook(name, Router);
+  itAddsClassInstanceToContainerOnInit(name, Router, name);
 
   const container = {};
   itSetsInjectablesOnInstance(name, Router(container), container);
+
+  itDoesNotAddClassInstanceBeforeInit(name, Router, keys.router);
 });

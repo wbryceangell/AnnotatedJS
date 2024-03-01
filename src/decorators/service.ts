@@ -33,11 +33,9 @@ import { validateKind } from "./utils/validateKind";
  * @param container - Object that stores injectables
  */
 export const Service = <T extends Class<object>>(
-  container = defaultContainer,
+  container = defaultContainer
 ) =>
   ((constructor, context) => {
-    
-
     validateContainer(container);
 
     const annotationName = `@${Service.name}`;
@@ -46,20 +44,18 @@ export const Service = <T extends Class<object>>(
     if (typeof context.name !== "string") {
       throw new Error(`${annotationName} must be used on a named class`);
     }
-    if(!isInitializing) {
-      return;
-    }
+
     context.addInitializer(function () {
-      const service = new this();
+      if (isInitializing(container)) {
+        const service = new this();
 
-      const metadata = getMetadata(annotationName, context);
-      setInjectables(container, service, metadata);
-
-      // @ts-expect-error we need to use object type but it is actually a class
+        const metadata = getMetadata(annotationName, context);
+        setInjectables(container, service, metadata);
+        // @ts-expect-error we need to use object type but it is actually a class
         setGlobal(container, context.name, service);
+      } else{
+      }
     });
-
-
 
     addClassToContainer(container, keys.serviceClasses, constructor);
   }) as ClassDecorator<T>;
