@@ -15,5 +15,6 @@ export { Service } from "./decorators/service/service";
 export { initialize } from "./initialize";
 export { AnnotatedCache } from "./interfaces/annotatedCache";
 export { AnnotatedCacheStorage } from "./interfaces/annotatedCacheStorage";
+export { AnnotatedDatastore } from "./interfaces/annotatedDatastore";
 export { AnnotatedRouter } from "./interfaces/annotatedRouter";
 export { RequestHandler } from "./interfaces/types";
