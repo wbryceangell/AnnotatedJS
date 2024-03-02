@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { MetadataProperties } from "../../../src/decorators/inject/metadataProperties";
 import { Class, ClassDecorator } from "../../../src/decorators/types";
 
@@ -8,7 +10,7 @@ export const initializerFor =
 const kind = "class";
 class ExampleClass {}
 
-export const itExpectsAValidContainer = <T extends Class<object>>(
+export const itExpectsAValidContainer = <T extends Class<any>>(
   getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
 ) =>
   it("expects a valid container", () => {
@@ -16,7 +18,7 @@ export const itExpectsAValidContainer = <T extends Class<object>>(
     expect(() => getClassDecorator(null)()).toThrow();
   });
 
-export const itThrowsErrorIfNotUsedOnAClass = <T extends Class<object>>(
+export const itThrowsErrorIfNotUsedOnAClass = <T extends Class<any>>(
   getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
 ) =>
   it("throws an error when not used on a class", () => {
