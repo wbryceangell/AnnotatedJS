@@ -16,6 +16,18 @@ export const itExpectsAValidContainer = <T extends Class<object>>(
     expect(() => getClassDecorator(null)()).toThrow();
   });
 
+export const itThrowsErrorIfNotUsedOnAClass = <T extends Class<object>>(
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+) =>
+  it("throws an error when not used on a class", () => {
+    expect(() =>
+      // @ts-expect-error Class type is too broad for anonymous class
+      getClassDecorator({})(class {}, {
+        kind: "method",
+      }),
+    ).toThrow();
+  });
+
 export const itCreatesInstanceOfClass = <T extends Class<object>>(
   name: string,
   classDecorator: ClassDecorator<T>,

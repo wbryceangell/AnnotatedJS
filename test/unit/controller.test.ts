@@ -9,6 +9,7 @@ import {
   itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
+  itThrowsErrorIfNotUsedOnAClass,
 } from "./utils/classDecorators";
 
 describe("@Controller", () => {
@@ -18,6 +19,7 @@ describe("@Controller", () => {
   const controllerWithPath = R.curryN(2, Controller)(path);
 
   itExpectsAValidContainer(controllerWithPath);
+  itThrowsErrorIfNotUsedOnAClass(controllerWithPath);
   itAddsClassToArrayInContainer(
     name,
     controllerWithPath,

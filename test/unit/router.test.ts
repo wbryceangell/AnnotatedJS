@@ -8,12 +8,14 @@ import {
   itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
+  itThrowsErrorIfNotUsedOnAClass,
 } from "./utils/classDecorators";
 
 describe("@Router", () => {
   const name = "Router";
 
   itExpectsAValidContainer(Router);
+  itThrowsErrorIfNotUsedOnAClass(Router);
   itAddsClassToContainer(name, Router, keys.routerClass);
   itAddsClassToContainerOnlyOnce(name, Router);
   itHasInitializationHook(name, Router({}));

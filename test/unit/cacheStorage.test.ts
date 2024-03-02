@@ -8,12 +8,14 @@ import {
   itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
+  itThrowsErrorIfNotUsedOnAClass,
 } from "./utils/classDecorators";
 
 describe("@CacheStorage", () => {
   const name = "CacheStorage";
 
   itExpectsAValidContainer(CacheStorage);
+  itThrowsErrorIfNotUsedOnAClass(CacheStorage);
   itAddsClassToContainer(name, CacheStorage, keys.cacheStorageClass);
   itAddsClassToContainerOnlyOnce(name, CacheStorage);
   itHasInitializationHook(name, CacheStorage({}));

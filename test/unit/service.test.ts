@@ -7,6 +7,7 @@ import {
   itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
+  itThrowsErrorIfNotUsedOnAClass,
 } from "./utils/classDecorators";
 
 describe("@Service", () => {
@@ -14,6 +15,7 @@ describe("@Service", () => {
   const name = "Service";
 
   itExpectsAValidContainer(Service);
+  itThrowsErrorIfNotUsedOnAClass(Service);
   itAddsClassToArrayInContainer(name, Service, keys.serviceClasses);
   itHasInitializationHook(name, Service({}));
   itCreatesClassInstanceInInitHook(name, Service({}));
