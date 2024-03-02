@@ -4,6 +4,7 @@ import {
   itAddsClassInstanceToContainerOnInit,
   itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
+  itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
 } from "./utils/classDecorators";
@@ -12,6 +13,7 @@ describe("@Service", () => {
   const kind = "class";
   const name = "Service";
 
+  itExpectsAValidContainer(Service);
   itAddsClassToArrayInContainer(name, Service, keys.serviceClasses);
   itHasInitializationHook(name, Service({}));
   itCreatesClassInstanceInInitHook(name, Service({}));

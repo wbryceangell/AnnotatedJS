@@ -5,6 +5,7 @@ import {
   itAddsClassToContainer,
   itAddsClassToContainerOnlyOnce,
   itCreatesClassInstanceInInitHook,
+  itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
 } from "./utils/classDecorators";
@@ -12,6 +13,7 @@ import {
 describe("@Router", () => {
   const name = "Router";
 
+  itExpectsAValidContainer(Router);
   itAddsClassToContainer(name, Router, keys.routerClass);
   itAddsClassToContainerOnlyOnce(name, Router);
   itHasInitializationHook(name, Router({}));

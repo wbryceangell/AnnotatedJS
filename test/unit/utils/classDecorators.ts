@@ -8,6 +8,14 @@ export const initializerFor =
 const kind = "class";
 class ExampleClass {}
 
+export const itExpectsAValidContainer = <T extends Class<object>>(
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+) =>
+  it("expects a valid container", () => {
+    // @ts-expect-error passing an invalid container
+    expect(() => getClassDecorator(null)()).toThrow();
+  });
+
 export const itCreatesInstanceOfClass = <T extends Class<object>>(
   name: string,
   classDecorator: ClassDecorator<T>,

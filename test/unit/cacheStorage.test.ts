@@ -5,6 +5,7 @@ import {
   itAddsClassToContainer,
   itAddsClassToContainerOnlyOnce,
   itCreatesClassInstanceInInitHook,
+  itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
 } from "./utils/classDecorators";
@@ -12,6 +13,7 @@ import {
 describe("@CacheStorage", () => {
   const name = "CacheStorage";
 
+  itExpectsAValidContainer(CacheStorage);
   itAddsClassToContainer(name, CacheStorage, keys.cacheStorageClass);
   itAddsClassToContainerOnlyOnce(name, CacheStorage);
   itHasInitializationHook(name, CacheStorage({}));

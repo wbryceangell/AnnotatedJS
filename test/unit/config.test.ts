@@ -5,6 +5,7 @@ import {
   initializerFor,
   itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
+  itExpectsAValidContainer,
   itHasInitializationHook,
 } from "./utils/classDecorators";
 
@@ -12,6 +13,7 @@ describe("@Config", () => {
   const name = "Config";
   const kind = "class";
 
+  itExpectsAValidContainer(Config);
   itAddsClassToArrayInContainer(name, Config, keys.configClasses);
   itHasInitializationHook(name, Config({}));
   itCreatesClassInstanceInInitHook(name, Config({}));

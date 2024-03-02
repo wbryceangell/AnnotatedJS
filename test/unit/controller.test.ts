@@ -6,6 +6,7 @@ import {
   initializerFor,
   itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
+  itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
 } from "./utils/classDecorators";
@@ -14,10 +15,12 @@ describe("@Controller", () => {
   const name = "Controller";
   const path = "path";
   const methodPath = "method";
+  const controllerWithPath = R.curryN(2, Controller)(path);
 
+  itExpectsAValidContainer(controllerWithPath);
   itAddsClassToArrayInContainer(
     name,
-    R.curryN(2, Controller)(path),
+    controllerWithPath,
     keys.controllerClasses,
   );
   itHasInitializationHook(name, Controller(path, {}));
