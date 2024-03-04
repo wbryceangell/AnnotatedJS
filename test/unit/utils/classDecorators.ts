@@ -135,7 +135,7 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
     expect(set).toHaveBeenCalledWith(expect.any(ServiceClass), value);
   });
 
-export const itAddsClassToArrayInContainer = <T extends Class<object>>(
+export const itAddsClassToArrayInContainer = <T extends Class<any>>(
   name: string,
   getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
   key: string,
