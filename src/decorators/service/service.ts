@@ -5,6 +5,7 @@ import { getInitializer } from "./getInitializer";
 import { Class, ClassDecorator } from "../types";
 import { addClassToContainer } from "../utils/addClassToContainer";
 import { validateKind } from "../utils/validateKind";
+import { validateName } from "../utils/validateName";
 
 /**
  * A class decorator that makes the class injectable
@@ -37,10 +38,7 @@ export const Service = <T extends Class<object>>(
 
     const annotationName = `@${Service.name}`;
     validateKind(annotationName, context, "class");
-
-    if (typeof context.name !== "string") {
-      throw new Error(`${annotationName} must be used on a named class`);
-    }
+    validateName(annotationName, context);
 
     context.addInitializer(
       getInitializer<T>(annotationName, context, container),

@@ -231,3 +231,18 @@ export const itAddsClassInstanceToContainerOnInit = <T extends Class<object>>(
 
     expect(container[key]).toStrictEqual(expect.any(ExampleClass));
   });
+
+export const itThrowsWhenUsedOnAnUnnamedClass = <T extends Class<any>>(
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+) =>
+  it("errors if context name is undefined", () => {
+    expect(() =>
+      // @ts-expect-error Class type is too broad for anonymous class
+      getClassDecorator({})(class {}, {
+        kind,
+        name: undefined,
+        addInitializer: () => {},
+        metadata: {},
+      }),
+    ).toThrow();
+  });
