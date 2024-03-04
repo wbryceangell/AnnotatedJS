@@ -17,8 +17,8 @@ describe("@Service", () => {
   itExpectsAValidContainer(Service);
   itThrowsErrorIfNotUsedOnAClass(Service);
   itThrowsWhenUsedOnAnUnnamedClass(Service);
-  itAddsClassToArrayInContainer(name, Service, keys.serviceClasses);
-  itHasInitializationHook(name, Service({}));
+  itAddsClassToArrayInContainer(Service, keys.serviceClasses);
+  itHasInitializationHook(Service);
   itCreatesClassInstanceInInitHook(name, Service({}));
   itAddsClassInstanceToContainerOnInit(name, Service, name);
 

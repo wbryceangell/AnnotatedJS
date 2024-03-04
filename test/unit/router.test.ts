@@ -18,7 +18,7 @@ describe("@Router", () => {
   itThrowsErrorIfNotUsedOnAClass(Router);
   itAddsClassToContainer(name, Router, keys.routerClass);
   itAddsClassToContainerOnlyOnce(name, Router);
-  itHasInitializationHook(name, Router({}));
+  itHasInitializationHook(Router);
   itCreatesClassInstanceInInitHook(name, Router({}));
   itAddsClassInstanceToContainerOnInit(name, Router, keys.router);
 

@@ -20,12 +20,8 @@ describe("@Controller", () => {
 
   itExpectsAValidContainer(controllerWithPath);
   itThrowsErrorIfNotUsedOnAClass(controllerWithPath);
-  itAddsClassToArrayInContainer(
-    name,
-    controllerWithPath,
-    keys.controllerClasses,
-  );
-  itHasInitializationHook(name, Controller(path, {}));
+  itAddsClassToArrayInContainer(controllerWithPath, keys.controllerClasses);
+  itHasInitializationHook(controllerWithPath);
   itCreatesClassInstanceInInitHook(
     name,
     Controller(path, { [keys.router]: {} }),

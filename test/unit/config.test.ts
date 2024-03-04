@@ -16,8 +16,8 @@ describe("@Config", () => {
 
   itExpectsAValidContainer(Config);
   itThrowsErrorIfNotUsedOnAClass(Config);
-  itAddsClassToArrayInContainer(name, Config, keys.configClasses);
-  itHasInitializationHook(name, Config({}));
+  itAddsClassToArrayInContainer(Config, keys.configClasses);
+  itHasInitializationHook(Config);
   itCreatesClassInstanceInInitHook(name, Config({}));
 
   it("adds properties to the container", () => {

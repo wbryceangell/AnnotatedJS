@@ -55,19 +55,18 @@ export const itCreatesInstanceOfClass = <T extends Class<object>>(
     expect(spy).toHaveBeenCalled();
   });
 
-export const itHasInitializationHook = <T extends Class<object>>(
-  name: string,
-  classDecorator: ClassDecorator<T>,
+export const itHasInitializationHook = <T extends Class<any>>(
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
 ) =>
   it("has an initialization hook", () => {
     const spy = jest.fn();
 
-    classDecorator(
+    getClassDecorator({})(
       // @ts-expect-error Class type is too broad for anonymous class
       class {},
       {
         kind,
-        name,
+        name: "name",
         addInitializer: spy,
         metadata: {},
       },
@@ -136,7 +135,6 @@ export const itSetsInjectablesOnInstance = <T extends Class<object>>(
   });
 
 export const itAddsClassToArrayInContainer = <T extends Class<any>>(
-  name: string,
   getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
   key: string,
 ) =>
@@ -148,7 +146,7 @@ export const itAddsClassToArrayInContainer = <T extends Class<any>>(
       class {},
       {
         kind,
-        name,
+        name: "name",
         addInitializer: () => {},
         metadata: {},
       },

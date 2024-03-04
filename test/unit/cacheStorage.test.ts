@@ -18,7 +18,7 @@ describe("@CacheStorage", () => {
   itThrowsErrorIfNotUsedOnAClass(CacheStorage);
   itAddsClassToContainer(name, CacheStorage, keys.cacheStorageClass);
   itAddsClassToContainerOnlyOnce(name, CacheStorage);
-  itHasInitializationHook(name, CacheStorage({}));
+  itHasInitializationHook(CacheStorage);
   itCreatesClassInstanceInInitHook(name, CacheStorage({}));
   itAddsClassInstanceToContainerOnInit(name, CacheStorage, keys.cacheStorage);
 
