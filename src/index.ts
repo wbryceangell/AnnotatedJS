@@ -9,6 +9,7 @@ export { Patch } from "./decorators/controller/methods/patch";
 export { Post } from "./decorators/controller/methods/post";
 export { Put } from "./decorators/controller/methods/put";
 export { Purge } from "./decorators/controller/purge/purge";
+export { Datastore } from "./decorators/datastore/datastore";
 export { Inject } from "./decorators/inject/inject";
 export { Router } from "./decorators/router/router";
 export { Service } from "./decorators/service/service";
