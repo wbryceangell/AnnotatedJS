@@ -81,6 +81,11 @@ describe("initialize", () => {
         spy(this);
       }
     }
+		class Datastore {
+			constructor() {
+        spy(this);
+      }
+		}
     class Service {
       constructor() {
         spy(this);
@@ -99,6 +104,7 @@ describe("initialize", () => {
 
     initialize({
       [keys.configClasses]: [Config],
+			[keys.datastoreClasses]: [Datastore],
       [keys.serviceClasses]: [Service],
       [keys.routerClass]: Router,
       [keys.controllerClasses]: [Controller],
@@ -106,8 +112,9 @@ describe("initialize", () => {
     });
 
     expect(spy).toHaveBeenNthCalledWith(1, expect.any(Config));
-    expect(spy).toHaveBeenNthCalledWith(2, expect.any(Service));
-    expect(spy).toHaveBeenNthCalledWith(3, expect.any(Router));
-    expect(spy).toHaveBeenNthCalledWith(4, expect.any(Controller));
+		expect(spy).toHaveBeenNthCalledWith(2, expect.any(Datastore));
+    expect(spy).toHaveBeenNthCalledWith(3, expect.any(Service));
+    expect(spy).toHaveBeenNthCalledWith(4, expect.any(Router));
+    expect(spy).toHaveBeenNthCalledWith(5, expect.any(Controller));
   });
 });
