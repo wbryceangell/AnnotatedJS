@@ -1,5 +1,6 @@
 import { container as defaultContainer } from "../../container/container";
 import { keys } from "../../container/keys";
+import { setGlobal } from "../../container/utils/setGlobal";
 import { validateContainer } from "../../container/utils/validateContainer";
 import { AnnotatedDatastore } from "../../interfaces/annotatedDatastore";
 import { setInjectables } from "../inject/setInjectables";
@@ -22,6 +23,9 @@ export const Datastore = <T>(container = defaultContainer) =>
 
       const metadata = getMetadata(annotationName, context);
       setInjectables(container, datastore, metadata);
+
+      // @ts-expect-error we need to use object type but it is actually a class
+      setGlobal(container, context.name, datastore);
     });
 
     addClassToContainer(container, keys.datastoreClasses, constructor);

@@ -179,7 +179,7 @@ export const itAddsClassToContainerOnlyOnce = <T extends Class<object>>(
     ).toThrow();
   });
 
-export const itAddsClassInstanceToContainerOnInit = <T extends Class<object>>(
+export const itAddsClassInstanceToContainerOnInit = <T extends Class<any>>(
   name: string,
   getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
   key: string,
