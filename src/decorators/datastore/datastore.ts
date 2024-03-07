@@ -4,9 +4,9 @@ import { validateContainer } from "../../container/utils/validateContainer";
 import { AnnotatedDatastore } from "../../interfaces/annotatedDatastore";
 import { Class, ClassDecorator } from "../types";
 import { addClassToContainer } from "../utils/addClassToContainer";
+import { getStandardInitializer } from "../utils/getStandardInitializer";
 import { validateKind } from "../utils/validateKind";
 import { validateName } from "../utils/validateName";
-import { getInitializer } from "./getInitializer";
 
 export const Datastore = <T>(container = defaultContainer) =>
   ((constructor, context) => {
@@ -16,7 +16,9 @@ export const Datastore = <T>(container = defaultContainer) =>
     validateKind(annotationName, context, "class");
     validateName(annotationName, context);
 
-    context.addInitializer(getInitializer(annotationName, context, container));
+    context.addInitializer(
+      getStandardInitializer(annotationName, context, container),
+    );
 
     addClassToContainer(container, keys.datastoreClasses, constructor);
   }) as ClassDecorator<Class<AnnotatedDatastore<T>>>;
