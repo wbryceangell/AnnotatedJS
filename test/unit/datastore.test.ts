@@ -3,6 +3,7 @@ import {
   itCreatesClassInstanceInInitHook,
   itExpectsAValidContainer,
   itHasInitializationHook,
+  itSetsInjectablesOnInstance,
   itThrowsErrorIfNotUsedOnAClass,
   itThrowsWhenUsedOnAnUnnamedClass,
 } from "./utils/classDecorators";
@@ -16,4 +17,5 @@ describe("@Datastore", () => {
   itAddsClassToArrayInContainer(Datastore, keys.datastoreClasses);
   itHasInitializationHook(Datastore);
   itCreatesClassInstanceInInitHook(Datastore);
+  itSetsInjectablesOnInstance(Datastore);
 });

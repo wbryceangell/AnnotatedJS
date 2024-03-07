@@ -21,7 +21,5 @@ describe("@Router", () => {
   itHasInitializationHook(Router);
   itCreatesClassInstanceInInitHook(Router);
   itAddsClassInstanceToContainerOnInit(name, Router, keys.router);
-
-  const container = {};
-  itSetsInjectablesOnInstance(name, Router(container), container);
+  itSetsInjectablesOnInstance(Router);
 });

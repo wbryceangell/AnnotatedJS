@@ -12,7 +12,7 @@ const name = "name";
 class ExampleClass {}
 
 export const itExpectsAValidContainer = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
 ) =>
   it("expects a valid container", () => {
     // @ts-expect-error passing an invalid container
@@ -20,7 +20,7 @@ export const itExpectsAValidContainer = <T extends Class<any>>(
   });
 
 export const itThrowsErrorIfNotUsedOnAClass = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
 ) =>
   it("throws an error when not used on a class", () => {
     expect(() =>
@@ -31,33 +31,8 @@ export const itThrowsErrorIfNotUsedOnAClass = <T extends Class<any>>(
     ).toThrow();
   });
 
-export const itCreatesInstanceOfClass = <T extends Class<object>>(
-  name: string,
-  classDecorator: ClassDecorator<T>,
-) =>
-  it(`creates an instance of the ${name} class`, () => {
-    const spy = jest.fn();
-
-    classDecorator(
-      // @ts-expect-error Class type is too broad for anonymous class
-      class {
-        constructor() {
-          spy();
-        }
-      },
-      {
-        kind,
-        name,
-        addInitializer: () => {},
-        metadata: {},
-      },
-    );
-
-    expect(spy).toHaveBeenCalled();
-  });
-
 export const itHasInitializationHook = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
 ) =>
   it("has an initialization hook", () => {
     const spy = jest.fn();
@@ -77,7 +52,7 @@ export const itHasInitializationHook = <T extends Class<any>>(
   });
 
 export const itCreatesClassInstanceInInitHook = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
 ) =>
   it("initialization hook to create instance of class", () => {
     const spy = jest.fn();
@@ -104,34 +79,30 @@ export const itCreatesClassInstanceInInitHook = <T extends Class<any>>(
     expect(spy).toHaveBeenCalled();
   });
 
-export const itSetsInjectablesOnInstance = <T extends Class<object>>(
-  name: string,
-  classDecorator: ClassDecorator<T>,
-  container: object,
+export const itSetsInjectablesOnInstance = <T extends Class<any>>(
+  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
 ) =>
   it("sets injectables on class instance", () => {
     const key = "key";
     const value = null;
-
-    container[key] = value;
+    const container = { [key]: value };
 
     const set = jest.fn();
-    class ServiceClass {}
 
-    classDecorator(
+    getClassDecorator(container)(
       // @ts-expect-error Class type is too broad for anonymous class
       class {},
       {
         kind,
         name,
-        addInitializer: initializerFor(ServiceClass),
+        addInitializer: initializerFor(ExampleClass),
         metadata: {
           [MetadataProperties.injectables]: [{ key, set }],
         },
       },
     );
 
-    expect(set).toHaveBeenCalledWith(expect.any(ServiceClass), value);
+    expect(set).toHaveBeenCalledWith(expect.any(ExampleClass), value);
   });
 
 export const itAddsClassToArrayInContainer = <T extends Class<any>>(

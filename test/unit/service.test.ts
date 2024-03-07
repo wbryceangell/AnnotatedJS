@@ -21,7 +21,5 @@ describe("@Service", () => {
   itHasInitializationHook(Service);
   itCreatesClassInstanceInInitHook(Service);
   itAddsClassInstanceToContainerOnInit(name, Service, name);
-
-  const container = {};
-  itSetsInjectablesOnInstance(name, Service(container), container);
+  itSetsInjectablesOnInstance(Service);
 });

@@ -23,9 +23,7 @@ describe("@Controller", () => {
   itAddsClassToArrayInContainer(controllerWithPath, keys.controllerClasses);
   itHasInitializationHook(controllerWithPath);
   itCreatesClassInstanceInInitHook(controllerWithPath);
-
-  const container = { [keys.router]: {} };
-  itSetsInjectablesOnInstance(name, Controller(path, container), container);
+  itSetsInjectablesOnInstance(controllerWithPath);
 
   it("configures router with annotated methods", () => {
     const get = jest.fn();
