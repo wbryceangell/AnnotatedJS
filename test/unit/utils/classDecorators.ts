@@ -8,6 +8,7 @@ export const initializerFor =
     initializer.call(classDef);
 
 const kind = "class";
+const name = "name";
 class ExampleClass {}
 
 export const itExpectsAValidContainer = <T extends Class<any>>(
@@ -66,7 +67,7 @@ export const itHasInitializationHook = <T extends Class<any>>(
       class {},
       {
         kind,
-        name: "name",
+        name,
         addInitializer: spy,
         metadata: {},
       },
@@ -75,14 +76,13 @@ export const itHasInitializationHook = <T extends Class<any>>(
     expect(spy).toHaveBeenCalledWith(expect.any(Function));
   });
 
-export const itCreatesClassInstanceInInitHook = <T extends Class<object>>(
-  name: string,
-  classDecorator: ClassDecorator<T>,
+export const itCreatesClassInstanceInInitHook = <T extends Class<any>>(
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
 ) =>
   it("initialization hook to create instance of class", () => {
     const spy = jest.fn();
 
-    classDecorator(
+    getClassDecorator({})(
       // @ts-expect-error Class type is too broad for anonymous class
       class {},
       {

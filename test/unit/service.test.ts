@@ -19,7 +19,7 @@ describe("@Service", () => {
   itThrowsWhenUsedOnAnUnnamedClass(Service);
   itAddsClassToArrayInContainer(Service, keys.serviceClasses);
   itHasInitializationHook(Service);
-  itCreatesClassInstanceInInitHook(name, Service({}));
+  itCreatesClassInstanceInInitHook(Service);
   itAddsClassInstanceToContainerOnInit(name, Service, name);
 
   const container = {};

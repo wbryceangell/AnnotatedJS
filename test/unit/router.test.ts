@@ -19,7 +19,7 @@ describe("@Router", () => {
   itAddsClassToContainer(name, Router, keys.routerClass);
   itAddsClassToContainerOnlyOnce(name, Router);
   itHasInitializationHook(Router);
-  itCreatesClassInstanceInInitHook(name, Router({}));
+  itCreatesClassInstanceInInitHook(Router);
   itAddsClassInstanceToContainerOnInit(name, Router, keys.router);
 
   const container = {};

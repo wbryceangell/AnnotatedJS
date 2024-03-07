@@ -22,10 +22,7 @@ describe("@Controller", () => {
   itThrowsErrorIfNotUsedOnAClass(controllerWithPath);
   itAddsClassToArrayInContainer(controllerWithPath, keys.controllerClasses);
   itHasInitializationHook(controllerWithPath);
-  itCreatesClassInstanceInInitHook(
-    name,
-    Controller(path, { [keys.router]: {} }),
-  );
+  itCreatesClassInstanceInInitHook(controllerWithPath);
 
   const container = { [keys.router]: {} };
   itSetsInjectablesOnInstance(name, Controller(path, container), container);

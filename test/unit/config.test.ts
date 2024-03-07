@@ -18,7 +18,7 @@ describe("@Config", () => {
   itThrowsErrorIfNotUsedOnAClass(Config);
   itAddsClassToArrayInContainer(Config, keys.configClasses);
   itHasInitializationHook(Config);
-  itCreatesClassInstanceInInitHook(name, Config({}));
+  itCreatesClassInstanceInInitHook(Config);
 
   it("adds properties to the container", () => {
     const key = "key";

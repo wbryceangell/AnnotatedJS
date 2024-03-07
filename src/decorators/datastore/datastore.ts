@@ -15,7 +15,9 @@ export const Datastore = <T>(container = defaultContainer) =>
     validateKind(annotationName, context, "class");
     validateName(annotationName, context);
 
-    context.addInitializer(function () {});
+    context.addInitializer(function () {
+      new this();
+    });
 
     addClassToContainer(container, keys.datastoreClasses, constructor);
   }) as ClassDecorator<Class<AnnotatedDatastore<T>>>;

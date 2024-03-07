@@ -1,5 +1,6 @@
 import {
   itAddsClassToArrayInContainer,
+  itCreatesClassInstanceInInitHook,
   itExpectsAValidContainer,
   itHasInitializationHook,
   itThrowsErrorIfNotUsedOnAClass,
@@ -14,4 +15,5 @@ describe("@Datastore", () => {
   itThrowsWhenUsedOnAnUnnamedClass(Datastore);
   itAddsClassToArrayInContainer(Datastore, keys.datastoreClasses);
   itHasInitializationHook(Datastore);
+  itCreatesClassInstanceInInitHook(Datastore);
 });
