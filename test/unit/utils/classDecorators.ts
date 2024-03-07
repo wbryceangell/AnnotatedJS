@@ -106,7 +106,7 @@ export const itSetsInjectablesOnInstance = <T extends Class<any>>(
   });
 
 export const itAddsClassToArrayInContainer = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
   key: string,
 ) =>
   it("adds class to array in container", () => {
@@ -128,9 +128,8 @@ export const itAddsClassToArrayInContainer = <T extends Class<any>>(
     );
   });
 
-export const itAddsClassToContainer = <T extends Class<object>>(
-  name: string,
-  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+export const itAddsClassToContainer = <T extends Class<any>>(
+  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
   key: string,
 ) =>
   it("adds class to container", () => {
@@ -150,9 +149,8 @@ export const itAddsClassToContainer = <T extends Class<object>>(
     expect(container[key]).toBeDefined();
   });
 
-export const itAddsClassToContainerOnlyOnce = <T extends Class<object>>(
-  name: string,
-  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+export const itAddsClassToContainerOnlyOnce = <T extends Class<any>>(
+  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
 ) =>
   it("adds class to container only once", () => {
     const container = {};

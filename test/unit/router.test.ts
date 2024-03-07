@@ -16,8 +16,8 @@ describe("@Router", () => {
 
   itExpectsAValidContainer(Router);
   itThrowsErrorIfNotUsedOnAClass(Router);
-  itAddsClassToContainer(name, Router, keys.routerClass);
-  itAddsClassToContainerOnlyOnce(name, Router);
+  itAddsClassToContainer(Router, keys.routerClass);
+  itAddsClassToContainerOnlyOnce(Router);
   itHasInitializationHook(Router);
   itCreatesClassInstanceInInitHook(Router);
   itAddsClassInstanceToContainerOnInit(name, Router, keys.router);
