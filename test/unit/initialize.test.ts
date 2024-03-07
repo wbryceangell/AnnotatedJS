@@ -34,6 +34,7 @@ describe("initialize", () => {
   itInstantiatesMultipleClasses(keys.configClasses);
   itInstantiatesMultipleClasses(keys.serviceClasses);
   itInstantiatesMultipleClasses(keys.controllerClasses);
+	itInstantiatesMultipleClasses(keys.datastoreClasses);
 
   it("errors if a router class is not in the container", () => {
     expect(() =>

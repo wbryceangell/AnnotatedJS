@@ -49,6 +49,7 @@ import { RequestHandler } from "./interfaces/types";
  * @param container - Object that stores injectables
  */
 export function initialize(container = defaultContainer): RequestHandler {
+	instantiateClasses(container, keys.datastoreClasses);
   instantiateClasses(container, keys.configClasses);
   instantiateClasses(container, keys.serviceClasses);
 
