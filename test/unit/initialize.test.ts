@@ -96,6 +96,11 @@ describe("initialize", () => {
         spy(this);
       }
     }
+		class CacheStorage {
+			constructor() {
+        spy(this);
+      }
+		}
     class Controller {
       constructor() {
         spy(this);
@@ -107,6 +112,7 @@ describe("initialize", () => {
 			[keys.datastoreClasses]: [Datastore],
       [keys.serviceClasses]: [Service],
       [keys.routerClass]: Router,
+			[keys.cacheStorageClass]: CacheStorage,
       [keys.controllerClasses]: [Controller],
       [keys.router]: router,
     });
@@ -115,6 +121,7 @@ describe("initialize", () => {
 		expect(spy).toHaveBeenNthCalledWith(2, expect.any(Datastore));
     expect(spy).toHaveBeenNthCalledWith(3, expect.any(Service));
     expect(spy).toHaveBeenNthCalledWith(4, expect.any(Router));
-    expect(spy).toHaveBeenNthCalledWith(5, expect.any(Controller));
+		expect(spy).toHaveBeenNthCalledWith(5, expect.any(CacheStorage));
+    expect(spy).toHaveBeenNthCalledWith(6, expect.any(Controller));
   });
 });
