@@ -6,6 +6,7 @@ export { Controller } from "./decorators/controller/controller";
 export { Delete } from "./decorators/controller/methods/delete";
 export { Get } from "./decorators/controller/methods/get";
 export { Head } from "./decorators/controller/methods/head";
+export { Options } from "./decorators/controller/methods/options";
 export { Patch } from "./decorators/controller/methods/patch";
 export { Post } from "./decorators/controller/methods/post";
 export { Put } from "./decorators/controller/methods/put";
