@@ -13,7 +13,9 @@ import {
   Datastore,
   Delete,
   Get,
+  Head,
   Inject,
+  Options,
   Patch,
   Post,
   Property,
@@ -82,12 +84,14 @@ describe("Initialization", () => {
       @Inject("IttyRouter")
       private accessor ittyRouter: RouterType;
 
-      options(_uri: string, _handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+      options(uri: string, handler: RequestHandler): AnnotatedRouter {
+        this.ittyRouter.options(uri, handler);
+        return this;
       }
 
-      head(_uri: string, _handler: RequestHandler): AnnotatedRouter {
-        throw new Error("Method not implemented.");
+      head(uri: string, handler: RequestHandler): AnnotatedRouter {
+        this.ittyRouter.head(uri, handler);
+        return this;
       }
 
       get(uri: string, handler: RequestHandler): AnnotatedRouter {
@@ -215,6 +219,7 @@ describe("Initialization", () => {
 
     const expectedGetAllBody = "getAll";
     const cacheName = "cacheName";
+    const allowedMethods = "OPTIONS, HEAD, GET, POST, PUT, PATCH, DELETE";
 
     @Controller("/controller", container)
     class TestController {
@@ -222,6 +227,19 @@ describe("Initialization", () => {
 
       @Inject(TestDatastore)
       private accessor datastore: AnnotatedDatastore<string>;
+
+      @Options()
+      async options() {
+        return new Response(null, {
+          status: 204,
+          headers: { Allow: allowedMethods },
+        });
+      }
+
+      @Head()
+      async head() {
+        return new Response(null, { status: 204 });
+      }
 
       @Get()
       async getAll() {
@@ -260,6 +278,19 @@ describe("Initialization", () => {
     }
 
     const handle = initialize(container);
+
+    const optionsResponse = await handle(
+      new Request("https://test.com/controller", { method: "OPTIONS" }),
+    );
+    expect(optionsResponse).toBeDefined();
+    expect(optionsResponse.status).toBe(204);
+    expect(optionsResponse.headers.get("Allow")).toBe(allowedMethods);
+
+    const headResponse = await handle(
+      new Request("https://test.com/controller", { method: "HEAD" }),
+    );
+    expect(headResponse).toBeDefined();
+    expect(headResponse.status).toBe(204);
 
     const getAllResponse = await handle(
       new Request("https://test.com/controller"),
