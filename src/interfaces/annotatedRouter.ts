@@ -12,6 +12,8 @@ import { RequestHandler } from "./types";
  * {@link https://github.com/kwhitley/itty-router | Itty-Router} for the inspiration behind the interface
  */
 export interface AnnotatedRouter {
+  options(uri: string, handler: RequestHandler): AnnotatedRouter;
+  head(uri: string, handler: RequestHandler): AnnotatedRouter;
   get(uri: string, handler: RequestHandler): AnnotatedRouter;
   put(uri: string, handler: RequestHandler): AnnotatedRouter;
   post(uri: string, handler: RequestHandler): AnnotatedRouter;
