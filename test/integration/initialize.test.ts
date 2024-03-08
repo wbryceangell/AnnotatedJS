@@ -34,6 +34,12 @@ describe("Initialization", () => {
 
     @Router(container)
     class TestRouter implements AnnotatedRouter {
+      options(_uri: string, _handler: RequestHandler): AnnotatedRouter {
+        throw new Error("Method not implemented.");
+      }
+      head(_uri: string, _handler: RequestHandler): AnnotatedRouter {
+        throw new Error("Method not implemented.");
+      }
       get(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
@@ -76,13 +82,17 @@ describe("Initialization", () => {
       @Inject("IttyRouter")
       private accessor ittyRouter: RouterType;
 
-      public get(uri: string, handler: RequestHandler): AnnotatedRouter {
-        this.ittyRouter.get(uri, handler);
-        return this;
+      options(_uri: string, _handler: RequestHandler): AnnotatedRouter {
+        throw new Error("Method not implemented.");
       }
 
-      handle(request: Request) {
-        return this.ittyRouter.handle(request);
+      head(_uri: string, _handler: RequestHandler): AnnotatedRouter {
+        throw new Error("Method not implemented.");
+      }
+
+      get(uri: string, handler: RequestHandler): AnnotatedRouter {
+        this.ittyRouter.get(uri, handler);
+        return this;
       }
 
       put(uri: string, handler: RequestHandler): AnnotatedRouter {
@@ -107,6 +117,10 @@ describe("Initialization", () => {
 
       all(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
+      }
+
+      handle(request: Request) {
+        return this.ittyRouter.handle(request);
       }
     }
 
