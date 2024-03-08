@@ -6,28 +6,24 @@ import {
   initializerFor,
   itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
+  itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
+  itThrowsErrorIfNotUsedOnAClass,
 } from "./utils/classDecorators";
 
 describe("@Controller", () => {
   const name = "Controller";
   const path = "path";
   const methodPath = "method";
+  const controllerWithPath = R.curryN(2, Controller)(path);
 
-  itAddsClassToArrayInContainer(
-    name,
-    R.curryN(2, Controller)(path),
-    keys.controllerClasses,
-  );
-  itHasInitializationHook(name, Controller(path, {}));
-  itCreatesClassInstanceInInitHook(
-    name,
-    Controller(path, { [keys.router]: {} }),
-  );
-
-  const container = { [keys.router]: {} };
-  itSetsInjectablesOnInstance(name, Controller(path, container), container);
+  itExpectsAValidContainer(controllerWithPath);
+  itThrowsErrorIfNotUsedOnAClass(controllerWithPath);
+  itAddsClassToArrayInContainer(controllerWithPath, keys.controllerClasses);
+  itHasInitializationHook(controllerWithPath);
+  itCreatesClassInstanceInInitHook(controllerWithPath);
+  itSetsInjectablesOnInstance(controllerWithPath);
 
   it("configures router with annotated methods", () => {
     const get = jest.fn();

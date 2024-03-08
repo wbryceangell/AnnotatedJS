@@ -4,30 +4,22 @@ import {
   itAddsClassInstanceToContainerOnInit,
   itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
+  itExpectsAValidContainer,
   itHasInitializationHook,
   itSetsInjectablesOnInstance,
+  itThrowsErrorIfNotUsedOnAClass,
+  itThrowsWhenUsedOnAnUnnamedClass,
 } from "./utils/classDecorators";
 
 describe("@Service", () => {
-  const kind = "class";
   const name = "Service";
 
-  itAddsClassToArrayInContainer(name, Service, keys.serviceClasses);
-  itHasInitializationHook(name, Service({}));
-  itCreatesClassInstanceInInitHook(name, Service({}));
+  itExpectsAValidContainer(Service);
+  itThrowsErrorIfNotUsedOnAClass(Service);
+  itThrowsWhenUsedOnAnUnnamedClass(Service);
+  itAddsClassToArrayInContainer(Service, keys.serviceClasses);
+  itHasInitializationHook(Service);
+  itCreatesClassInstanceInInitHook(Service);
   itAddsClassInstanceToContainerOnInit(name, Service, name);
-
-  const container = {};
-  itSetsInjectablesOnInstance(name, Service(container), container);
-
-  it("errors if context name is undefined", () => {
-    expect(() =>
-      Service({})(class {}, {
-        kind,
-        name: undefined,
-        addInitializer: () => {},
-        metadata: {},
-      }),
-    ).toThrow();
-  });
+  itSetsInjectablesOnInstance(Service);
 });

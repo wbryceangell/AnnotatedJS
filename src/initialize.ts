@@ -50,6 +50,7 @@ import { RequestHandler } from "./interfaces/types";
  */
 export function initialize(container = defaultContainer): RequestHandler {
   instantiateClasses(container, keys.configClasses);
+  instantiateClasses(container, keys.datastoreClasses);
   instantiateClasses(container, keys.serviceClasses);
 
   const RouterClass: Class<AnnotatedRouter> = getGlobal(
