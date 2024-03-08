@@ -4,11 +4,13 @@ import { Router as IttyRouter, RouterType } from "itty-router";
 import {
   AnnotatedCache,
   AnnotatedCacheStorage,
+  AnnotatedDatastore,
   AnnotatedRouter,
   Cache,
   CacheStorage,
   Config,
   Controller,
+  Datastore,
   Delete,
   Get,
   Inject,
@@ -157,12 +159,56 @@ describe("Initialization", () => {
       }
     }
 
-    const expectedGetBody = "get";
+    @Datastore(container)
+    class TestDatastore implements AnnotatedDatastore<string> {
+      private map = new Map<string, string>();
+
+      length: number = 0;
+
+      async clear(): Promise<undefined> {
+        this.map.clear();
+        this.length = 0;
+      }
+
+      async getItem(keyName: string): Promise<string | null> {
+        return this.map.get(keyName) || null;
+      }
+
+      async key(index: number): Promise<string | null> {
+        return [...this.map.keys()].at(index) || null;
+      }
+
+      async removeItem(keyName: string): Promise<undefined> {
+        const keyExisted = this.map.has(keyName);
+
+        this.map.delete(keyName);
+
+        if (!keyExisted) {
+          this.length--;
+        }
+      }
+
+      async setItem(keyName: string, value: string): Promise<undefined> {
+        const keyExisted = this.map.has(keyName);
+
+        this.map.set(keyName, value);
+
+        if (!keyExisted) {
+          this.length++;
+        }
+      }
+    }
+
     const expectedGetAllBody = "getAll";
     const cacheName = "cacheName";
 
     @Controller("/controller", container)
     class TestController {
+      private static KEY = "key";
+
+      @Inject(TestDatastore)
+      private accessor datastore: AnnotatedDatastore<string>;
+
       @Get()
       async getAll() {
         return new Response(expectedGetAllBody);
@@ -171,7 +217,8 @@ describe("Initialization", () => {
       @Cache(cacheName)
       @Get("get")
       async get() {
-        return new Response(expectedGetBody);
+        const text = await this.datastore.getItem(TestController.KEY);
+        return new Response(text);
       }
 
       @Delete()
@@ -185,7 +232,9 @@ describe("Initialization", () => {
       }
 
       @Post()
-      async post() {
+      async post(req: Request) {
+        const text = await req.text();
+        await this.datastore.setItem(TestController.KEY, text);
         return new Response(null, { status: 201 });
       }
 
@@ -205,6 +254,18 @@ describe("Initialization", () => {
 
     const getAllBody = await getAllResponse.text();
     expect(getAllBody).toBe(expectedGetAllBody);
+
+    const expectedGetBody = "get";
+
+    const postResponse: Response = await handle(
+      new Request("https://test.com/controller", {
+        method: "POST",
+        body: expectedGetBody,
+      }),
+    );
+
+    expect(postResponse).toBeDefined();
+    expect(postResponse.status).toBe(201);
 
     let getResponse = await handle(
       new Request("https://test.com/controller/get"),
@@ -232,13 +293,6 @@ describe("Initialization", () => {
 
     expect(patchResponse).toBeDefined();
     expect(patchResponse.status).toBe(204);
-
-    const postResponse: Response = await handle(
-      new Request("https://test.com/controller", { method: "POST" }),
-    );
-
-    expect(postResponse).toBeDefined();
-    expect(postResponse.status).toBe(201);
 
     const putResponse: Response = await handle(
       new Request("https://test.com/controller", { method: "PUT" }),
