@@ -1,10 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { RequestHandler } from "../interfaces/types";
 
 export type HttpMethodMetadata = {
+  methodName: string | symbol;
   path: string;
   httpMethod: string;
-  handler: RequestHandler;
+  getHandler: GetHandler;
 };
+
+export type GetHandler = (
+  container: Record<string, unknown>,
+  controller: object,
+) => RequestHandler;
 
 export type ConfigMetadataProperties = Array<[string, () => unknown]>;
 
@@ -22,9 +30,10 @@ export type ClassDecorator<T extends Class<unknown>> = (
   context: ClassDecoratorContext<T>,
 ) => void;
 
-export type ClassMethodDecorator<
-  T extends (...args: Array<unknown>) => unknown,
-> = (method: T, context: ClassMethodDecoratorContext<unknown, T>) => void;
+export type ClassMethodDecorator<T extends (...args: any) => any> = (
+  method: T,
+  context: ClassMethodDecoratorContext<unknown, T>,
+) => void;
 
 export type ClassAccessorDecorator<T, K> = (
   target: ClassAccessorDecoratorTarget<T, K>,

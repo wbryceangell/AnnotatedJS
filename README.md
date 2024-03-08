@@ -133,8 +133,73 @@ export class StorageService {
 ```
 
 ```typescript
+// nodeCache.ts
+import { AnnotatedCache } from "@fork-git-it/annotatedjs";
+
+export class NodeCache implements AnnotatedCache {
+  private map = new Map<string, Response>();
+
+  async match(request: Request): Promise<Response | undefined> {
+    let response = this.map.get(request.url);
+
+    if (response) {
+      response = new Response(response.body, {
+        headers: { [cacheHeader]: "true" },
+      });
+    }
+
+    return response;
+  }
+
+  async put(request: Request, response: Response): Promise<undefined> {
+    this.map.set(request.url, response);
+  }
+
+  async delete(request: Request): Promise<boolean> {
+    return this.map.delete(request.url);
+  }
+}
+```
+
+```typescript
+// nodeCacheStorage.ts
+import { AnnotatedCacheStorage, CacheStorage } from "@fork-git-it/annotatedjs";
+import { NodeCache } from "./nodeCache";
+
+@CacheStorage()
+class NodeCacheStorage implements AnnotatedCacheStorage {
+  private map = new Map<string, AnnotatedCache>();
+
+  has(cacheName: string): Promise<boolean> {
+    return this.map.has(cacheName);
+  }
+
+  async open(cacheName: string): Promise<AnnotatedCache> {
+    if (this.map.has(cacheName)) {
+      return this.map.get(cacheName) as AnnotatedCache;
+    }
+
+    const cache = new NodeCache();
+    this.map.set(cacheName, cache);
+    return cache;
+  }
+
+  async delete(cacheName: string): Promise<boolean> {
+    return this.map.delete(cacheName);
+  }
+}
+```
+
+```typescript
 // storageController.ts
-import { Controller, Get, Put, Delete } from "@fork-git-it/annotatedjs";
+import {
+  Cache,
+  Controller,
+  Get,
+  Purge,
+  Put,
+  Delete,
+} from "@fork-git-it/annotatedjs";
 import { StorageService } from "./storageService";
 
 @Controller("/storage")
@@ -142,6 +207,7 @@ export class StorageController {
   @Inject(StorageService)
   private accessor storageService: StorageService;
 
+  @Cache("storageCache")
   @Get("/:key")
   async get(req: Request): Promise<Response> {
     const ittyRequest: IRequest = <IRequest>req;
@@ -153,6 +219,7 @@ export class StorageController {
     }
   }
 
+  @Purge("storageCache")
   @Put("/:key")
   async put(req: Request): Promise<Response> {
     const ittyRequest: IRequest = <IRequest>req;
@@ -161,6 +228,7 @@ export class StorageController {
     return new Response(null, { status: 204 });
   }
 
+  @Purge("storageCache")
   @Delete("/:key")
   async delete(req: Request): Promise<Response> {
     const ittyRequest: IRequest = <IRequest>req;

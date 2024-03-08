@@ -34,6 +34,7 @@ describe("initialize", () => {
   itInstantiatesMultipleClasses(keys.configClasses);
   itInstantiatesMultipleClasses(keys.serviceClasses);
   itInstantiatesMultipleClasses(keys.controllerClasses);
+  itInstantiatesMultipleClasses(keys.datastoreClasses);
 
   it("errors if a router class is not in the container", () => {
     expect(() =>
@@ -74,9 +75,8 @@ describe("initialize", () => {
       [keys.router]: router,
     };
 
-    expect(() => initialize({[keys.initializing]: true})).toThrow();
+    expect(() => initialize({ [keys.initializing]: true })).toThrow();
   });
-
 
   it("instantiates cache storage", () => {
     const spy = jest.fn();
@@ -102,12 +102,22 @@ describe("initialize", () => {
         spy(this);
       }
     }
+    class Datastore {
+      constructor() {
+        spy(this);
+      }
+    }
     class Service {
       constructor() {
         spy(this);
       }
     }
     class Router {
+      constructor() {
+        spy(this);
+      }
+    }
+    class CacheStorage {
       constructor() {
         spy(this);
       }
@@ -120,15 +130,19 @@ describe("initialize", () => {
 
     initialize({
       [keys.configClasses]: [Config],
+      [keys.datastoreClasses]: [Datastore],
       [keys.serviceClasses]: [Service],
       [keys.routerClass]: Router,
+      [keys.cacheStorageClass]: CacheStorage,
       [keys.controllerClasses]: [Controller],
       [keys.router]: router,
     });
 
     expect(spy).toHaveBeenNthCalledWith(1, expect.any(Config));
-    expect(spy).toHaveBeenNthCalledWith(2, expect.any(Service));
-    expect(spy).toHaveBeenNthCalledWith(3, expect.any(Router));
-    expect(spy).toHaveBeenNthCalledWith(4, expect.any(Controller));
+    expect(spy).toHaveBeenNthCalledWith(2, expect.any(Datastore));
+    expect(spy).toHaveBeenNthCalledWith(3, expect.any(Service));
+    expect(spy).toHaveBeenNthCalledWith(4, expect.any(Router));
+    expect(spy).toHaveBeenNthCalledWith(5, expect.any(CacheStorage));
+    expect(spy).toHaveBeenNthCalledWith(6, expect.any(Controller));
   });
 });

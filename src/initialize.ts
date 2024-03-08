@@ -51,8 +51,13 @@ import { RequestHandler } from "./interfaces/types";
  * @param container - Object that stores injectables
  */
 export function initialize(container = defaultContainer): RequestHandler {
+  if (isInitializing(container)) {
+    throw new Error("container has already been initialized");
+  }
+
   setGlobal(container, keys.initializing, true);
   instantiateClasses(container, keys.configClasses);
+  instantiateClasses(container, keys.datastoreClasses);
   instantiateClasses(container, keys.serviceClasses);
 
   const RouterClass: Class<AnnotatedRouter> = getGlobal(

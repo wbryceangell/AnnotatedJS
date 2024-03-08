@@ -1,13 +1,11 @@
-import { container as defaultContainer } from "../container/container";
-import { keys } from "../container/keys";
-import { setGlobal } from "../container/utils/setGlobal";
-import { isInitializing } from "../container/utils/isInitializing";
-import { validateContainer } from "../container/utils/validateContainer";
-import { setInjectables } from "./inject/setInjectables";
-import { Class, ClassDecorator } from "./types";
-import { AnnotatedRouter } from "../interfaces/annotatedRouter";
-import { getMetadata } from "./utils/getMetadata";
-import { validateKind } from "./utils/validateKind";
+import { container as defaultContainer } from "../../container/container";
+import { keys } from "../../container/keys";
+import { setGlobal } from "../../container/utils/setGlobal";
+import { validateContainer } from "../../container/utils/validateContainer";
+import { AnnotatedRouter } from "../../interfaces/annotatedRouter";
+import { Class, ClassDecorator } from "../types";
+import { validateKind } from "../utils/validateKind";
+import { getInitializer } from "./getInitializer";
 
 /**
  * A class decorator that defines the router used by controllers
@@ -71,19 +69,7 @@ export const Router = (container = defaultContainer) =>
     const annotationName = `@${Router.name}`;
     validateKind(annotationName, context, "class");
 
-    context.addInitializer(function () {
-      if(isInitializing(container)){
-        console.log("is init");
-        const router = new this();
-        const metadata = getMetadata(annotationName, context);
-        setInjectables(container, router, metadata);
-      
-        // @ts-expect-error we need to use object type but it is actually a class
-        setGlobal(container, context.name, router);
-        } else {
-          console.log("no init");
-        }
-    });
+    context.addInitializer(getInitializer(annotationName, context, container));
 
     setGlobal(container, keys.routerClass, constructor);
   }) as ClassDecorator<Class<AnnotatedRouter>>;

@@ -5,16 +5,20 @@ import {
   initializerFor,
   itAddsClassToArrayInContainer,
   itCreatesClassInstanceInInitHook,
+  itExpectsAValidContainer,
   itHasInitializationHook,
-} from "./utils";
+  itThrowsErrorIfNotUsedOnAClass,
+} from "./utils/classDecorators";
 
 describe("@Config", () => {
   const name = "Config";
   const kind = "class";
 
-  itAddsClassToArrayInContainer(name, Config, keys.configClasses);
-  itHasInitializationHook(name, Config({}));
-  itCreatesClassInstanceInInitHook(name, Config);
+  itExpectsAValidContainer(Config);
+  itThrowsErrorIfNotUsedOnAClass(Config);
+  itAddsClassToArrayInContainer(Config, keys.configClasses);
+  itHasInitializationHook(Config);
+  itCreatesClassInstanceInInitHook(Config);
 
   it("adds properties to the container", () => {
     const key = "key";

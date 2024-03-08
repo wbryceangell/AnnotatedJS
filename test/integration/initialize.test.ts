@@ -2,15 +2,22 @@
 
 import { Router as IttyRouter, RouterType } from "itty-router";
 import {
+  AnnotatedCache,
+  AnnotatedCacheStorage,
+  AnnotatedDatastore,
   AnnotatedRouter,
+  Cache,
+  CacheStorage,
   Config,
   Controller,
+  Datastore,
   Delete,
   Get,
   Inject,
   Patch,
   Post,
   Property,
+  Purge,
   Put,
   RequestHandler,
   Router,
@@ -103,19 +110,115 @@ describe("Initialization", () => {
       }
     }
 
-    const expectedGetBody = "get";
+    const cacheHeader = "cached";
+
+    class TestCache implements AnnotatedCache {
+      private map = new Map<string, Response>();
+
+      async match(request: Request): Promise<Response | undefined> {
+        let response = this.map.get(request.url);
+
+        if (response) {
+          response = new Response(response.body, {
+            headers: { [cacheHeader]: "true" },
+          });
+        }
+
+        return response;
+      }
+
+      async put(request: Request, response: Response): Promise<undefined> {
+        this.map.set(request.url, response);
+      }
+
+      async delete(request: Request): Promise<boolean> {
+        return this.map.delete(request.url);
+      }
+    }
+
+    @CacheStorage(container)
+    class TestCacheStorage implements AnnotatedCacheStorage {
+      private map = new Map<string, AnnotatedCache>();
+
+      async has(cacheName: string): Promise<boolean> {
+        return this.map.has(cacheName);
+      }
+
+      async open(cacheName: string): Promise<AnnotatedCache> {
+        if (this.map.has(cacheName)) {
+          return this.map.get(cacheName) as AnnotatedCache;
+        }
+
+        const cache = new TestCache();
+        this.map.set(cacheName, cache);
+        return cache;
+      }
+
+      async delete(cacheName: string): Promise<boolean> {
+        return this.map.delete(cacheName);
+      }
+    }
+
+    @Datastore(container)
+    class TestDatastore implements AnnotatedDatastore<string> {
+      private map = new Map<string, string>();
+
+      length: number = 0;
+
+      async clear(): Promise<undefined> {
+        this.map.clear();
+        this.length = 0;
+      }
+
+      async getItem(keyName: string): Promise<string | null> {
+        return this.map.get(keyName) || null;
+      }
+
+      async key(index: number): Promise<string | null> {
+        return [...this.map.keys()].at(index) || null;
+      }
+
+      async removeItem(keyName: string): Promise<undefined> {
+        const keyExisted = this.map.has(keyName);
+
+        this.map.delete(keyName);
+
+        if (!keyExisted) {
+          this.length--;
+        }
+      }
+
+      async setItem(keyName: string, value: string): Promise<undefined> {
+        const keyExisted = this.map.has(keyName);
+
+        this.map.set(keyName, value);
+
+        if (!keyExisted) {
+          this.length++;
+        }
+      }
+    }
+
     const expectedGetAllBody = "getAll";
+    const cacheName = "cacheName";
 
     @Controller("/controller", container)
     class TestController {
+      private static KEY = "key";
+
+      @Inject(TestDatastore)
+      private accessor datastore: AnnotatedDatastore<string>;
+
       @Get()
       async getAll() {
         return new Response(expectedGetAllBody);
       }
 
+      @Cache(cacheName)
       @Get("get")
       async get() {
-        return new Response(expectedGetBody);
+        const text = await this.datastore.getItem(TestController.KEY);
+        return new Response(text);
       }
 
       @Delete()
@@ -129,10 +232,13 @@ describe("Initialization", () => {
       }
 
       @Post()
-      async post() {
+      async post(req: Request) {
+        const text = await req.text();
+        await this.datastore.setItem(TestController.KEY, text);
         return new Response(null, { status: 201 });
       }
 
+      @Purge(cacheName)
       @Put()
       async put() {
         return new Response(null, { status: 204 });
@@ -149,10 +255,27 @@ describe("Initialization", () => {
     const getAllBody = await getAllResponse.text();
     expect(getAllBody).toBe(expectedGetAllBody);
 
-    const getResponse = await handle(
+    const expectedGetBody = "get";
+
+    const postResponse: Response = await handle(
+      new Request("https://test.com/controller", {
+        method: "POST",
+        body: expectedGetBody,
+      }),
+    );
+
+    expect(postResponse).toBeDefined();
+    expect(postResponse.status).toBe(201);
+
+    let getResponse = await handle(
       new Request("https://test.com/controller/get"),
     );
     expect(getResponse).toBeDefined();
+    expect(getResponse.headers.get(cacheHeader)).toBeFalsy();
+
+    getResponse = await handle(new Request("https://test.com/controller/get"));
+    expect(getResponse).toBeDefined();
+    expect(getResponse.headers.get(cacheHeader)).toBeTruthy();
 
     const getBody = await getResponse.text();
     expect(getBody).toBe(expectedGetBody);
@@ -171,22 +294,19 @@ describe("Initialization", () => {
     expect(patchResponse).toBeDefined();
     expect(patchResponse.status).toBe(204);
 
-    const postResponse: Response = await handle(
-      new Request("https://test.com/controller", { method: "POST" }),
-    );
-
-    expect(postResponse).toBeDefined();
-    expect(postResponse.status).toBe(201);
-
     const putResponse: Response = await handle(
       new Request("https://test.com/controller", { method: "PUT" }),
     );
 
     expect(putResponse).toBeDefined();
     expect(putResponse.status).toBe(204);
+
+    getResponse = await handle(new Request("https://test.com/controller/get"));
+    expect(getResponse).toBeDefined();
+    expect(getResponse.headers.get(cacheHeader)).toBeFalsy();
   });
 
-  it("Initialize twice expects returns error on second init", () =>{
+  it("Initialize twice expects returns error on second init", () => {
     const container = {};
 
     @Router(container)

@@ -23,7 +23,7 @@ describe("Service", () => {
       if (isInitializing(container)) {
         return;
       }
-      
+
       @Service(container)
       class TestService {}
 
