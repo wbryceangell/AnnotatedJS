@@ -13,7 +13,9 @@ import {
   Datastore,
   Delete,
   Get,
+  Head,
   Inject,
+  Options,
   Patch,
   Post,
   Property,
@@ -34,6 +36,12 @@ describe("Initialization", () => {
 
     @Router(container)
     class TestRouter implements AnnotatedRouter {
+      options(_uri: string, _handler: RequestHandler): AnnotatedRouter {
+        throw new Error("Method not implemented.");
+      }
+      head(_uri: string, _handler: RequestHandler): AnnotatedRouter {
+        throw new Error("Method not implemented.");
+      }
       get(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
       }
@@ -76,13 +84,19 @@ describe("Initialization", () => {
       @Inject("IttyRouter")
       private accessor ittyRouter: RouterType;
 
-      public get(uri: string, handler: RequestHandler): AnnotatedRouter {
-        this.ittyRouter.get(uri, handler);
+      options(uri: string, handler: RequestHandler): AnnotatedRouter {
+        this.ittyRouter.options(uri, handler);
         return this;
       }
 
-      handle(request: Request) {
-        return this.ittyRouter.handle(request);
+      head(uri: string, handler: RequestHandler): AnnotatedRouter {
+        this.ittyRouter.head(uri, handler);
+        return this;
+      }
+
+      get(uri: string, handler: RequestHandler): AnnotatedRouter {
+        this.ittyRouter.get(uri, handler);
+        return this;
       }
 
       put(uri: string, handler: RequestHandler): AnnotatedRouter {
@@ -107,6 +121,10 @@ describe("Initialization", () => {
 
       all(_uri: string, _handler: RequestHandler): AnnotatedRouter {
         throw new Error("Method not implemented.");
+      }
+
+      handle(request: Request) {
+        return this.ittyRouter.handle(request);
       }
     }
 
@@ -201,6 +219,7 @@ describe("Initialization", () => {
 
     const expectedGetAllBody = "getAll";
     const cacheName = "cacheName";
+    const allowedMethods = "OPTIONS, HEAD, GET, POST, PUT, PATCH, DELETE";
 
     @Controller("/controller", container)
     class TestController {
@@ -208,6 +227,19 @@ describe("Initialization", () => {
 
       @Inject(TestDatastore)
       private accessor datastore: AnnotatedDatastore<string>;
+
+      @Options()
+      async options() {
+        return new Response(null, {
+          status: 204,
+          headers: { Allow: allowedMethods },
+        });
+      }
+
+      @Head()
+      async head() {
+        return new Response(null, { status: 204 });
+      }
 
       @Get()
       async getAll() {
@@ -246,6 +278,19 @@ describe("Initialization", () => {
     }
 
     const handle = initialize(container);
+
+    const optionsResponse = await handle(
+      new Request("https://test.com/controller", { method: "OPTIONS" }),
+    );
+    expect(optionsResponse).toBeDefined();
+    expect(optionsResponse.status).toBe(204);
+    expect(optionsResponse.headers.get("Allow")).toBe(allowedMethods);
+
+    const headResponse = await handle(
+      new Request("https://test.com/controller", { method: "HEAD" }),
+    );
+    expect(headResponse).toBeDefined();
+    expect(headResponse.status).toBe(204);
 
     const getAllResponse = await handle(
       new Request("https://test.com/controller"),

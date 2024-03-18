@@ -21,6 +21,8 @@ import { getInitializer } from "./getInitializer";
  *   Cache,
  *   Controller,
  *   Get,
+ *   Head,
+ *   Options,
  *   Purge,
  *   Put,
  *   Post,
@@ -30,8 +32,15 @@ import { getInitializer } from "./getInitializer";
  *
  * @Controller("/items")
  * export class ExampleController {
+ *   @Options()
+ *   async allowedMethods(req: Request): Promise<Response> {}
+ *
  *   @Get()
  *   async getItems(req: Request): Promise<Response> {}
+ *
+ *   @Cache("cacheName")
+ *   @Head("/:id")
+ *   async headItem(req: Request): Promise<Response> {}
  *
  *   @Cache("cacheName")
  *   @Get("/:id")

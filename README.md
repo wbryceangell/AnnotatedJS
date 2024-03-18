@@ -38,42 +38,78 @@ npm install @fork-git-it/annotatedjs
 
 ## Example
 
+A trivial example of a local storage API in a service worker
+
 ```typescript
-// exampleConfig.ts
-import { Config, Router } from "@fork-git-it/annotatedjs";
+// workerConfig.ts
+import { Config } from "@fork-git-it/annotatedjs";
 import { Router as IttyRouter } from "itty-router";
 
 @Config()
-export class ExampleConfig {
+export class WorkerConfig {
   @Property("IttyRouter")
   getIttyRouter() {
     return IttyRouter();
-  }
-
-  @Property("Storage")
-  getStorage(): Map<string, string> {
-    return new Map();
   }
 }
 ```
 
 ```typescript
-// exampleRouter.ts
+// localDatastore.ts
+import { AnnotatedDatastore, Datastore } from "@fork-git-it/annotatedjs";
+
+@Datastore()
+class LocalDatastore implements AnnotatedDatastore<string> {
+  length: number;
+
+  async clear(): Promise<undefined> {
+    localStorage.clear();
+    this.length = localStorage.length;
+  }
+
+  async getItem(keyName: string): Promise<string | null> {
+    return localStorage.getItem(keyName);
+  }
+
+  async key(index: number): Promise<string | null> {
+    return localStorage.key(index);
+  }
+
+  async removeItem(keyName: string): Promise<undefined> {
+    localStorage.removeItem(keyName);
+    this.length = localStorage.length;
+  }
+
+  async setItem(keyName: string, value: string): Promise<undefined> {
+    localStorage.setItem(keyName, value);
+    this.length = localStorage.length;
+  }
+}
+```
+
+```typescript
+// workerRouter.ts
 import { AnnotatedRouter, Router } from "@fork-git-it/annotatedjs";
 import { type RouterType } from "itty-router";
 
 @Router()
-class ExampleRouter implements AnnotatedRouter {
+class WorkerRouter implements AnnotatedRouter {
   @Inject("IttyRouter")
   private accessor ittyRouter: RouterType;
+
+  options(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.options(uri, handler);
+    return this;
+  }
+
+  head(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.head(uri, handler);
+    return this;
+  }
 
   get(uri: string, handler: RequestHandler): AnnotatedRouter {
     this.ittyRouter.get(uri, handler);
     return this;
-  }
-
-  handle(request: Request) {
-    return this.ittyRouter.handle(request);
   }
 
   put(uri: string, handler: RequestHandler): AnnotatedRouter {
@@ -100,92 +136,59 @@ class ExampleRouter implements AnnotatedRouter {
     this.ittyRouter.all(uri, handler);
     return this;
   }
+
+  handle(request: Request) {
+    return this.ittyRouter.handle(request);
+  }
 }
 ```
 
 ```typescript
 // storageService.ts
-import { Inject, Service } from "@fork-git-it/annotatedjs";
+import { AnnotatedDatastore, Inject, Service } from "@fork-git-it/annotatedjs";
+import { LocalDatastore } from "./localDatastore";
 
 @Service()
 export class StorageService {
-  @Inject("Storage")
-  private accessor storage: Map<string, string>;
+  @Inject(LocalDatastore)
+  private accessor datastore: AnnotatedDatastore<string>;
 
-  create(key: string, value: any) {
-    this.storage.set(key, JSON.stringify(value));
+  async create(key: string, value: any) {
+    await this.datastore.setItem(key, JSON.stringify(value));
   }
 
-  read(key: string) {
-    const value = this.storage.get(key);
+  async read(key: string) {
+    const value = await this.datastore.getItem(key);
     if (!value) throw new Error(`no value for ${key} in storage`);
     return JSON.parse(value);
   }
 
-  update(key: string, value: any) {
-    this.storage.set(key, JSON.stringify(value));
+  async update(key: string, value: any) {
+    await this.datastore.setItem(key, JSON.stringify(value));
   }
 
-  delete(key: string) {
-    this.storage.delete(key);
-  }
-}
-```
-
-```typescript
-// nodeCache.ts
-import { AnnotatedCache } from "@fork-git-it/annotatedjs";
-
-export class NodeCache implements AnnotatedCache {
-  private map = new Map<string, Response>();
-
-  async match(request: Request): Promise<Response | undefined> {
-    let response = this.map.get(request.url);
-
-    if (response) {
-      response = new Response(response.body, {
-        headers: { [cacheHeader]: "true" },
-      });
-    }
-
-    return response;
-  }
-
-  async put(request: Request, response: Response): Promise<undefined> {
-    this.map.set(request.url, response);
-  }
-
-  async delete(request: Request): Promise<boolean> {
-    return this.map.delete(request.url);
+  async delete(key: string) {
+    await this.datastore.removeItem(key);
   }
 }
 ```
 
 ```typescript
-// nodeCacheStorage.ts
+// workerCacheStorage.ts
 import { AnnotatedCacheStorage, CacheStorage } from "@fork-git-it/annotatedjs";
-import { NodeCache } from "./nodeCache";
 
 @CacheStorage()
-class NodeCacheStorage implements AnnotatedCacheStorage {
-  private map = new Map<string, AnnotatedCache>();
-
+class WorkerCacheStorage implements AnnotatedCacheStorage {
   has(cacheName: string): Promise<boolean> {
-    return this.map.has(cacheName);
+    return caches.has(cacheName);
   }
 
   async open(cacheName: string): Promise<AnnotatedCache> {
-    if (this.map.has(cacheName)) {
-      return this.map.get(cacheName) as AnnotatedCache;
-    }
-
-    const cache = new NodeCache();
-    this.map.set(cacheName, cache);
-    return cache;
+    return caches.open(cacheName);
   }
 
   async delete(cacheName: string): Promise<boolean> {
-    return this.map.delete(cacheName);
+    return caches.delete(cacheName);
   }
 }
 ```
@@ -242,20 +245,15 @@ export class StorageController {
 // index.ts
 
 import { initialize } from "@fork-git-it/annotatedjs";
-import { createServerAdapter } from "@whatwg-node/server";
-import { createServer } from "http";
-import "isomorphic-fetch";
+import "./workerConfig";
+import "./localDatastore";
+import "./storageController";
 
-import "./exampleConfig.ts";
-import "./exampleRouter.ts";
-import "./storageService.ts";
-import "./storageController.ts";
-
-const handleRequest = initialize();
-const ittyServer = createServerAdapter(handleRequest);
-const httpServer = createServer(ittyServer);
-httpServer.listen(3001);
-console.log("listening at https://localhost:3001");
+const requestHandler = initialize();
+const eventHandler = (evt: Event) => {
+  evt.respondWith(requestHandler(evt.request));
+};
+addEventListener("fetch", eventHandler);
 ```
 
 ## Containers
