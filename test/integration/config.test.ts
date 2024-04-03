@@ -1,72 +1,35 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Config, Property } from "../../src";
 
 describe("Config", () => {
-  it("should not work when getRouter is missing", () => {
+  it("should not work when @Property arg is not a string", () => {
     expect(() => {
-      // @ts-ignore
-      @Config
-      class Configuration {}
-    }).toThrow();
-  });
-
-  it("should not work when router is not an object", () => {
-    expect(() => {
-      @Config
+      @Config({})
       class Configuration {
-        getRouter() {
-          return null;
-        }
-      }
-    }).toThrow();
-  });
-
-  it("should work when router is an object", () => {
-    expect(() => {
-      @Config
-      class Configuration {
-        getRouter() {
-          return {};
-        }
-      }
-    }).not.toThrow();
-  });
-
-  it("should not work when @Property arg is not a symbol", () => {
-    expect(() => {
-      @Config
-      class Configuration {
-        getRouter() {
-          return {};
-        }
-
-        //@ts-ignore
-        @Property("") getProp() {}
+        // @ts-expect-error property arg is not a string
+        @Property(0)
+        getProp() {}
       }
     }).toThrow();
   });
 
   it("should not work when property is undefined", () => {
     expect(() => {
-      @Config
+      @Config({})
       class Configuration {
-        getRouter() {
-          return {};
-        }
-
-        @Property(Symbol.for("prop")) getProp() {}
+        @Property("prop")
+        getProp() {}
       }
     }).toThrow();
   });
 
   it("should work when property is null", () => {
     expect(() => {
-      @Config
+      @Config({})
       class Configuration {
-        getRouter() {
-          return {};
-        }
-
-        @Property(Symbol.for("prop")) getProp() {
+        @Property("prop")
+        getProp() {
           return null;
         }
       }
@@ -75,14 +38,45 @@ describe("Config", () => {
 
   it("should not work when @Property is not used on a function", () => {
     expect(() => {
-      @Config
+      @Config({})
       class Configuration {
-        getRouter() {
-          return {};
+        // @ts-expect-error annotation used on a non-method
+        @Property("prop")
+        private prop: unknown;
+      }
+    }).toThrow();
+  });
+
+  it("should work when a property is used in another property", () => {
+    expect(() => {
+      @Config({})
+      class Configuration {
+        @Property("propOne")
+        getPropOne() {
+          return null;
         }
 
-        // @ts-ignore
-        @Property(Symbol.for("prop")) private prop: any;
+        @Property("propTwo")
+        getPropTwo() {
+          return this.getPropOne();
+        }
+      }
+    }).not.toThrow();
+  });
+
+  it("should not work when property tries to access another property before it is declared", () => {
+    expect(() => {
+      @Config({})
+      class Configuration {
+        @Property("propOne")
+        getPropOne() {
+          return this.getPropTwo();
+        }
+
+        @Property("propTwo")
+        getPropTwo() {
+          return null;
+        }
       }
     }).toThrow();
   });

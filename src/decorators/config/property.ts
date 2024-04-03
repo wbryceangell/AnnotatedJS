@@ -1,22 +1,53 @@
-import { propertiesKey } from "../../keys";
-import getProperties from "./getProperties";
+import { keys } from "../../container/keys";
+import {
+  ClassMethodDecorator,
+  PropertyMethod,
+  type ConfigMetadataProperties,
+} from "../types";
+import { getMetadata } from "../utils/getMetadata";
+import { getMetadataProperty } from "../utils/getMetadataProperty";
+import { setMetadataProperty } from "../utils/setMetadataProperty";
+import { validateKind } from "../utils/validateKind";
+import { MetadataProperties } from "./metadataProperties";
 
-export const Property = (property: symbol) =>
-  ((config, methodName) => {
-    if (typeof property !== "symbol")
+/**
+ * A class method decorator that specifies an injectable property
+ *
+ * @see {@link Config} for example
+ *
+ * @typeParam T - Return type of the annotated method
+ *
+ * @param property - A unique string used to represent the property
+ *
+ */
+export const Property = <T>(property: string) =>
+  ((method, context) => {
+    const annotationName = `@${Property.name}`;
+    validateKind(annotationName, context, "method");
+
+    if (typeof property !== "string") {
       throw new Error(
         `Invalid property argument ${JSON.stringify(
           property,
-        )}. It must be a symbol`,
+        )}. It must be a string`,
       );
-    // @ts-ignore
-    if (typeof config[methodName] !== "function")
-      throw new Error("Property must be used on a Config method");
-    const properties = getProperties(config);
-    properties.push({ property, methodName });
-    Reflect.defineMetadata(propertiesKey, properties, config);
-  }) as (
-    target: Object,
-    propertyKey: string | symbol,
-    descriptor: TypedPropertyDescriptor<() => any>,
-  ) => TypedPropertyDescriptor<() => any> | void;
+    }
+
+    if (Object.values(keys).includes(property)) {
+      throw new Error(`Property ${property} is a reserved key`);
+    }
+
+    const metadata = getMetadata(annotationName, context);
+    const properties = <ConfigMetadataProperties>(
+      getMetadataProperty(metadata, MetadataProperties.properties, [])
+    );
+
+    if (
+      properties.find(([existingProperty]) => existingProperty === property)
+    ) {
+      throw new Error(`Property ${property} is being set more than once`);
+    }
+
+    properties.push([property, method]);
+    setMetadataProperty(metadata, MetadataProperties.properties, properties);
+  }) as ClassMethodDecorator<PropertyMethod<T>>;

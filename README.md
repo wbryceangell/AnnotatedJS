@@ -14,189 +14,203 @@ AnnotatedJS is a lightweight framework for building JavaScript backends. It is b
 
 The framework is heavily inspired by <a href="https://spring.io/" target="_blank">Spring</a> and <a href="https://nestjs.com/" target="_blank">NestJS</a>.
 
+## Documentation
+
+Full documentation can be found on the [GitHub page](https://fork-git-it.github.io/AnnotatedJS/)
+
 ## Decorators
 
-This framework relies on the <a href="https://github.com/tc39/proposal-decorators" target="_blank">decorators</a> experimental JavaScript feature. Here are a some guides to start using it in:
+This framework relies on the <a href="https://github.com/tc39/proposal-decorators" target="_blank">decorators</a> experimental JavaScript feature. It is recommended to use [Babel](https://babeljs.io/docs/babel-plugin-proposal-decorators) to compile codebases that include AnnotatedJS.
 
-- [JavaScript](https://babeljs.io/docs/babel-plugin-proposal-decorators)
-  - Use "legacy" version of the decorator proposal
-- [TypeScript](https://www.typescriptlang.org/docs/handbook/decorators.html)
+## Installation
 
-## Initialization
+Create a [GitHub Personal Access Token](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry) and use it to login to npm via:
 
-```typescript
-// service worker entrypoint
-
-import { initialize } from "@fork-git-it/annotatedjs";
-// import config and all controllers here
-
-const requestHandler = initialize();
-const eventHandler = (evt: Event) => {
-  evt.respondWith(requestHandler(evt.request));
-};
-addEventListener("fetch", eventHandler);
+```bash
+npm login --scope=@fork-git-it --registry=https://npm.pkg.github.com
 ```
 
-```typescript
-// node entrypoint
+Then proceed to install the npm package via:
 
-import { initialize } from "@fork-git-it/annotatedjs";
-import { createServerAdapter } from "@whatwg-node/server";
-import { createServer } from "http";
-import "isomorphic-fetch";
-// import config and all controllers here
-
-const requestHandler = initialize();
-const ittyServer = createServerAdapter(requestHandler);
-const httpServer = createServer(ittyServer);
-httpServer.listen(3001);
-console.log("listening at https://localhost:3001");
+```bash
+npm install @fork-git-it/annotatedjs
 ```
 
-AnnotatedJS starts with the `initialize()` method. This method will return back a request handler. The request handler can then be used in different runtimes such as a service worker, or node (see above).
+## Example
 
-## Annotations
-
-### [@Config](#config-1)
-
-### [@Controller](#controller-1)
-
-### [@Service](#service-1)
-
-### [@Inject](#inject-1)
-
-## @Config
+A trivial example of a local storage API in a service worker
 
 ```typescript
-import { Config, Router } from "@fork-git-it/annotatedjs";
-
-@Config
-export class ExampleConfig {
-  getRouter(): Router {
-    // return Router implementation
-  }
-
-  @Property(Symbol.for("Injected"))
-  getInjected(): any {
-    // return some value to be injected
-  }
-}
-```
-
-`@Config` defines values that will be available for injection. It requires the `getRouter()` method at minimum, see [Router](#router).
-
-`@Config` encapsulates `@Property` annotations. `@Property` takes a symbol as an argument and injects the returned value of the method using that symbol, see [@Inject](#inject-1).
-
-## @Controller
-
-```typescript
-import {
-  Controller,
-  Get,
-  Put,
-  Post,
-  Patch,
-  Delete,
-} from "@fork-git-it/annotatedjs";
-
-@Controller("/items")
-export class ExampleController {
-  @Get()
-  async getItems(req: Request): Promise<Response> {}
-
-  @Get("/:id")
-  async getItem(req: Request): Promise<Response> {}
-
-  @Put("/:id")
-  async putItem(req: Request): Promise<Response> {}
-
-  @Post("/:id")
-  async postItem(req: Request): Promise<Response> {}
-
-  @Patch("/:id")
-  async patchItem(req: Request): Promise<Response> {}
-
-  @Delete("/:id")
-  async deleteItem(req: Request): Promise<Response> {}
-}
-```
-
-`@Controller` represents a specific API entrypoint. It expects the API path as a parameter.
-
-The HTTP method annotations `@Get`, `@Put`, `@Post`, `@Patch`, `@Delete` take the API endpoint path as an optional paramater.
-
-## @Service
-
-```typescript
-import { Service } from "@fork-git-it/annotatedjs";
-
-@Service
-export class ExampleService {
-  doSomething() {}
-}
-```
-
-`@Service` will specify the class as one that can be injeted. The class is used as the lookup when injecting the service, see [@Inject](#inject-1).
-
-## @Inject
-
-`@Inject` is the annotation that allows for injection across classes. Here is a full example:
-
-```typescript
-import { Config, Router } from "@fork-git-it/annotatedjs";
+// workerConfig.ts
+import { Config } from "@fork-git-it/annotatedjs";
 import { Router as IttyRouter } from "itty-router";
 
-@Config
-export class ExampleConfig {
-  getRouter(): Router {
+@Config()
+export class WorkerConfig {
+  @Property("IttyRouter")
+  getIttyRouter() {
     return IttyRouter();
   }
+}
+```
 
-  @Property(Symbol.for("Storage"))
-  getStorage(): Map<string, string> {
-    return new Map();
+```typescript
+// localDatastore.ts
+import { AnnotatedDatastore, Datastore } from "@fork-git-it/annotatedjs";
+
+@Datastore()
+class LocalDatastore implements AnnotatedDatastore<string> {
+  length: number;
+
+  async clear(): Promise<undefined> {
+    localStorage.clear();
+    this.length = localStorage.length;
+  }
+
+  async getItem(keyName: string): Promise<string | null> {
+    return localStorage.getItem(keyName);
+  }
+
+  async key(index: number): Promise<string | null> {
+    return localStorage.key(index);
+  }
+
+  async removeItem(keyName: string): Promise<undefined> {
+    localStorage.removeItem(keyName);
+    this.length = localStorage.length;
+  }
+
+  async setItem(keyName: string, value: string): Promise<undefined> {
+    localStorage.setItem(keyName, value);
+    this.length = localStorage.length;
+  }
+}
+```
+
+```typescript
+// workerRouter.ts
+import { AnnotatedRouter, Router } from "@fork-git-it/annotatedjs";
+import { type RouterType } from "itty-router";
+
+@Router()
+class WorkerRouter implements AnnotatedRouter {
+  @Inject("IttyRouter")
+  private accessor ittyRouter: RouterType;
+
+  options(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.options(uri, handler);
+    return this;
+  }
+
+  head(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.head(uri, handler);
+    return this;
+  }
+
+  get(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.get(uri, handler);
+    return this;
+  }
+
+  put(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.put(uri, handler);
+    return this;
+  }
+
+  post(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.post(uri, handler);
+    return this;
+  }
+
+  patch(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.patch(uri, handler);
+    return this;
+  }
+
+  delete(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.delete(uri, handler);
+    return this;
+  }
+
+  all(uri: string, handler: RequestHandler): AnnotatedRouter {
+    this.ittyRouter.all(uri, handler);
+    return this;
+  }
+
+  handle(request: Request) {
+    return this.ittyRouter.handle(request);
   }
 }
 ```
 
 ```typescript
 // storageService.ts
-import { Inject, Service } from "@fork-git-it/annotatedjs";
+import { AnnotatedDatastore, Inject, Service } from "@fork-git-it/annotatedjs";
+import { LocalDatastore } from "./localDatastore";
 
-@Service
+@Service()
 export class StorageService {
-  @Inject(Symbol.for("Storage"))
-  private storage!: Map<string, string>;
+  @Inject(LocalDatastore)
+  private accessor datastore: AnnotatedDatastore<string>;
 
-  create(key: string, value: any) {
-    this.storage.set(key, JSON.stringify(value));
+  async create(key: string, value: any) {
+    await this.datastore.setItem(key, JSON.stringify(value));
   }
 
-  read(key: string) {
-    const value = this.storage.get(key);
+  async read(key: string) {
+    const value = await this.datastore.getItem(key);
     if (!value) throw new Error(`no value for ${key} in storage`);
     return JSON.parse(value);
   }
 
-  update(key: string, value: any) {
-    this.storage.set(key, JSON.stringify(value));
+  async update(key: string, value: any) {
+    await this.datastore.setItem(key, JSON.stringify(value));
   }
 
-  delete(key: string) {
-    this.storage.delete(key);
+  async delete(key: string) {
+    await this.datastore.removeItem(key);
   }
 }
 ```
 
 ```typescript
-import { Controller, Get, Put, Delete } from "@fork-git-it/annotatedjs";
+// workerCacheStorage.ts
+import { AnnotatedCacheStorage, CacheStorage } from "@fork-git-it/annotatedjs";
+
+@CacheStorage()
+class WorkerCacheStorage implements AnnotatedCacheStorage {
+  has(cacheName: string): Promise<boolean> {
+    return caches.has(cacheName);
+  }
+
+  async open(cacheName: string): Promise<AnnotatedCache> {
+    return caches.open(cacheName);
+  }
+
+  async delete(cacheName: string): Promise<boolean> {
+    return caches.delete(cacheName);
+  }
+}
+```
+
+```typescript
+// storageController.ts
+import {
+  Cache,
+  Controller,
+  Get,
+  Purge,
+  Put,
+  Delete,
+} from "@fork-git-it/annotatedjs";
 import { StorageService } from "./storageService";
 
 @Controller("/storage")
 export class StorageController {
   @Inject(StorageService)
-  private storageService!: StorageService;
+  private accessor storageService: StorageService;
 
+  @Cache("storageCache")
   @Get("/:key")
   async get(req: Request): Promise<Response> {
     const ittyRequest: IRequest = <IRequest>req;
@@ -208,6 +222,7 @@ export class StorageController {
     }
   }
 
+  @Purge("storageCache")
   @Put("/:key")
   async put(req: Request): Promise<Response> {
     const ittyRequest: IRequest = <IRequest>req;
@@ -216,6 +231,7 @@ export class StorageController {
     return new Response(null, { status: 204 });
   }
 
+  @Purge("storageCache")
   @Delete("/:key")
   async delete(req: Request): Promise<Response> {
     const ittyRequest: IRequest = <IRequest>req;
@@ -225,11 +241,24 @@ export class StorageController {
 }
 ```
 
-`@Inject` accepts two different types of arguments: a symbol or a class. The `StorageService` class above uses a Symbol to get the `Storage` instance. The `StorageController` class uses the `StorageService` class as the injection argument.
+```typescript
+// index.ts
 
-## Router
+import { initialize } from "@fork-git-it/annotatedjs";
+import "./workerConfig";
+import "./localDatastore";
+import "./storageController";
 
-`Router` is an interface that is exposed by the framework. The `@Config` class expects the `getRouter()` method to return an implementation that conforms to the interface. The examples above uses [itty-router](https://github.com/kwhitley/itty-router).
+const requestHandler = initialize();
+const eventHandler = (evt: Event) => {
+  evt.respondWith(requestHandler(evt.request));
+};
+addEventListener("fetch", eventHandler);
+```
+
+## Containers
+
+AnnotatedJS utilizes a container object to store globally configured values. The framework sets up a container by default but the `initialize` function and class-level annotations also accept a container object as an argument. This means that multiple containers can be configured if necessary. The container TypeScript type is `Record<string, unknown>`.
 
 ## Attributions
 

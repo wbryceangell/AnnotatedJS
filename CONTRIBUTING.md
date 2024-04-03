@@ -21,3 +21,9 @@ Always write a clear log message for your commits. One-line messages are fine fo
 AnnotatedJS uses the default [prettier](https://prettier.io/) formatter. The command `npm run format` will automatically format the codebase.
 
 Please bump the version number of the package based on the type of PR (Feature or Fix). Also be sure that the package-lock.json is updated as well!
+
+## Documentation
+
+AnnotatedJS follows [TSDoc](https://tsdoc.org) standards and utilizes [TypeDoc](https://typedoc.org). The documentation can be generated using the `npm run docs` command. The docs will be generated in the pipeline when merging to master.
+
+Please be sure to update or add any necessary documentation when making changes.

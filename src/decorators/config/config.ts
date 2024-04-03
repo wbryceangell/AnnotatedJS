@@ -1,20 +1,57 @@
-import setGlobal from "../../global/utils/setGlobal";
-import { routerKey } from "../../keys";
-import { ConfigConstructor } from "../types";
-import getProperties from "./getProperties";
+import { container as defaultContainer } from "../../container/container";
+import { keys } from "../../container/keys";
+import { validateContainer } from "../../container/utils/validateContainer";
+import type { Class, ClassDecorator } from "../types";
+import { addClassToContainer } from "../utils/addClassToContainer";
+import { validateKind } from "../utils/validateKind";
+import { getInitializer } from "./getInitializer";
 
-export const Config = ({ prototype }: ConfigConstructor) => {
-  if (!prototype.getRouter) throw new Error("Config getRouter must be defined");
-  const router = prototype.getRouter.call(prototype);
-  if (router === null || typeof router !== "object")
-    throw new Error("Config router must be an object");
-  setGlobal(routerKey, router);
-  const properties = getProperties(prototype);
-  for (const { property, methodName } of properties) {
-    // @ts-ignore
-    const propertyValue = prototype[methodName].call(prototype);
-    if (propertyValue === undefined)
-      throw new Error(`Config property ${property.toString()} is undefined`);
-    setGlobal(property, propertyValue);
-  }
-};
+/**
+ * A class decorator that encapsulates injectable properties
+ *
+ * @remarks
+ *
+ * `@Config` defines values that will be available for injection
+ *
+ * `@Config` encapsulates `@Property` annotations. `@Property` takes a string as an argument and injects the returned value of the method using that string
+ *
+ * Properties may also use other properties in the config as long as they are declared in order
+ *
+ * @example
+ * ```ts
+ * import { Config } from "@fork-git-it/annotatedjs";
+ *
+ * @Config()
+ * export class ExampleConfig {
+ *   @Property("Injected")
+ *   getInjected(): unknown {
+ *     // return some value to be injected
+ *   }
+ *
+ *   @Property("AnotherInjected")
+ *   getAnotherInjected(): unknown {
+ *     this.getInjected(); // will return singleton
+ *     // return value to be injected
+ *   }
+ *}
+ * ```
+ *
+ * @typeParam T - Type of the annotated class
+ *
+ * @param container - Object that stores injectables
+ */
+export const Config = <T extends Class<object>>(
+  container: Record<string, Array<T>> = defaultContainer,
+) =>
+  ((constructor, context) => {
+    validateContainer(container);
+
+    const annotationName = `@${Config.name}`;
+    validateKind(annotationName, context, "class");
+
+    context.addInitializer(
+      getInitializer<T>(annotationName, context, container),
+    );
+
+    addClassToContainer(container, keys.configClasses, constructor);
+  }) as ClassDecorator<T>;
