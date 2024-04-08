@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./logo.svg" height="150" alt="AnnotatedJS logo">
+  <img src="./logo.svg" height="125" alt="AnnotatedJS logo">
 </p>
 <p align="center">A JavaScript framework for building backends with annotations.</p>
 <p align="center">
