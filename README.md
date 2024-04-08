@@ -1,5 +1,14 @@
 <p align="center">
-  <img src="https://github.com/Fork-Git-It/AnnotatedJS/assets/11467984/c11a3cb2-4fe9-4656-9c1c-24626352b4f0" width="120" alt="AnnotatedJS Logo" />
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="150" height="150">
+    <circle cx="12" cy="12" r="12" fill="#f7df1e" />
+    <defs>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap')
+        </style>
+    </defs>
+    <text x="50%" y="52%" fill="#fff" stroke="#fff" font-family="Nunito" text-anchor="middle"
+        dominant-baseline="middle">@</text>
+  </svg>
 </p>
 <p align="center">A JavaScript framework for building backends with annotations.</p>
 <p align="center">
@@ -259,10 +268,6 @@ addEventListener("fetch", eventHandler);
 ## Containers
 
 AnnotatedJS utilizes a container object to store globally configured values. The framework sets up a container by default but the `initialize` function and class-level annotations also accept a container object as an argument. This means that multiple containers can be configured if necessary. The container TypeScript type is `Record<string, unknown>`.
-
-## Attributions
-
-Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect"> Pixel perfect </a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 
 ## License
 
