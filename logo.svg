@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="150" height="150">
+    <circle cx="12" cy="12" r="12" fill="#f7df1e" />
+    <defs>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap')
+        </style>
+    </defs>
+    <text x="50%" y="52%" fill="#fff" stroke="#fff" font-family="Nunito" text-anchor="middle"
+        dominant-baseline="middle">@</text>
+</svg>
