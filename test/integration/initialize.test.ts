@@ -28,7 +28,7 @@ import {
 
 describe("Initialization", () => {
   it("fails when router is not configured", () => {
-    expect(() => initialize({ container: {} })).toThrow();
+    expect(() => initialize({})).toThrow();
   });
 
   it("works when router is configured", () => {
@@ -65,7 +65,7 @@ describe("Initialization", () => {
       }
     }
 
-    expect(() => initialize({ container })).not.toThrow();
+    expect(() => initialize(container)).not.toThrow();
   });
 
   it("returns a functioning request handler", async () => {
@@ -277,7 +277,7 @@ describe("Initialization", () => {
       }
     }
 
-    const handle = initialize({ container });
+    const handle = initialize(container);
 
     const optionsResponse = await handle(
       new Request("https://test.com/controller", { method: "OPTIONS" }),

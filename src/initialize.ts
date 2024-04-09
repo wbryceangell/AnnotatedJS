@@ -1,5 +1,3 @@
-/* eslint-disable tsdoc/syntax */
-
 import { container as defaultContainer } from "./container/container";
 import { keys } from "./container/keys";
 import { getGlobal } from "./container/utils/getGlobal";
@@ -48,14 +46,9 @@ import { RequestHandler } from "./interfaces/types";
  * ```
  *
  *
- * @param options - AnnotatedJS configuration options
- * @param options.container - The container object to initialize
+ * @param container - Object that stores injectables
  */
-export function initialize(options?: {
-  container?: typeof defaultContainer;
-}): RequestHandler {
-  const container = options?.container || defaultContainer;
-
+export function initialize(container = defaultContainer): RequestHandler {
   instantiateClasses(container, keys.configClasses);
   instantiateClasses(container, keys.datastoreClasses);
   instantiateClasses(container, keys.serviceClasses);
