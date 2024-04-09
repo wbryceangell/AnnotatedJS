@@ -22,9 +22,11 @@ describe("initialize", () => {
       }
 
       initialize({
-        [key]: [ClassOne, ClassTwo],
-        [keys.routerClass]: Router,
-        [keys.router]: router,
+        container: {
+          [key]: [ClassOne, ClassTwo],
+          [keys.routerClass]: Router,
+          [keys.router]: router,
+        },
       });
 
       expect(spy).toHaveBeenNthCalledWith(1, expect.any(ClassOne));
@@ -38,7 +40,9 @@ describe("initialize", () => {
 
   it("errors if a router class is not in the container", () => {
     expect(() =>
-      initialize({ [keys.configClasses]: [class {}], [keys.router]: router }),
+      initialize({
+        container: { [keys.configClasses]: [class {}], [keys.router]: router },
+      }),
     ).toThrow();
   });
 
@@ -51,8 +55,10 @@ describe("initialize", () => {
     }
 
     initialize({
-      [keys.routerClass]: Router,
-      [keys.router]: router,
+      container: {
+        [keys.routerClass]: Router,
+        [keys.router]: router,
+      },
     });
 
     expect(spy).toHaveBeenCalled();
@@ -62,12 +68,14 @@ describe("initialize", () => {
     const spy = jest.fn();
 
     initialize({
-      [keys.routerClass]: Router,
-      [keys.router]: router,
-      [keys.cacheStorageClass]: class {
-        constructor() {
-          spy();
-        }
+      container: {
+        [keys.routerClass]: Router,
+        [keys.router]: router,
+        [keys.cacheStorageClass]: class {
+          constructor() {
+            spy();
+          }
+        },
       },
     });
 
@@ -108,13 +116,15 @@ describe("initialize", () => {
     }
 
     initialize({
-      [keys.configClasses]: [Config],
-      [keys.datastoreClasses]: [Datastore],
-      [keys.serviceClasses]: [Service],
-      [keys.routerClass]: Router,
-      [keys.cacheStorageClass]: CacheStorage,
-      [keys.controllerClasses]: [Controller],
-      [keys.router]: router,
+      container: {
+        [keys.configClasses]: [Config],
+        [keys.datastoreClasses]: [Datastore],
+        [keys.serviceClasses]: [Service],
+        [keys.routerClass]: Router,
+        [keys.cacheStorageClass]: CacheStorage,
+        [keys.controllerClasses]: [Controller],
+        [keys.router]: router,
+      },
     });
 
     expect(spy).toHaveBeenNthCalledWith(1, expect.any(Config));
