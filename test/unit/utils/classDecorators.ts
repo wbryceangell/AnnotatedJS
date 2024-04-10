@@ -84,8 +84,12 @@ export const itSetsInjectablesOnInstance = <T extends Class<any>>(
 ) =>
   it("sets injectables on class instance", () => {
     const key = "key";
+    const otherKey = "otherKey";
     const value = null;
-    const container = { [key]: { type: "object", value } };
+    const container = {
+      [key]: { type: "object", value },
+      [otherKey]: { type: "factory", value: () => value },
+    };
 
     const set = jest.fn();
 
@@ -97,12 +101,16 @@ export const itSetsInjectablesOnInstance = <T extends Class<any>>(
         name,
         addInitializer: initializerFor(ExampleClass),
         metadata: {
-          [MetadataProperties.injectables]: [{ key, set }],
+          [MetadataProperties.injectables]: [
+            { key, set },
+            { key: otherKey, set },
+          ],
         },
       },
     );
 
-    expect(set).toHaveBeenCalledWith(expect.any(ExampleClass), value);
+    expect(set).toHaveBeenNthCalledWith(1, expect.any(ExampleClass), value);
+    expect(set).toHaveBeenNthCalledWith(2, expect.any(ExampleClass), value);
   });
 
 export const itAddsClassToArrayInContainer = <T extends Class<any>>(

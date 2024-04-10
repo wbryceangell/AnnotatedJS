@@ -42,6 +42,33 @@ describe("@Config", () => {
     expect(container[key]).toStrictEqual({ type: "object", value });
   });
 
+  it("adds property factory methods to the container", () => {
+    const key = "key";
+    const value = null;
+    const getter = () => {};
+    const callGetter = jest.fn(() => value);
+    getter.call = callGetter;
+    getter.bind = () => getter;
+    const container = {};
+    class ConfigClass {}
+
+    Config(container)(class {}, {
+      kind,
+      name,
+      addInitializer: initializerFor(ConfigClass),
+      metadata: {
+        [MetadataProperties.requestScope]: true,
+        [MetadataProperties.properties]: [[key, getter]],
+      },
+    });
+
+    expect(callGetter).toHaveBeenCalledWith(expect.any(ConfigClass));
+    expect(container[key]).toStrictEqual({
+      type: "factory",
+      value: getter,
+    });
+  });
+
   it("errors if property is undefined", () => {
     expect(() =>
       Config({})(class {}, {

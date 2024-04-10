@@ -17,6 +17,9 @@ export function getInitializer<T extends Class<object>>(
     const config = new this();
 
     const metadata = getMetadata(annotationName, context);
+    const requestScope = <boolean>(
+      getMetadataProperty(metadata, MetadataProperties.requestScope, false)
+    );
     const properties = <ConfigMetadataProperties>(
       getMetadataProperty(metadata, MetadataProperties.properties, [])
     );
@@ -42,7 +45,10 @@ export function getInitializer<T extends Class<object>>(
         value: () => value,
       });
 
-      const injectable: ContainerInjectable = { type: "object", value };
+      const injectable: ContainerInjectable = requestScope
+        ? { type: "factory", value: method.bind(config) }
+        : { type: "object", value };
+
       setGlobal(
         container as Record<string, typeof value>,
         property,
