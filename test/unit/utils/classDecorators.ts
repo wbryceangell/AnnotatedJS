@@ -4,7 +4,7 @@ import { MetadataProperties } from "../../../src/decorators/inject/metadataPrope
 import { Class, ClassDecorator } from "../../../src/decorators/types";
 
 export const initializerFor =
-  (classDef: Class<unknown>) => (initializer: () => void) =>
+  (classDef: Class<any>) => (initializer: () => void) =>
     initializer.call(classDef);
 
 const kind = "class";
@@ -12,7 +12,7 @@ const name = "name";
 class ExampleClass {}
 
 export const itExpectsAValidContainer = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
 ) =>
   it("expects a valid container", () => {
     // @ts-expect-error passing an invalid container
@@ -20,7 +20,7 @@ export const itExpectsAValidContainer = <T extends Class<any>>(
   });
 
 export const itThrowsErrorIfNotUsedOnAClass = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
 ) =>
   it("throws an error when not used on a class", () => {
     expect(() =>
@@ -32,7 +32,7 @@ export const itThrowsErrorIfNotUsedOnAClass = <T extends Class<any>>(
   });
 
 export const itHasInitializationHook = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
 ) =>
   it("has an initialization hook", () => {
     const spy = jest.fn();
@@ -52,7 +52,7 @@ export const itHasInitializationHook = <T extends Class<any>>(
   });
 
 export const itCreatesClassInstanceInInitHook = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
 ) =>
   it("initialization hook to create instance of class", () => {
     const spy = jest.fn();
@@ -80,12 +80,12 @@ export const itCreatesClassInstanceInInitHook = <T extends Class<any>>(
   });
 
 export const itSetsInjectablesOnInstance = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
 ) =>
   it("sets injectables on class instance", () => {
     const key = "key";
     const value = null;
-    const container = { [key]: value };
+    const container = { [key]: { type: "object", value } };
 
     const set = jest.fn();
 
@@ -106,7 +106,7 @@ export const itSetsInjectablesOnInstance = <T extends Class<any>>(
   });
 
 export const itAddsClassToArrayInContainer = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
   key: string,
 ) =>
   it("adds class to array in container", () => {
@@ -129,7 +129,7 @@ export const itAddsClassToArrayInContainer = <T extends Class<any>>(
   });
 
 export const itAddsClassToContainer = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
   key: string,
 ) =>
   it("adds class to container", () => {
@@ -150,7 +150,7 @@ export const itAddsClassToContainer = <T extends Class<any>>(
   });
 
 export const itAddsClassToContainerOnlyOnce = <T extends Class<any>>(
-  getClassDecorator: (container: Record<string, unknown>) => ClassDecorator<T>,
+  getClassDecorator: (container: Record<string, any>) => ClassDecorator<T>,
 ) =>
   it("adds class to container only once", () => {
     const container = {};
@@ -197,6 +197,32 @@ export const itAddsClassInstanceToContainerOnInit = <T extends Class<any>>(
     );
 
     expect(container[key]).toStrictEqual(expect.any(ExampleClass));
+  });
+
+export const itAddsInjectableToContainerOnInit = <T extends Class<any>>(
+  name: string,
+  getClassDecorator: (container: Record<string, Array<T>>) => ClassDecorator<T>,
+) =>
+  it("adds injectable to container when initialized", () => {
+    const container = {};
+
+    getClassDecorator(container)(
+      // @ts-expect-error Class type is too broad for anonymous class
+      ExampleClass,
+      {
+        kind,
+        name,
+        addInitializer: initializerFor(ExampleClass),
+        metadata: {},
+      },
+    );
+
+    expect(container[name]).toStrictEqual(
+      expect.objectContaining({
+        type: "object",
+        value: expect.any(ExampleClass),
+      }),
+    );
   });
 
 export const itThrowsWhenUsedOnAnUnnamedClass = <T extends Class<any>>(

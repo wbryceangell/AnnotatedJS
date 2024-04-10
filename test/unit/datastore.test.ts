@@ -1,6 +1,6 @@
 import {
-  itAddsClassInstanceToContainerOnInit,
   itAddsClassToArrayInContainer,
+  itAddsInjectableToContainerOnInit,
   itCreatesClassInstanceInInitHook,
   itExpectsAValidContainer,
   itHasInitializationHook,
@@ -21,5 +21,5 @@ describe("@Datastore", () => {
   itHasInitializationHook(Datastore);
   itCreatesClassInstanceInInitHook(Datastore);
   itSetsInjectablesOnInstance(Datastore);
-  itAddsClassInstanceToContainerOnInit(name, Datastore, name);
+  itAddsInjectableToContainerOnInit(name, Datastore);
 });

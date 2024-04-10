@@ -39,7 +39,7 @@ describe("@Config", () => {
     });
 
     expect(callGetter).toHaveBeenCalledWith(expect.any(ConfigClass));
-    expect(container[key]).toBe(value);
+    expect(container[key]).toStrictEqual({ type: "object", value });
   });
 
   it("errors if property is undefined", () => {
@@ -88,8 +88,8 @@ describe("@Config", () => {
     expect(callFirstGetter).toHaveBeenCalledWith(expect.any(ConfigClass));
     expect(callSecondGetter).toHaveBeenCalledWith(expect.any(ConfigClass));
 
-    expect(container[firstKey]).toBe(value);
-    expect(container[secondKey]).toBe(value);
+    expect(container[firstKey]).toStrictEqual({ type: "object", value });
+    expect(container[secondKey]).toStrictEqual({ type: "object", value });
   });
 
   it("can use properties in other properties when declared in order", () => {

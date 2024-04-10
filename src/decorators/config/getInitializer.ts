@@ -1,5 +1,9 @@
 import { setGlobal } from "../../container/utils/setGlobal";
-import type { Class, ConfigMetadataProperties } from "../types";
+import type {
+  Class,
+  ConfigMetadataProperties,
+  ContainerInjectable,
+} from "../types";
 import { getMetadata } from "../utils/getMetadata";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { MetadataProperties } from "./metadataProperties";
@@ -37,7 +41,13 @@ export function getInitializer<T extends Class<object>>(
       Object.defineProperty(prototype, method.name, {
         value: () => value,
       });
-      setGlobal(container as Record<string, typeof value>, property, value);
+
+      const injectable: ContainerInjectable = { type: "object", value };
+      setGlobal(
+        container as Record<string, typeof value>,
+        property,
+        injectable,
+      );
     }
   };
 }

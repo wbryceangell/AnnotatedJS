@@ -1,8 +1,8 @@
 import { keys } from "../../src/container/keys";
 import { Service } from "../../src/index";
 import {
-  itAddsClassInstanceToContainerOnInit,
   itAddsClassToArrayInContainer,
+  itAddsInjectableToContainerOnInit,
   itCreatesClassInstanceInInitHook,
   itExpectsAValidContainer,
   itHasInitializationHook,
@@ -20,6 +20,6 @@ describe("@Service", () => {
   itAddsClassToArrayInContainer(Service, keys.serviceClasses);
   itHasInitializationHook(Service);
   itCreatesClassInstanceInInitHook(Service);
-  itAddsClassInstanceToContainerOnInit(name, Service, name);
+  itAddsInjectableToContainerOnInit(name, Service);
   itSetsInjectablesOnInstance(Service);
 });

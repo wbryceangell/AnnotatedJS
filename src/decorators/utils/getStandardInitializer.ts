@@ -1,6 +1,6 @@
 import { setGlobal } from "../../container/utils/setGlobal";
 import { setInjectables } from "../inject/setInjectables";
-import { Class } from "../types";
+import { Class, ContainerInjectable } from "../types";
 import { getMetadata } from "../utils/getMetadata";
 
 export function getStandardInitializer<T extends Class<object>>(
@@ -14,7 +14,9 @@ export function getStandardInitializer<T extends Class<object>>(
     const metadata = getMetadata(annotationName, context);
     setInjectables(container, instance, metadata);
 
+    const injectable: ContainerInjectable = { type: "object", value: instance };
+
     // @ts-expect-error we need to use object type but it is actually a class
-    setGlobal(container, context.name, instance);
+    setGlobal(container, context.name, injectable);
   };
 }

@@ -1,5 +1,5 @@
 import { getGlobal } from "../../container/utils/getGlobal";
-import { InjectableMetadata } from "../types";
+import { ContainerInjectable, InjectableMetadata } from "../types";
 import { getMetadataProperty } from "../utils/getMetadataProperty";
 import { MetadataProperties } from "./metadataProperties";
 
@@ -13,10 +13,25 @@ export const setInjectables = (
   );
 
   for (const { key, set } of injectables) {
-    const value = getGlobal(container, key);
+    const injectable = getGlobal(container, key) as ContainerInjectable;
 
-    if (value === undefined) {
+    if (injectable === undefined) {
       throw new Error(`Injectable ${key} is undefined`);
+    }
+
+    let value: unknown;
+    switch (injectable.type) {
+      case "object": {
+        value = injectable.value;
+        break;
+      }
+      case "factory": {
+        value = (<() => unknown>injectable.value)();
+        break;
+      }
+      default: {
+        throw new Error(`Invalid injectable type: ${injectable.type}`);
+      }
     }
 
     set(instance, value);

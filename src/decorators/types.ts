@@ -39,3 +39,8 @@ export type ClassAccessorDecorator<T, K> = (
   target: ClassAccessorDecoratorTarget<T, K>,
   context: ClassAccessorDecoratorContext,
 ) => void;
+
+export type ContainerInjectable = {
+  type: "object" | "factory";
+  value: unknown | (() => unknown);
+};
