@@ -4,6 +4,7 @@ import { validateContainer } from "../../container/utils/validateContainer";
 import type { Class, ClassDecorator } from "../types";
 import { addClassToContainer } from "../utils/addClassToContainer";
 import { validateKind } from "../utils/validateKind";
+import { validateName } from "../utils/validateName";
 import { getInitializer } from "./getInitializer";
 
 /**
@@ -48,6 +49,7 @@ export const Config = <T extends Class<object>>(
 
     const annotationName = `@${Config.name}`;
     validateKind(annotationName, context, "class");
+    validateName(annotationName, context);
 
     context.addInitializer(
       getInitializer<T>(annotationName, context, container),

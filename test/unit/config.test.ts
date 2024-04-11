@@ -8,6 +8,7 @@ import {
   itExpectsAValidContainer,
   itHasInitializationHook,
   itThrowsErrorIfNotUsedOnAClass,
+  itThrowsWhenUsedOnAnUnnamedClass,
 } from "./utils/classDecorators";
 
 describe("@Config", () => {
@@ -16,6 +17,7 @@ describe("@Config", () => {
 
   itExpectsAValidContainer(Config);
   itThrowsErrorIfNotUsedOnAClass(Config);
+  itThrowsWhenUsedOnAnUnnamedClass(Config);
   itAddsClassToArrayInContainer(Config, keys.configClasses);
   itHasInitializationHook(Config);
   itCreatesClassInstanceInInitHook(Config);
