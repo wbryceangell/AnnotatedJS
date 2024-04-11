@@ -11,7 +11,7 @@ import { validateName } from "../utils/validateName";
 export const RequestScope = <T extends Class<object>>(
   container: Record<string, Array<T>> = defaultContainer,
 ) =>
-  ((constructor, context) => {
+  ((_constructor, context) => {
     validateContainer(container);
 
     const annotationName = `@${RequestScope.name}`;
@@ -21,10 +21,12 @@ export const RequestScope = <T extends Class<object>>(
     const configClasses = getGlobal(container, keys.configClasses);
     if (
       !Array.isArray(configClasses) ||
-      !configClasses.find((config) => config.name === constructor.name)
+      !configClasses.find((config) => config.name === context.name)
     ) {
       throw new Error(
         `${annotationName} must be used on an existing configuration class`,
       );
     }
+
+    context.addInitializer(function () {});
   }) as ClassDecorator<T>;

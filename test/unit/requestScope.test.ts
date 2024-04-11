@@ -13,17 +13,33 @@ describe("@RequestScope", () => {
 
   it("throws error when class is not a config class in the container", () => {
     class Config {}
-    class OtherClass {}
 
     expect(() =>
       RequestScope({ [keys.configClasses]: [Config] })(
-        OtherClass,
-        // @ts-expect-error not a complete class decorator context
+        class {},
+        // @ts-expect-error not a valid context
         {
           kind: "class",
-          name: OtherClass.name,
+          name: "NotConfig",
         },
       ),
     ).toThrow();
+  });
+
+  it("has an initialization hook", () => {
+    class Config {}
+    const spy = jest.fn();
+
+    RequestScope({ [keys.configClasses]: [Config] })(
+      class {},
+      // @ts-expect-error not a valid context
+      {
+        kind: "class",
+        name: Config.name,
+        addInitializer: spy,
+      },
+    );
+
+    expect(spy).toHaveBeenCalledWith(expect.any(Function));
   });
 });
