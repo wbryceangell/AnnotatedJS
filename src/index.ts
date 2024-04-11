@@ -1,6 +1,7 @@
 export { CacheStorage } from "./decorators/cacheStorage/cacheStorage";
 export { Config } from "./decorators/config/config";
 export { Property } from "./decorators/config/property";
+export { RequestScope } from "./decorators/config/requestScope";
 export { Cache } from "./decorators/controller/cache/cache";
 export { Controller } from "./decorators/controller/controller";
 export { Delete } from "./decorators/controller/methods/delete";

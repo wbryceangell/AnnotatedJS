@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Config, Property } from "../../src";
+import { Config, Property, RequestScope } from "../../src";
 
 describe("Config", () => {
   it("should not work when @Property arg is not a string", () => {
@@ -79,5 +79,32 @@ describe("Config", () => {
         }
       }
     }).toThrow();
+  });
+
+  it("should not work when @RequestScope is used on a class that is not a configuration", () => {
+    expect(() => {
+      @RequestScope({})
+      class NotConfig {}
+    }).toThrow();
+  });
+
+  it("should not work when @RequestScope is used on a class before @Config", () => {
+    expect(() => {
+      const container = {};
+
+      @Config(container)
+      @RequestScope(container)
+      class Configuration {}
+    }).toThrow();
+  });
+
+  it("should work when @RequestScope is used on an existing configuration class", () => {
+    expect(() => {
+      const container = {};
+
+      @RequestScope(container)
+      @Config(container)
+      class Configuration {}
+    }).not.toThrow();
   });
 });
