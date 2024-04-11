@@ -5,8 +5,11 @@ import { keys } from "../../container/keys";
 import { getGlobal } from "../../container/utils/getGlobal";
 import { validateContainer } from "../../container/utils/validateContainer";
 import { Class, ClassDecorator } from "../types";
+import { getMetadata } from "../utils/getMetadata";
+import { setMetadataProperty } from "../utils/setMetadataProperty";
 import { validateKind } from "../utils/validateKind";
 import { validateName } from "../utils/validateName";
+import { MetadataProperties } from "./metadataProperties";
 
 export const RequestScope = <T extends Class<object>>(
   container: Record<string, Array<T>> = defaultContainer,
@@ -28,5 +31,8 @@ export const RequestScope = <T extends Class<object>>(
       );
     }
 
-    context.addInitializer(function () {});
+    context.addInitializer(function () {
+      const metadata = getMetadata(annotationName, context);
+      setMetadataProperty(metadata, MetadataProperties.requestScope, true);
+    });
   }) as ClassDecorator<T>;

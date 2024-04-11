@@ -1,6 +1,8 @@
 import { keys } from "../../src/container/keys";
+import { MetadataProperties } from "../../src/decorators/config/metadataProperties";
 import { RequestScope } from "../../src/decorators/config/requestScope";
 import {
+  initializerFor,
   itExpectsAValidContainer,
   itThrowsErrorIfNotUsedOnAClass,
   itThrowsWhenUsedOnAnUnnamedClass,
@@ -41,5 +43,19 @@ describe("@RequestScope", () => {
     );
 
     expect(spy).toHaveBeenCalledWith(expect.any(Function));
+  });
+
+  it("initialization hook sets request scope flag in metadata", () => {
+    class Config {}
+    const metadata = {};
+
+    RequestScope({ [keys.configClasses]: [Config] })(class {}, {
+      kind: "class",
+      name: Config.name,
+      addInitializer: initializerFor(Config),
+      metadata,
+    });
+
+    expect(metadata[MetadataProperties.requestScope]).toBeTruthy();
   });
 });
