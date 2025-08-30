@@ -21,6 +21,7 @@ import { RequestHandler } from "./interfaces/types";
  *
  * import { initialize } from "@fork-git-it/annotatedjs";
  * // import annotated classes
+ * // IMPORTANT: Make sure that the AnnotatedRouter is imported before any Controllers
  *
  * const handleRequest = initialize();
  * const eventHandler = (evt: Event) => {
@@ -37,6 +38,7 @@ import { RequestHandler } from "./interfaces/types";
  * import { createServer } from "http";
  * import "isomorphic-fetch";
  * // import annotated classes
+ * // IMPORTANT: Make sure that the AnnotatedRouter is imported before any Controllers
  *
  * const handleRequest = initialize();
  * const ittyServer = createServerAdapter(handleRequest);

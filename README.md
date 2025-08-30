@@ -245,8 +245,15 @@ export class StorageController {
 // index.ts
 
 import { initialize } from "@fork-git-it/annotatedjs";
+
 import "./workerConfig";
 import "./localDatastore";
+import "./workerCacheStorage";
+import "./storageService";
+
+// IMPORTANT: Make sure that the AnnotatedRouter is imported before any Controllers
+import ".workerRouter.ts";
+
 import "./storageController";
 
 const requestHandler = initialize();
